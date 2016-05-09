@@ -18,11 +18,7 @@ package br.com.anteros.vendas.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
-
-import javax.validation.constraints.Past;
-import javax.validation.groups.Default;
 
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
@@ -41,6 +37,8 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchMode;
 import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
+import br.com.anteros.validation.api.constraints.Past;
+import br.com.anteros.validation.api.groups.Default;
 
 /**
  * Created by edson on 09/05/16.

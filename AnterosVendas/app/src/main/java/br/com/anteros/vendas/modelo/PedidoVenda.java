@@ -21,13 +21,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
-import javax.validation.groups.Default;
-
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
 import br.com.anteros.persistence.metadata.annotation.Column;
 import br.com.anteros.persistence.metadata.annotation.Entity;
-import br.com.anteros.persistence.metadata.annotation.EnumValues;
 import br.com.anteros.persistence.metadata.annotation.Enumerated;
 import br.com.anteros.persistence.metadata.annotation.Fetch;
 import br.com.anteros.persistence.metadata.annotation.ForeignKey;
@@ -42,6 +39,7 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchMode;
 import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
+import br.com.anteros.validation.api.groups.Default;
 
 /**
  * Created by edson on 09/05/16.

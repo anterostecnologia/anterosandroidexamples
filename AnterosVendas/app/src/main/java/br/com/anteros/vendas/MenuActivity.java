@@ -43,7 +43,7 @@ public class MenuActivity extends AppCompatActivity {
         AnterosVendasContext.setApplication(this.getApplication());
         final AnterosVendasContext vendasContext = AnterosVendasContext.getInstance();
 
-       // vendasContext.populateDatabase();
+        vendasContext.populateDatabase();
 
 
 //        new QuestionAlert(this, "Manutenção Tabelas",

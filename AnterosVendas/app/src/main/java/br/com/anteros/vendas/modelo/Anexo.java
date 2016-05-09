@@ -19,9 +19,6 @@ package br.com.anteros.vendas.modelo;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.Size;
-import javax.validation.groups.Default;
-
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Column;
 import br.com.anteros.persistence.metadata.annotation.Entity;
@@ -34,6 +31,8 @@ import br.com.anteros.persistence.metadata.annotation.Table;
 import br.com.anteros.persistence.metadata.annotation.TableGenerator;
 import br.com.anteros.persistence.metadata.annotation.type.EnumType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
+import br.com.anteros.validation.api.constraints.Size;
+import br.com.anteros.validation.api.groups.Default;
 
 /**
  * Created by edson on 09/05/16.
