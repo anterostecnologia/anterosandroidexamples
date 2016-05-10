@@ -49,7 +49,6 @@ public class AnterosVendasContext {
 
     private SQLSessionFactory sessionFactory;
     private SQLSession session;
-    private SQLSession sessionSincronismo;
 
     public static AnterosVendasContext getInstance() {
         try {
@@ -79,7 +78,6 @@ public class AnterosVendasContext {
 
     public static SQLSessionFactory createSessionFactory(Application context) throws Exception {
         return new AndroidSQLConfiguration().context(context.getApplicationContext())
-                //setPackageToScanEntity(new PackageScanEntity("br.com.anteros.vendas.modelo"))
                 .addAnnotatedClass(Anexo.class)
                 .addAnnotatedClass(Cliente.class)
                 .addAnnotatedClass(CondicaoPagamento.class)
@@ -146,7 +144,7 @@ public class AnterosVendasContext {
 
     public void populateDatabase() {
         Cliente cliente1 = new Cliente();
-        cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
+        //cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
         cliente1.setNomeFantasia("JOAO DA SILVA");
         cliente1.setTpLogradouro(TipoLogradouro.AVENIDA);
         cliente1.setNrLogradouro("240");
