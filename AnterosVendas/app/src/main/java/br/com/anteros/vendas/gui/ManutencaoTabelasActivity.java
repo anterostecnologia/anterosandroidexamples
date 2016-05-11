@@ -8,14 +8,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,16 +37,12 @@ import br.com.anteros.vendas.ImportDatabaseTask;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.RecriarBancoDeDados;
 
-public class ManutencaoTabelasActivity extends AppCompatActivity implements View.OnClickListener {
+public class ManutencaoTabelasActivity extends AppCompatActivity {
 
     public static final int RECRIOU_TABELAS = 1;
 
     private ListView lvTabelas;
     private CursorAdapter adapter;
-    private ImageView imgExportar;
-    private ImageView imgImportar;
-    private ImageView imgRecriar;
-    private ImageView imgCancelar;
     private SQLiteConnection connection;
     private Cursor cursor = null;
 
@@ -52,19 +50,14 @@ public class ManutencaoTabelasActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manutencao_tabelas);
 
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
+
         lvTabelas = (ListView) findViewById(R.id.manutencao_tabelas_lvTabelas);
-
-        imgExportar = (ImageView) findViewById(R.id.manutencao_tabelas_exportar);
-        imgExportar.setOnClickListener(this);
-
-        imgImportar = (ImageView) findViewById(R.id.manutencao_tabelas_importar);
-        imgImportar.setOnClickListener(this);
-
-        imgRecriar = (ImageView) findViewById(R.id.manutencao_tabelas_recriar);
-        imgRecriar.setOnClickListener(this);
-
-        imgCancelar = (ImageView) findViewById(R.id.manutencao_tabelas_sair);
-        imgCancelar.setOnClickListener(this);
 
         try {
             connection = (SQLiteConnection) AnterosVendasContext.getInstance().getSession().getConnection();
@@ -124,6 +117,41 @@ public class ManutencaoTabelasActivity extends AppCompatActivity implements View
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.manutencao_action);
+        tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            case R.id.manutencao_action_exportar:
+                exportarBancoDeDados();
+                break;
+            case R.id.manutencao_action_importar:
+                importarBancoDeDados();
+                break;
+            case R.id.manutencao_action_recriar:
+                dropAndCreateTables();
+                break;
+
+        }
+        return true;
+    }
+
     private void dropAndCreateTables() {
         new QuestionAlert(
                 this,
@@ -171,19 +199,6 @@ public class ManutencaoTabelasActivity extends AppCompatActivity implements View
                     public void onNegativeClick() {
                     }
                 }).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == imgExportar) {
-            exportarBancoDeDados();
-        } else if (v == imgImportar) {
-            importarBancoDeDados();
-        } else if (v == imgRecriar) {
-            dropAndCreateTables();
-        } else if (v == imgCancelar) {
-            finish();
-        }
     }
 
     private void importarBancoDeDados() {

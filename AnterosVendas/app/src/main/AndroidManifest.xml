@@ -51,6 +51,7 @@
         <activity
             android:name=".gui.ClienteConsultaActivity"
             android:configChanges="orientation"
+            android:theme="@style/Base.AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".gui.ClienteCadastroActivity"
@@ -59,6 +60,7 @@
         <activity
             android:name=".gui.ManutencaoTabelasActivity"
             android:configChanges="orientation"
+            android:theme="@style/Base.AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".gui.RegistrosTabelasActivity"

@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cliente_cadastro_relativeLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Consulta de clientes"
+        app:titleTextColor="@android:color/white"/>
 
     <LinearLayout
         android:id="@+id/cliente_cadastro_barraBotoes"
@@ -27,168 +38,169 @@
             android:src="@drawable/sel_cancela" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-        </RelativeLayout>
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-        <TextView
-            style="@style/Label"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Razão Social"
-            android:textSize="15sp" />
+            <TextView
+                style="@style/Label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Razão Social"
+                android:textSize="15sp" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_razaoSocial"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_razaoSocial"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_lbFantasia"
-            style="@style/Label"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Fantasia"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/cliente_cadastro_lbFantasia"
+                style="@style/Label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Fantasia"
+                android:textSize="15sp" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_fantasia"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_fantasia"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tpLogradouro"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tipo Logradouro" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tpLogradouro"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo Logradouro" />
 
-        <Spinner
-            android:id="@+id/cliente_cadastro_cb_tipo_logradouro"
-            style="@style/EstiloSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/cliente_cadastro_cb_tipo_logradouro"
+                style="@style/EstiloSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvLogradouro"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logradouro" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvLogradouro"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logradouro" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_logradouro"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapCharacters"
-            android:maxLength="60"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_logradouro"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textCapCharacters"
+                android:maxLength="60"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvNumero"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Número" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvNumero"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Número" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_numero"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number|text"
-            android:maxLength="9"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_numero"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:ems="10"
+                android:imeOptions="actionNext"
+                android:inputType="number|text"
+                android:maxLength="9"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvCEP"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CEP" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvCEP"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CEP" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_CEP"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_CEP"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvBairro"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bairro" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvBairro"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bairro" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_bairro"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapCharacters"
-            android:maxLength="60"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_bairro"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textCapCharacters"
+                android:maxLength="60"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvComplemento"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Complemento" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvComplemento"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complemento" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_complemento"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapCharacters"
-            android:lines="1"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_complemento"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textCapCharacters"
+                android:lines="1"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_tvCidade"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cidade" />
+            <TextView
+                android:id="@+id/cliente_cadastro_tvCidade"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cidade" />
 
-        <EditText
-            android:id="@+id/cliente_cadastro_cidade"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapCharacters"
-            android:lines="1"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/cliente_cadastro_cidade"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textCapCharacters"
+                android:lines="1"
+                android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/cliente_cadastro_estado"
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estado" />
+            <TextView
+                android:id="@+id/cliente_cadastro_estado"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estado" />
 
-        <Spinner
-            android:id="@+id/cliente_cadastro_cb_estado"
-            style="@style/EstiloSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/cliente_cadastro_cb_estado"
+                style="@style/EstiloSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

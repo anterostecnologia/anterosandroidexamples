@@ -113,10 +113,10 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.menu_action_settings:
                 startActivity(new Intent(this, ManutencaoTabelasActivity.class));
                 break;
-            case R.id.action_exit:
+            case R.id.menu_action_exit:
                 sairDoSistema();
                 break;
         }

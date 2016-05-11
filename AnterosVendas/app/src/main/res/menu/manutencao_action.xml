@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:id="@+id/manutencao_action_exportar"
+            android:orderInCategory="100"
+            app:showAsAction="always"
+            android:icon="@drawable/sel_exportar_banco_dados"
+            android:title="Exportar dados"/>
+
+        <item
+            android:id="@+id/manutencao_action_importar"
+            android:orderInCategory="101"
+            app:showAsAction="always"
+            android:icon="@drawable/sel_importar_banco_dados"
+            android:title="Importar dados"/>
+
+        <item
+            android:id="@+id/manutencao_action_recriar"
+            android:orderInCategory="102"
+            app:showAsAction="always"
+            android:icon="@drawable/sel_recriar_banco_dados"
+            android:title="Recriar base"/>
+
+
+</menu>

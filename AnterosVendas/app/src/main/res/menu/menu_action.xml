@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <item
-            android:id="@+id/action_settings"
+            android:id="@+id/menu_action_settings"
             android:orderInCategory="100"
             app:showAsAction="always"
             android:icon="@drawable/ic_settings"
             android:title="Configuração"/>
 
         <item
-            android:id="@+id/action_exit"
+            android:id="@+id/menu_action_exit"
             android:orderInCategory="101"
             app:showAsAction="always"
             android:icon="@drawable/ic_exit"

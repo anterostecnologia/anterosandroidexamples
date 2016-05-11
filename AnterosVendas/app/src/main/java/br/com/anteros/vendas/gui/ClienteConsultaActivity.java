@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,14 +26,10 @@ import br.com.anteros.vendas.modelo.Cliente;
 /**
  * Created by eduardogreco on 5/10/16.
  */
-public class ClienteConsultaActivity extends AppCompatActivity implements
-        AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class ClienteConsultaActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
     private ListView lvClientes;
     private ClienteConsultaAdapter adapter;
-    private ImageView imgFinalizar;
-    private ImageView imgAddCliente;
-    private TextView lbQtdade;
     private final int REQUISICAO = 1000;
     private SQLRepository<Cliente, Long> clienteRepository;
 
@@ -39,21 +38,49 @@ public class ClienteConsultaActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cliente_consulta);
 
-        clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        lbQtdade = (TextView) findViewById(R.id.cliente_consulta_qtdade);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
+
+        clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
 
         lvClientes = (ListView) findViewById(R.id.cliente_consulta_list_view);
         lvClientes.setOnItemLongClickListener(this);
 
-        imgFinalizar = (ImageView) findViewById(R.id.cliente_consulta_img_finalizar);
-        imgFinalizar.setOnClickListener(this);
-
-        imgAddCliente = (ImageView) findViewById(R.id.cliente_consulta_adicionar_cliente);
-        imgAddCliente.setOnClickListener(this);
-
         new BuscarClientes().execute();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.cliente_consulta_action);
+        tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            case R.id.cliente_consulta_action_adicionar:
+                Intent intent = new Intent(this, ClienteCadastroActivity.class);
+                startActivityForResult(intent, REQUISICAO);
+                break;
+        }
+        return true;
     }
 
     private class BuscarClientes extends AsyncTask<Void, Void, List<Cliente>> {
@@ -76,13 +103,8 @@ public class ClienteConsultaActivity extends AppCompatActivity implements
         public void onPostExecute(List<Cliente> clientes) {
             adapter = new ClienteConsultaAdapter(ClienteConsultaActivity.this, clientes);
             lvClientes.setAdapter(adapter);
-            atualizarQuantidadeRegistro();
             progress.dismiss();
         }
-    }
-
-    private void atualizarQuantidadeRegistro() {
-        lbQtdade.setText(adapter.getCount() + " registro(s).");
     }
 
 
@@ -107,15 +129,4 @@ public class ClienteConsultaActivity extends AppCompatActivity implements
             }
         }
     }
-
-    @Override
-    public void onClick(View v) {
-        if (v == imgAddCliente) {
-            Intent intent = new Intent(this, ClienteCadastroActivity.class);
-            startActivityForResult(intent, REQUISICAO);
-        } else if (v == imgFinalizar) {
-            finish();
-        }
-    }
-
 }

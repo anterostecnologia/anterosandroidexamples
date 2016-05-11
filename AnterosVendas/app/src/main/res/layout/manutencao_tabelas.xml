@@ -1,49 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/manutencao_tabelas_barraCancelar"
-        style="@style/BarraBotes"
-        android:layout_width="fill_parent"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/manutencao_tabelas_exportar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/sel_exportar_banco_dados" />
-
-        <ImageView
-            android:id="@+id/manutencao_tabelas_importar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/sel_importar_banco_dados" />
-
-        <ImageView
-            android:id="@+id/manutencao_tabelas_recriar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/sel_recriar_banco_dados" />
-
-        <ImageView
-            android:id="@+id/manutencao_tabelas_sair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/sel_close" />
-
-    </LinearLayout>
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Manutenção das tabelas"
+        app:titleTextColor="@android:color/white"/>
 
     <ListView
         android:id="@+id/manutencao_tabelas_lvTabelas"
@@ -52,4 +22,4 @@
         android:layout_above="@+id/manutencao_tabelas_barraCancelar">
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>
