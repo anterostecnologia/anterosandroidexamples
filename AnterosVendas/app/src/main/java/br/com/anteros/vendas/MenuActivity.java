@@ -17,33 +17,27 @@
 package br.com.anteros.vendas;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.vendas.gui.ClienteConsultaActivity;
-import dalvik.system.DexClassLoader;
+import br.com.anteros.vendas.gui.ManutencaoTabelasActivity;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener, OnItemClickListener {
 
     private GridView gridMenu;
     private ImageView imgLogout;
+    private ImageView imgConfiguracao;
 
     public static final int CLIENTE = 0;
     public static final int PEDIDO = 1;
@@ -60,12 +54,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         AnterosVendasContext.setApplication(this.getApplication());
         final AnterosVendasContext vendasContext = AnterosVendasContext.getInstance();
 
-       // vendasContext.populateDatabase();
+        // vendasContext.populateDatabase();
 
         gridMenu = (GridView) findViewById(R.id.lvMenu);
         gridMenu.setOnItemClickListener(this);
         imgLogout = (ImageView) findViewById(R.id.img_logout);
         imgLogout.setOnClickListener(this);
+        imgConfiguracao = (ImageView) findViewById(R.id.img_configuracao);
+        imgConfiguracao.setOnClickListener(this);
 
         adicionarItensMenu();
     }
@@ -98,6 +94,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == imgLogout) {
             sairDoSistema();
+        } else if (view == imgConfiguracao) {
+            startActivity(new Intent(this, ManutencaoTabelasActivity.class));
         }
     }
 

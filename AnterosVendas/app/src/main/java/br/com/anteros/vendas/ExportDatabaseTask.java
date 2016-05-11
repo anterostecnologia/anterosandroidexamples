@@ -166,25 +166,11 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
 				Toast.makeText(this.context,
 						"Exportação realizada com sucesso!", Toast.LENGTH_SHORT)
 						.show();
-				//enviarBancoDeDadosFTP();
 			} else {
 				Toast.makeText(this.context, "Export falhou - " + success,
 						Toast.LENGTH_LONG).show();
 			}
 		}
 	}
-
-//	private void enviarBancoDeDadosFTP() {
-//		new QuestionAlert(this.context, "Manutenção Tabelas",
-//				"Deseja enviar os dados por FTP ?", new QuestionListener() {
-//					public void onPositiveClick() {
-//						String path = ultimoBackup.getAbsolutePath();
-//						new SendDatabaseToFTP(ExportDatabaseTask.this.context).execute(path);
-//					}
-//
-//					public void onNegativeClick() {
-//					}
-//				}).show();
-//	}
 
 }

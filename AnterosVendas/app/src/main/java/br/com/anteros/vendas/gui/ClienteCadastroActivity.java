@@ -195,7 +195,7 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
             if (result == null) {
 
                 new InfoAlert(ClienteCadastroActivity.this, getString(R.string.app_name),
-                        "Cliente salvo sucesso!", new InfoAlert.InfoListener() {
+                        "Cliente salvo com sucesso!", new InfoAlert.InfoListener() {
                     @Override
                     public void onOkClick() {
                         setResult(RESULT_OK);

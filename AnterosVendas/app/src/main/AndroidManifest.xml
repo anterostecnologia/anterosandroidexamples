@@ -42,6 +42,16 @@
             android:configChanges="orientation"
             android:windowSoftInputMode="adjustPan|stateHidden" >
         </activity>
+        <activity
+            android:name=".gui.ManutencaoTabelasActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name=".gui.RegistrosTabelasActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
     </application>
 
 </manifest>
