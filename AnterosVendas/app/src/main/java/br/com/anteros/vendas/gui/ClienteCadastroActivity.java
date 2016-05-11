@@ -101,7 +101,7 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v == imgSave) {
-            new QuestionAlert(this, "Ordem de serviço", "Deseja salvar o cliente?",
+            new QuestionAlert(this, this.getResources().getString(R.string.app_name), "Deseja salvar o cliente?",
                     new QuestionAlert.QuestionListener() {
 
                         @Override
