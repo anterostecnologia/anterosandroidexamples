@@ -139,7 +139,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                 startActivity(new Intent(this, ClienteConsultaActivity.class));
                 break;
             case PEDIDO:
-//
+                startActivity(new Intent(this, PedidoConsultaActivity.class));
                 break;
         }
     }

@@ -16,9 +16,13 @@
 
 package br.com.anteros.vendas.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import br.com.anteros.bean.validation.constraints.Required;
@@ -45,70 +49,96 @@ import br.com.anteros.validation.api.groups.Default;
  * Created by edson on 09/05/16.
  */
 @Entity
-@Table(name="PEDIDOVENDA")
-public class PedidoVenda implements Serializable {
+@Table(name = "PEDIDOVENDA")
+public class PedidoVenda implements Serializable, Parcelable {
 
     /*
      * Id do Pedido de venda
      */
     @Id
     @GeneratedValue(strategy = GeneratedType.TABLE)
-    @TableGenerator(value= "SEQ_PEDIDOVENDA", name = "SEQUENCIA", initialValue= 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
-    @Column(name="ID_PEDIDOVENDA", required = true, length = 8)
+    @TableGenerator(value = "SEQ_PEDIDOVENDA", name = "SEQUENCIA", initialValue = 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
+    @Column(name = "ID_PEDIDOVENDA", required = true, length = 8)
     private Long id;
 
     /*
      * Número do pedido
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="NR_PEDIDO", length = 8, required = true, label = "Nr.pedido")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "NR_PEDIDO", length = 8, required = true, label = "Nr.pedido")
     private Long nrPedido;
 
     /*
      * Data do pedido
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Temporal(TemporalType.DATE)
-    @Column(name="DT_PEDIDO", required = true, label = "Data do pedido")
+    @Column(name = "DT_PEDIDO", required = true, label = "Data do pedido")
     private Date dtPedido;
 
     /*
      * Cliente a qual pertence o pedido
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @ForeignKey
     private Cliente cliente;
 
     /*
      * Valor total do pedido
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="VL_TOTAL_PEDIDO", required = true, defaultValue = "0", precision = 14, scale = 2, label="Valor total do pedido")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "VL_TOTAL_PEDIDO", required = true, defaultValue = "0", precision = 14, scale = 2, label = "Valor total do pedido")
     private BigDecimal vlTotalPedido;
 
     /*
      * Condição de pagamento
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Enumerated(EnumType.STRING)
-    @Column(name="TP_CONDICAO_PGTO", length = 20, required = true, label = "Tipo de condição de pagamento")
+    @Column(name = "TP_CONDICAO_PGTO", length = 20, required = true, label = "Tipo de condição de pagamento")
     private CondicaoPagamento condicaoPagamento;
 
     /*
      * Forma de pagamento
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Enumerated
-    @Column(name="FORMA_PAGTO", required = true, length = 20)
+    @Column(name = "FORMA_PAGTO", required = true, length = 20)
     private FormaPagamento formaPagamento;
 
     /*
      * Itens do pedido de venda
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Fetch(type = FetchType.LAZY, mode = FetchMode.ONE_TO_MANY, mappedBy = "pedidoVenda")
-    @Cascade(values = { CascadeType.DELETE_ORPHAN })
-    private Set<ItemPedido> itens;
+    @Cascade(values = {CascadeType.DELETE_ORPHAN})
+    private List<ItemPedido> itens;
+
+
+    protected PedidoVenda(Parcel in) {
+        cliente = in.readParcelable(Cliente.class.getClassLoader());
+
+        id = in.readLong();
+        nrPedido = in.readLong();
+        dtPedido = new Date(in.readLong());
+        cliente = in.readParcelable(Cliente.class.getClassLoader());
+        vlTotalPedido = new BigDecimal(in.readString());
+        condicaoPagamento = CondicaoPagamento.values()[in.readInt()];
+        formaPagamento = FormaPagamento.values()[in.readInt()];
+        itens = in.readArrayList(ItemPedido.class.getClassLoader());
+    }
+
+    public static final Creator<PedidoVenda> CREATOR = new Creator<PedidoVenda>() {
+        @Override
+        public PedidoVenda createFromParcel(Parcel in) {
+            return new PedidoVenda(in);
+        }
+
+        @Override
+        public PedidoVenda[] newArray(int size) {
+            return new PedidoVenda[size];
+        }
+    };
 
     public Long getId() {
         return id;
@@ -166,11 +196,32 @@ public class PedidoVenda implements Serializable {
         this.formaPagamento = formaPagamento;
     }
 
-    public Set<ItemPedido> getItens() {
+    public List<ItemPedido> getItens() {
         return itens;
     }
 
-    public void setItens(Set<ItemPedido> itens) {
+    public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(nrPedido);
+        dest.writeLong(dtPedido.getTime());
+        dest.writeParcelable(cliente, flags);
+        dest.writeString(vlTotalPedido.toString());
+        if (condicaoPagamento != null) {
+            dest.writeInt(condicaoPagamento.ordinal());
+        }
+        if (formaPagamento != null) {
+            dest.writeInt(formaPagamento.ordinal());
+        }
+        dest.writeList(itens);
     }
 }
