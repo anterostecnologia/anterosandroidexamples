@@ -16,8 +16,12 @@
 
 package br.com.anteros.vendas.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import br.com.anteros.bean.validation.constraints.Required;
@@ -45,93 +49,93 @@ import br.com.anteros.validation.api.groups.Default;
  */
 
 @Entity
-@Table(name="CLIENTE")
-public class Cliente implements Serializable {
+@Table(name = "CLIENTE")
+public class Cliente implements Serializable, Parcelable {
 
     /*
      * Id do Cliente
      */
     @Id
     @GeneratedValue(strategy = GeneratedType.TABLE)
-    @TableGenerator(value= "SEQ_CLIENTE", name = "SEQUENCIA", initialValue= 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
-    @Column(name="ID_CLIENTE", required = true, length = 8)
+    @TableGenerator(value = "SEQ_CLIENTE", name = "SEQUENCIA", initialValue = 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
+    @Column(name = "ID_CLIENTE", required = true, length = 8)
     private Long id;
 
     /*
      * Razão social do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="RAZAO_SOCIAL", required = true, length = 50, label = "Razão social")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "RAZAO_SOCIAL", required = true, length = 50, label = "Razão social")
     private String razaoSocial;
 
     /*
      * Nome fantasia do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="FANTASIA", required = true, length = 40, label = "Nome fantasia")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "FANTASIA", required = true, length = 40, label = "Nome fantasia")
     private String nomeFantasia;
 
     /*
      * Tipo de logradouro: RUA, AVENIDA, etc
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Enumerated(EnumType.STRING)
-    @Column(name="TP_LOGRADOURO", length = 20, required = true, label="Tipo de logradouro")
+    @Column(name = "TP_LOGRADOURO", length = 20, required = true, label = "Tipo de logradouro")
     private TipoLogradouro tpLogradouro;
 
     /*
      * Logradouro do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="LOGRADOURO", length = 40, required = true, label="Logradouro")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "LOGRADOURO", length = 40, required = true, label = "Logradouro")
     private String logradouro;
 
     /*
      * Número do logradouro do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="NR_LOGRADOURO", length = 20, required = true, label="Nr.logradouro")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "NR_LOGRADOURO", length = 20, required = true, label = "Nr.logradouro")
     private String nrLogradouro;
 
     /*
      * Cep do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="CEP", length = 8, required = true, label="Cep")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "CEP", length = 8, required = true, label = "Cep")
     private String cep;
 
     /*
      * Bairro do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="BAIRRO", length = 30, required = true, label="Bairro")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "BAIRRO", length = 30, required = true, label = "Bairro")
     private String bairro;
 
     /*
      * Complemento
      */
-    @Column(name="COMPLEMENTO", length = 30, label="Complemento")
+    @Column(name = "COMPLEMENTO", length = 30, label = "Complemento")
     private String complemento;
 
     /*
      * Cidade do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="DS_CIDADE", length = 40, required = true, label = "Cidade")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "DS_CIDADE", length = 40, required = true, label = "Cidade")
     private String Cidade;
 
     /*
      * Estado do cliente
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="UF", required = true, length = 2, label = "Estado")
-    private Estado Estado;
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "UF", required = true, length = 2, label = "Estado")
+    private Estado estado;
 
     /*
-	 * Data do cadastro do cliente
+     * Data do cadastro do cliente
 	 */
     @Past
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Required(groups = {Default.class, ValidacaoCliente.class})
     @Temporal(TemporalType.DATE_TIME)
     @Column(name = "DT_CADASTRO", required = true, label = "Data do cadastro")
     private Date dtCadastro;
@@ -141,9 +145,39 @@ public class Cliente implements Serializable {
      * Anexos do cliente: FOTOS, DOCUMENTOS, CONTRATOS, etc
      */
     @Fetch(type = FetchType.LAZY, mode = FetchMode.ONE_TO_MANY, mappedBy = "cliente")
-    @Cascade(values = { CascadeType.DELETE_ORPHAN })
-    private Set<Anexo> anexos;
+    @Cascade(values = {CascadeType.DELETE_ORPHAN})
+    private List<Anexo> anexos;
 
+
+    protected Cliente(Parcel in) {
+        id = in.readLong();
+        razaoSocial = in.readString();
+        nomeFantasia = in.readString();
+        logradouro = in.readString();
+        nrLogradouro = in.readString();
+        cep = in.readString();
+        bairro = in.readString();
+        complemento = in.readString();
+        Cidade = in.readString();
+        tpLogradouro = TipoLogradouro.values()[in.readInt()];
+        estado = Estado.values()[in.readInt()];
+        anexos = in.readArrayList(Anexo.class.getClassLoader());
+    }
+
+    public static final Creator<Cliente> CREATOR = new Creator<Cliente>() {
+        @Override
+        public Cliente createFromParcel(Parcel in) {
+            return new Cliente(in);
+        }
+
+        @Override
+        public Cliente[] newArray(int size) {
+            return new Cliente[size];
+        }
+    };
+
+    public Cliente() {
+    }
 
     public Long getId() {
         return id;
@@ -226,18 +260,18 @@ public class Cliente implements Serializable {
     }
 
     public br.com.anteros.vendas.modelo.Estado getEstado() {
-        return Estado;
+        return estado;
     }
 
-    public void setEstado(br.com.anteros.vendas.modelo.Estado estado) {
-        Estado = estado;
+    public void setEstado(br.com.anteros.vendas.modelo.Estado est) {
+        estado = est;
     }
 
-    public Set<Anexo> getAnexos() {
+    public List<Anexo> getAnexos() {
         return anexos;
     }
 
-    public void setAnexos(Set<Anexo> anexos) {
+    public void setAnexos(List<Anexo> anexos) {
         this.anexos = anexos;
     }
 
@@ -267,6 +301,31 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return id+" "+razaoSocial;
+        return id + " " + razaoSocial;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(razaoSocial);
+        dest.writeString(nomeFantasia);
+        dest.writeString(logradouro);
+        dest.writeString(nrLogradouro);
+        dest.writeString(cep);
+        dest.writeString(bairro);
+        dest.writeString(complemento);
+        dest.writeString(Cidade);
+        if (tpLogradouro != null) {
+            dest.writeInt(tpLogradouro.ordinal());
+        }
+        if (estado != null) {
+            dest.writeInt(estado.ordinal());
+        }
+        dest.writeList(anexos);
     }
 }

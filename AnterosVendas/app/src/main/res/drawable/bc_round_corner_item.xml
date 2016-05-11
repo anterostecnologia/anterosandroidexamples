@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+     <!-- Drop Shadow Stack -->
+     <item>
+        <shape>
+            <padding  android:top="1dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
+            <gradient android:startColor="#00CCCCCC" 
+                      android:endColor="#10CCCCCC" />
+            <corners  android:radius="30dp" />
+        </shape>
+    </item>
+     <item>
+        <shape>
+            <padding android:top="1dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
+            <gradient android:startColor="#10CCCCCC" 
+                      android:endColor="#20CCCCCC" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+     <item>
+        <shape>
+            <padding android:top="0dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
+            <gradient android:startColor="#30CCCCCC" 
+                      android:endColor="#40CCCCCC" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+     <item>
+        <shape>
+            <padding android:top="0dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
+            <gradient android:startColor="#50CCCCCC" 
+                      android:endColor="#60CCCCCC" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:top="0dp" android:right="0dp" android:bottom="2dp" android:left="0dp" />
+            <gradient android:startColor="#70CCCCCC" 
+                      android:endColor="#80CCCCCC" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
+    <!-- Background -->
+    <item>
+		<shape>
+	         <solid android:color="@android:color/white" /> 
+		    <corners android:radius="1dp" />
+		</shape>
+    </item>
+</layer-list>

@@ -16,12 +16,18 @@
 
 package br.com.anteros.vendas.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by edson on 09/05/16.
  */
 public enum TipoLogradouro {
+
     RUA,
     AVENIDA,
     ESTRADA,
     RODOVIA
+
 }
+

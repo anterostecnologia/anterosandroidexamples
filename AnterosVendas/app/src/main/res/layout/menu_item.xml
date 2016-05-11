@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bc_round_corner_menu" >
+
+            <View
+                android:id="@+id/menu_item_viewColor"
+                android:layout_width="5dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent" />
+
+            <ImageView
+                android:id="@+id/menu_item_imgItem"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_btn_foto" />
+
+            <LinearLayout
+                android:id="@+id/menu_item_layoutPrincipal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/menu_item_titulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="Nome"
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/menu_item_descricao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Descrição"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/menu_item_descricao2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Descrição 2"
+                    android:textColor="#4787CB"
+                    android:textSize="14sp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

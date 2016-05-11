@@ -17,6 +17,9 @@
 package br.com.anteros.vendas.modelo;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 import br.com.anteros.bean.validation.constraints.Required;
@@ -39,7 +42,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 @Entity
 @Table(name = "ANEXO")
-public class Anexo implements Serializable {
+public class Anexo implements Serializable, Parcelable {
 
     /*
  * Identificação do Anexo
@@ -81,6 +84,25 @@ public class Anexo implements Serializable {
     @ForeignKey
     private Cliente cliente;
 
+    protected Anexo(Parcel in) {
+        nome = in.readString();
+        conteudo = in.createByteArray();
+        cliente = in.readParcelable(Cliente.class.getClassLoader());
+        tipoConteudo = TipoConteudoAnexo.values()[in.readInt()];
+    }
+
+    public static final Creator<Anexo> CREATOR = new Creator<Anexo>() {
+        @Override
+        public Anexo createFromParcel(Parcel in) {
+            return new Anexo(in);
+        }
+
+        @Override
+        public Anexo[] newArray(int size) {
+            return new Anexo[size];
+        }
+    };
+
     public Long getId() {
         return id;
     }
@@ -119,5 +141,18 @@ public class Anexo implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nome);
+        dest.writeByteArray(conteudo);
+        dest.writeParcelable(cliente, flags);
+        dest.writeInt(tipoConteudo.ordinal());
     }
 }

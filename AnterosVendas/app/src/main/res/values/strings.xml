@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">AnterosVendas</string>
+    <string name="app_name">Anteros Vendas</string>
+    <string name="filtro">Filtro</string>
+
+    <string-array name="consulta_cliente_filtro_values">
+        <item>ID</item>
+        <item>Razão</item>
+        <item>Fantasia</item>
+        <item>Cidade</item>
+
+    </string-array>
+
 </resources>

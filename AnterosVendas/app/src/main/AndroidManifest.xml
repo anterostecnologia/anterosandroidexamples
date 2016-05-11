@@ -29,9 +29,18 @@
         <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="br.com.anteros.vendas.gui.ClienteConsultaActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name=".gui.ClienteCadastroActivity"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
         </activity>
     </application>
 

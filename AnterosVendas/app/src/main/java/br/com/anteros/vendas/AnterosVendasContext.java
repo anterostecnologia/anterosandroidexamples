@@ -19,6 +19,7 @@ package br.com.anteros.vendas;
 import android.app.Application;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,8 @@ import br.com.anteros.persistence.session.SQLSession;
 import br.com.anteros.persistence.session.SQLSessionFactory;
 import br.com.anteros.persistence.session.configuration.AnterosPersistenceProperties;
 import br.com.anteros.persistence.session.query.TypedSQLQuery;
+import br.com.anteros.persistence.session.repository.AbstractSQLRepositoryFactory;
+import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.CondicaoPagamento;
@@ -142,9 +145,18 @@ public class AnterosVendasContext {
         return application.getString(R.string.app_name);
     }
 
+    public AbstractSQLRepositoryFactory getSQLRepositoryFactory() {
+        return AbstractSQLRepositoryFactory.getInstance();
+    }
+
+    public <T, ID extends Serializable> SQLRepository<T, ID> getSQLRepository(Class<T> clazz) {
+        SQLRepository<T, ID> repository = getSQLRepositoryFactory().getRepository(getSession(), clazz);
+        return repository;
+    }
+
     public void populateDatabase() {
         Cliente cliente1 = new Cliente();
-        //cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
+        cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
         cliente1.setNomeFantasia("JOAO DA SILVA");
         cliente1.setTpLogradouro(TipoLogradouro.AVENIDA);
         cliente1.setNrLogradouro("240");
