@@ -23,6 +23,12 @@ public abstract class RecriarBancoDeDados extends AsyncTask<Void, Void, String> 
 
     @Override
     protected String doInBackground(Void... params) {
+        try {
+            AnterosVendasContext.getInstance().recriarBancoDados();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage() + "";
+        }
         return null;
     }
 
