@@ -1,4 +1,4 @@
-package br.com.anteros.vendas;
+package br.com.anteros.vendas.gui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import br.com.anteros.vendas.MenuItem;
+import br.com.anteros.vendas.R;
 
 /**
  * Created by eduardogreco on 5/10/16.

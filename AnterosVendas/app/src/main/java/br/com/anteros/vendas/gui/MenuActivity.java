@@ -14,56 +14,76 @@
  * limitations under the License.
  */
 
-package br.com.anteros.vendas;
+package br.com.anteros.vendas.gui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.anteros.android.ui.controls.QuestionAlert;
-import br.com.anteros.vendas.gui.ClienteConsultaActivity;
-import br.com.anteros.vendas.gui.ManutencaoTabelasActivity;
+import br.com.anteros.vendas.AnterosVendasContext;
+import br.com.anteros.vendas.GUIUtils;
+import br.com.anteros.vendas.MenuItem;
+import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.adapter.MenuAdapter;
 
-public class MenuActivity extends AppCompatActivity implements View.OnClickListener, OnItemClickListener {
-
-    private GridView gridMenu;
-    private ImageView imgLogout;
-    private ImageView imgConfiguracao;
+public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
 
     public static final int CLIENTE = 0;
     public static final int PEDIDO = 1;
     public static final int CADASTRO_SELECIONAR_CLIENTE = 3;
+    private GridView gridMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         /*
          * Inicializa o contexto da aplicação de vendas.
          */
         AnterosVendasContext.setApplication(this.getApplication());
-        final AnterosVendasContext vendasContext = AnterosVendasContext.getInstance();
 
         // vendasContext.populateDatabase();
 
-        gridMenu = (GridView) findViewById(R.id.lvMenu);
+        gridMenu = (GridView) findViewById(R.id.activity_menu_gridMenu
+        );
         gridMenu.setOnItemClickListener(this);
-        imgLogout = (ImageView) findViewById(R.id.img_logout);
-        imgLogout.setOnClickListener(this);
-        imgConfiguracao = (ImageView) findViewById(R.id.img_configuracao);
-        imgConfiguracao.setOnClickListener(this);
 
         adicionarItensMenu();
+        verificaQtdeColunasPorLinha();
+    }
+
+    private void verificaQtdeColunasPorLinha() {
+        if (gridMenu != null) {
+            if (GUIUtils.isTablet(MenuActivity.this)) {
+                gridMenu.setVerticalSpacing(5);
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gridMenu.setNumColumns(3);
+                else
+                    gridMenu.setNumColumns(2);
+            } else {
+                gridMenu.setVerticalSpacing(3);
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gridMenu.setNumColumns(2);
+                else
+                    gridMenu.setNumColumns(1);
+            }
+        }
     }
 
 
@@ -76,6 +96,40 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         gridMenu.setAdapter(new MenuAdapter(this, R.layout.menu_item, itens));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.menu_action);
+        tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, ManutencaoTabelasActivity.class));
+                break;
+            case R.id.action_exit:
+                sairDoSistema();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            sairDoSistema();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view,
@@ -87,15 +141,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             case PEDIDO:
 //
                 break;
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == imgLogout) {
-            sairDoSistema();
-        } else if (view == imgConfiguracao) {
-            startActivity(new Intent(this, ManutencaoTabelasActivity.class));
         }
     }
 
