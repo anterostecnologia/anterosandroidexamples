@@ -33,6 +33,8 @@ import br.com.anteros.persistence.session.configuration.AnterosPersistenceProper
 import br.com.anteros.persistence.session.query.TypedSQLQuery;
 import br.com.anteros.persistence.session.repository.AbstractSQLRepositoryFactory;
 import br.com.anteros.persistence.session.repository.SQLRepository;
+import br.com.anteros.validation.api.Validation;
+import br.com.anteros.validation.api.Validator;
 import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.CondicaoPagamento;
@@ -52,6 +54,7 @@ public class AnterosVendasContext {
 
     private SQLSessionFactory sessionFactory;
     private SQLSession session;
+    private Validator validator;
 
     public static AnterosVendasContext getInstance() {
         try {
@@ -123,6 +126,13 @@ public class AnterosVendasContext {
 
     public String getAbsolutPathDb() {
         return application.getDatabasePath(getDatabaseName()).getAbsolutePath();
+    }
+
+    public Validator getDefaultValidator() {
+        if (validator == null)
+            validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+        return validator;
     }
 
     public String getDatabaseName() {

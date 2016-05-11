@@ -1,5 +1,7 @@
 package br.com.anteros.vendas.gui;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,11 +11,13 @@ import android.widget.Spinner;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
+import br.com.anteros.android.ui.controls.InfoAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.persistence.session.repository.SQLRepository;
-import br.com.anteros.persistence.transaction.impl.TransactionException;
+import br.com.anteros.validation.api.ConstraintViolation;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.EstadoAdapter;
@@ -21,6 +25,7 @@ import br.com.anteros.vendas.gui.adapter.TipoLogradouroAdapter;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.Estado;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
+import br.com.anteros.vendas.modelo.ValidacaoCliente;
 
 /**
  * Created by eduardogreco on 5/10/16.
@@ -96,7 +101,20 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v == imgSave) {
-            salvar();
+            new QuestionAlert(this, "Ordem de serviço", "Deseja salvar o cliente?",
+                    new QuestionAlert.QuestionListener() {
+
+                        @Override
+                        public void onPositiveClick() {
+                            new SalvarCliente().execute();
+                        }
+
+                        @Override
+                        public void onNegativeClick() {
+
+                        }
+
+                    }).show();
         } else if (v == imgCancel) {
             new QuestionAlert(this, this.getResources().getString(
                     R.string.app_name), "Deseja cancelar o cliente?",
@@ -115,53 +133,84 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         }
     }
 
-    private void salvar() {
-        new QuestionAlert(this, this.getResources().getString(
-                R.string.app_name), "Deseja salvar o Cliente?",
-                new QuestionAlert.QuestionListener() {
+    private void salvarDadosCliente() {
+        cliente.setRazaoSocial(edRazao.getText().toString());
+        cliente.setNomeFantasia(edFantasia.getText().toString());
+        cliente.setLogradouro(edLogradouro.getText().toString());
+        cliente.setNrLogradouro(edNrLogradouro.getText().toString());
+        cliente.setCep(edCep.getText().toString());
+        cliente.setBairro(edBairro.getText().toString());
+        cliente.setComplemento(edComplemento.getText().toString());
+        cliente.setCidade(edCidade.getText().toString());
+        cliente.setDtCadastro(cliente.getDtCadastro() != null ? cliente.getDtCadastro() : new Date());
+        cliente.setEstado((Estado) spEstado.getSelectedItem());
+        cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
+    }
 
-                    public void onPositiveClick() {
-                        SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
-                        try {
-                            cliente.setRazaoSocial(edRazao.getText().toString());
-                            cliente.setNomeFantasia(edFantasia.getText().toString());
-                            cliente.setLogradouro(edLogradouro.getText().toString());
-                            cliente.setNrLogradouro(edNrLogradouro.getText().toString());
-                            cliente.setCep(edCep.getText().toString());
-                            cliente.setBairro(edBairro.getText().toString());
-                            cliente.setComplemento(edComplemento.getText().toString());
-                            cliente.setCidade(edCidade.getText().toString());
-                            cliente.setDtCadastro(cliente.getDtCadastro() != null ? cliente.getDtCadastro() : new Date());
-                            cliente.setEstado((Estado) spEstado.getSelectedItem());
-                            cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
+    public class SalvarCliente extends AsyncTask<Integer, Void, String> {
 
-                            clienteRepository.getTransaction().begin();
-                            clienteRepository.save(cliente);
-                            clienteRepository.getTransaction().commit();
+        SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
+        private ProgressDialog dialog;
+        Set<ConstraintViolation<Cliente>> violations;
 
-                            setResult(RESULT_OK);
-                            finish();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            try {
-                                clienteRepository.getTransaction().rollback();
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-                            if (e instanceof TransactionException) {
-                                new ErrorAlert(ClienteCadastroActivity.this, "Erro",
-                                        "Ocorreu um erro ao salvar o cliente. " + e.getCause()).show();
-                            } else {
-                                new ErrorAlert(ClienteCadastroActivity.this, "Erro",
-                                        "Ocorreu um erro ao salvar o cliente. " + e.getMessage()).show();
-                            }
-                        }
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(ClienteCadastroActivity.this);
+            dialog.setTitle(getResources().getString(R.string.app_name));
+            dialog.setMessage("Salvando cliente...");
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            try {
+                salvarDadosCliente();
+
+                violations = AnterosVendasContext.getInstance().getDefaultValidator().validate(cliente, ValidacaoCliente.class);
+                if (violations.size() > 0) {
+                    return "ERRO_VALIDACAO";
+                }
+                clienteRepository.getTransaction().begin();
+                clienteRepository.save(cliente);
+                clienteRepository.getTransaction().commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    clienteRepository.getTransaction().rollback();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                return e.getMessage() + "";
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (dialog.isShowing())
+                dialog.dismiss();
+
+            if (result == null) {
+
+                new InfoAlert(ClienteCadastroActivity.this, getString(R.string.app_name),
+                        "Cliente salvo sucesso!", new InfoAlert.InfoListener() {
+                    @Override
+                    public void onOkClick() {
+                        setResult(RESULT_OK);
+                        finish();
                     }
-
-                    public void onNegativeClick() {
-
-                    }
-
                 }).show();
+
+            } else if (result.equals("ERRO_VALIDACAO")) {
+                new MensagemErrorDialog<Cliente>(ClienteCadastroActivity.this,
+                        "Atenção!", violations).show();
+            } else {
+                new ErrorAlert(ClienteCadastroActivity.this, getString(R.string.app_name),
+                        "Salvando cliente: " + result).show();
+            }
+        }
+
     }
 }
