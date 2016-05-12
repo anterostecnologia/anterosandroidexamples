@@ -16,6 +16,9 @@
 
 package br.com.anteros.vendas.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -34,37 +37,60 @@ import br.com.anteros.validation.api.groups.Default;
  * Created by edson on 09/05/16.
  */
 @Entity
-@Table(name="PRODUTO")
-public class Produto implements Serializable {
+@Table(name = "PRODUTO")
+public class Produto implements Serializable, Parcelable {
     /*
      * Id do Produto
      */
     @Id
     @GeneratedValue(strategy = GeneratedType.TABLE)
-    @TableGenerator(value= "SEQ_PRODUTO", name = "SEQUENCIA", initialValue= 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
-    @Column(name="ID_PRODUTO", required = true, length = 8)
+    @TableGenerator(value = "SEQ_PRODUTO", name = "SEQUENCIA", initialValue = 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
+    @Column(name = "ID_PRODUTO", required = true, length = 8)
     private Long id;
 
     /*
      * Nome do produto
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="DS_PRODUTO", required = true, length = 50)
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "DS_PRODUTO", required = true, length = 50)
     private String nomeProduto;
 
     /*
      * Foto do produto
      */
     @Lob
-    @Column(name="FOTO_PRODUTO")
+    @Column(name = "FOTO_PRODUTO")
     private byte[] fotoProduto;
 
     /*
      * Valor do produto
      */
-    @Required(groups = { Default.class, ValidacaoCliente.class })
-    @Column(name="VL_PRODUTO", required = true, precision = 14, scale = 2, defaultValue = "0")
+    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Column(name = "VL_PRODUTO", required = true, precision = 14, scale = 2, defaultValue = "0")
     private BigDecimal vlProduto;
+
+    public Produto(){
+
+    }
+
+    protected Produto(Parcel in) {
+        id = in.readLong();
+        nomeProduto = in.readString();
+        fotoProduto = in.createByteArray();
+        vlProduto = new BigDecimal(in.readString());
+    }
+
+    public static final Creator<Produto> CREATOR = new Creator<Produto>() {
+        @Override
+        public Produto createFromParcel(Parcel in) {
+            return new Produto(in);
+        }
+
+        @Override
+        public Produto[] newArray(int size) {
+            return new Produto[size];
+        }
+    };
 
     public Long getId() {
         return id;
@@ -96,5 +122,18 @@ public class Produto implements Serializable {
 
     public void setVlProduto(BigDecimal vlProduto) {
         this.vlProduto = vlProduto;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(nomeProduto);
+        dest.writeByteArray(fotoProduto);
+        dest.writeString(vlProduto.toString());
     }
 }

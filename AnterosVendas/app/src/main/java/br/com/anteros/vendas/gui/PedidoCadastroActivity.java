@@ -1,5 +1,6 @@
 package br.com.anteros.vendas.gui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,16 +14,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.adapter.PedidoCadastroPageViewAdapter;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 
 public class PedidoCadastroActivity extends AppCompatActivity {
 
     private PedidoVenda pedido;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
+
+    private PedidoCadastroDadosFragment pedidoCadastroDadosFragment;
+    private PedidoCadastroItensFragment pedidoCadastroItensFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +38,18 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//
+//        mViewPager = (ViewPager) findViewById(R.id.container);
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+        }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_pedido_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
 
         if (getIntent().hasExtra("pedido")) {
             pedido = (PedidoVenda) getIntent().getSerializableExtra("pedido");
@@ -122,5 +133,22 @@ public class PedidoCadastroActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    private void setupViewPager(final ViewPager viewPager) {
+        PedidoCadastroPageViewAdapter adapter = new PedidoCadastroPageViewAdapter(getSupportFragmentManager());
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("teste", pedido);
+
+        pedidoCadastroDadosFragment = new PedidoCadastroDadosFragment();
+        pedidoCadastroDadosFragment.setArguments(arguments);
+        adapter.addFragment(pedidoCadastroDadosFragment, "Dados");
+
+        pedidoCadastroItensFragment = new PedidoCadastroItensFragment();
+        pedidoCadastroItensFragment.setArguments(arguments);
+        adapter.addFragment(pedidoCadastroItensFragment, "Itens");
+
+        viewPager.setAdapter(adapter);
     }
 }
