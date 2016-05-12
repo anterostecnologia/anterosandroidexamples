@@ -56,8 +56,7 @@ public class Produto implements Serializable {
      * Foto do produto
      */
     @Lob
-    @Column(name="FOTO_PRODUTO", required = true)
-    @Required(groups = { Default.class, ValidacaoCliente.class })
+    @Column(name="FOTO_PRODUTO")
     private byte[] fotoProduto;
 
     /*

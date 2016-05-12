@@ -20,6 +20,8 @@ import android.app.Application;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +41,7 @@ import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.CondicaoPagamento;
 import br.com.anteros.vendas.modelo.Estado;
+import br.com.anteros.vendas.modelo.FormaPagamento;
 import br.com.anteros.vendas.modelo.ItemPedido;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 import br.com.anteros.vendas.modelo.Produto;
@@ -177,6 +180,7 @@ public class AnterosVendasContext {
         cliente1.setCidade("CAMPO MOURAO");
         cliente1.setEstado(Estado.PR);
         cliente1.setDtCadastro(new Date());
+
         try {
             getSession().getTransaction().begin();
             getSession().save(cliente1);
@@ -189,8 +193,11 @@ public class AnterosVendasContext {
                 Log.d(AnterosVendasContext.class.getName(), cliente.toString());
             }
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 }

@@ -42,11 +42,11 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/pedido_consulta_item_nomeCliente"
+                                android:id="@+id/pedido_consulta_item_nomePedido"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical|left"
-                                android:text="Nr. Pedido"
+                                android:text="Nr. pedido "
                                 android:textColor="#000000"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />

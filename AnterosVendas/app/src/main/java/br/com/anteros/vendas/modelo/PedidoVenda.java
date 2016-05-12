@@ -114,6 +114,8 @@ public class PedidoVenda implements Serializable, Parcelable {
     @Cascade(values = {CascadeType.DELETE_ORPHAN})
     private List<ItemPedido> itens;
 
+    public PedidoVenda() {
+    }
 
     protected PedidoVenda(Parcel in) {
         cliente = in.readParcelable(Cliente.class.getClassLoader());
