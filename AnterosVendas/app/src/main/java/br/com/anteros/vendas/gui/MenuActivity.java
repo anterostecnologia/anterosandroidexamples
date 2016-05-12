@@ -32,9 +32,9 @@ import android.widget.GridView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.vendas.AnterosVendasContext;
-import br.com.anteros.vendas.GUIUtils;
 import br.com.anteros.vendas.MenuItem;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.MenuAdapter;

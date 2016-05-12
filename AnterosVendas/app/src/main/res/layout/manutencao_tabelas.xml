@@ -15,11 +15,11 @@
         app:title="Manutenção das tabelas"
         app:titleTextColor="@android:color/white"/>
 
-    <ListView
-        android:id="@+id/manutencao_tabelas_lvTabelas"
+    <LinearLayout
+        android:id="@+id/manutencao_tabelas_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/manutencao_tabelas_barraCancelar">
-    </ListView>
+        android:orientation="vertical">
+    </LinearLayout>
 
 </LinearLayout>

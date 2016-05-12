@@ -1,50 +1,41 @@
 package br.com.anteros.vendas.gui;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.CursorAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.sql.SQLException;
 
-import br.com.anteros.android.persistence.sql.jdbc.SQLiteConnection;
-import br.com.anteros.android.persistence.sql.jdbc.SQLiteResultSet;
+import br.com.anteros.android.persistence.backup.BackupException;
+import br.com.anteros.android.persistence.backup.BackupService;
+import br.com.anteros.android.persistence.backup.DatabaseMaintenanceFragment;
+import br.com.anteros.android.persistence.backup.ExportDatabaseTask;
+import br.com.anteros.android.persistence.backup.ImportDatabaseTask;
+import br.com.anteros.android.persistence.backup.RecreateDatabaseTask;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.InfoAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.vendas.AnterosVendasContext;
-import br.com.anteros.vendas.BackupService;
-import br.com.anteros.vendas.ExportDatabaseTask;
-import br.com.anteros.vendas.ImportDatabaseTask;
 import br.com.anteros.vendas.R;
-import br.com.anteros.vendas.RecriarBancoDeDados;
 
 public class ManutencaoTabelasActivity extends AppCompatActivity {
 
-    public static final int RECRIOU_TABELAS = 1;
-
-    private ListView lvTabelas;
-    private CursorAdapter adapter;
-    private SQLiteConnection connection;
-    private Cursor cursor = null;
+    private static int REQUEST_PERMISSION_IMPORT = 777;
+    private static int REQUEST_PERMISSION_EXPORT = 778;
+    private static int REQUEST_PERMISSION_SHARE = 779;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,64 +48,10 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
 
-        lvTabelas = (ListView) findViewById(R.id.manutencao_tabelas_lvTabelas);
 
-        try {
-            connection = (SQLiteConnection) AnterosVendasContext.getInstance().getSession().getConnection();
-        } catch (Exception e) {
-        }
-        cursor = connection
-                .getDatabase()
-                .rawQuery(
-                        "SELECT name as _id FROM sqlite_master WHERE type='table' ORDER BY name;",
-                        null);
-
-        adapter = new CursorAdapter(this, cursor) {
-
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                View view = inflater.inflate(R.layout.manutencao_tabelas_item,
-                        parent, false);
-                bindView(view, context, cursor);
-                return view;
-            }
-
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-                TextView lbTabela = (TextView) view
-                        .findViewById(R.id.manutencao_tabela_item_nome_tabela);
-                try {
-                    lbTabela.setText(getObjectValue(cursor, 0) + "");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    lbTabela.setText("");
-                }
-            }
-
-        };
-
-        lvTabelas.setAdapter(adapter);
-        lvTabelas.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> adapterView,
-                                           View view, int position, long id) {
-                String tabela = "";
-
-                try {
-                    tabela = getObjectValue((Cursor) adapter.getItem(position), 0) + "";
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                RegistrosTabelasActivity.setTabela(tabela);
-
-                startActivity(new Intent(ManutencaoTabelasActivity.this,
-                        RegistrosTabelasActivity.class));
-
-                return false;
-            }
-        });
+        DatabaseMaintenanceFragment fragment = new ManutencaoTabelasFragment();
+        FragmentTransaction mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        mFragmentTransaction.replace(R.id.manutencao_tabelas_fragment, fragment).commit();
     }
 
     @Override
@@ -145,14 +82,66 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
                 importarBancoDeDados();
                 break;
             case R.id.manutencao_action_recriar:
-                dropAndCreateTables();
+                recriarBancoDados();
+                break;
+            case R.id.manutencao_action_share:
+                compartilharBancoDados();
                 break;
 
         }
         return true;
     }
 
-    private void dropAndCreateTables() {
+    private void compartilharBancoDados() {
+        new QuestionAlert(this, "Manutenção Tabelas",
+                "Deseja compartilhar o banco de dados ?", new QuestionAlert.QuestionListener() {
+
+            public void onPositiveClick() {
+                if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ManutencaoTabelasActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_SHARE);
+                } else {
+                    selecionarArquivoCompartilhar();
+                }
+            }
+
+            public void onNegativeClick() {
+            }
+        }).show();
+    }
+
+    private void selecionarArquivoCompartilhar() {
+
+        File importFolder = new File(Environment.getExternalStorageDirectory()
+                + "/backup/");
+
+        final File importFiles[] = importFolder.listFiles();
+
+        if (importFiles == null || importFiles.length == 0) {
+            Toast.makeText(this, "Pasta de backup vazia", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecionar arquivo:");
+        builder.setSingleChoiceItems(importFolder.list(), 0,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        File importDatabaseFile = importFiles[whichButton];
+                        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        emailIntent.setType("*/*");
+                        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "File Name");
+                        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(importDatabaseFile));
+                        startActivity(Intent.createChooser(emailIntent, "Share File"));
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void recriarBancoDados() {
         new QuestionAlert(
                 this,
                 "Atenção!",
@@ -162,8 +151,8 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
                     @Override
                     public void onPositiveClick() {
                         try {
-                            new RecriarBancoDeDados(
-                                    ManutencaoTabelasActivity.this) {
+                            new RecreateDatabaseTask(
+                                    ManutencaoTabelasActivity.this, AnterosVendasContext.getInstance().getSession()) {
 
                                 @Override
                                 public void onSuccess() {
@@ -173,7 +162,7 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
                                         @Override
                                         public void onOkClick() {
                                             ManutencaoTabelasActivity.this
-                                                    .setResult(ManutencaoTabelasActivity.RECRIOU_TABELAS);
+                                                    .setResult(ImportDatabaseTask.TABLES_RECREATED);
                                             ManutencaoTabelasActivity.this.finish();
                                         }
                                     }).show();
@@ -203,40 +192,45 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
 
     private void importarBancoDeDados() {
         new QuestionAlert(this, "Manutenção Tabelas",
-                "Importar Banco de Dados ?", new QuestionAlert.QuestionListener() {
+                "Importar banco de dados ?", new QuestionAlert.QuestionListener() {
 
             public void onPositiveClick() {
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    chooseFileToRestore();
+
+
+                if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ManutencaoTabelasActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_IMPORT);
                 } else {
-                    Toast.makeText(
-                            ManutencaoTabelasActivity.this,
-                            "Cartão externo não foi encontrado. Não será possível importar os dados.",
-                            Toast.LENGTH_LONG).show();
+                    executarImportacaoBancoDados();
                 }
             }
 
             public void onNegativeClick() {
             }
         }).show();
+    }
+
+    private void executarImportacaoBancoDados() {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            selecionarArquivoImportarBancoDados();
+        } else {
+            Toast.makeText(
+                    ManutencaoTabelasActivity.this,
+                    "Cartão externo não foi encontrado. Não será possível importar os dados.",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private void exportarBancoDeDados() {
         new QuestionAlert(this, "Manutenção Tabelas",
-                "Exportar Banco de Dados ?", new QuestionAlert.QuestionListener() {
+                "Exportar banco de dados ?", new QuestionAlert.QuestionListener() {
 
             public void onPositiveClick() {
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    new ExportDatabaseTask(ManutencaoTabelasActivity.this, AnterosVendasContext.getInstance().getAbsolutPathDb(),
-                            AnterosVendasContext.getInstance().getDatabaseName(), getSharedPreferences(
-                            BackupService.PREFERENCES_NAME, MODE_PRIVATE)).execute();
+
+                if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ManutencaoTabelasActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_EXPORT);
                 } else {
-                    Toast.makeText(
-                            ManutencaoTabelasActivity.this,
-                            "Cartão externo não foi encontrado. Não será possível exportar os dados.",
-                            Toast.LENGTH_LONG).show();
+                    executarExportacaoBancoDados();
                 }
             }
 
@@ -245,7 +239,21 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
         }).show();
     }
 
-    private void chooseFileToRestore() {
+    private void executarExportacaoBancoDados() {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            new ExportDatabaseTask(ManutencaoTabelasActivity.this, AnterosVendasContext.getInstance().getAbsolutPathDb(),
+                    AnterosVendasContext.getInstance().getDatabaseName(), getSharedPreferences(
+                    BackupService.PREFERENCES_NAME, MODE_PRIVATE)).execute();
+        } else {
+            Toast.makeText(
+                    ManutencaoTabelasActivity.this,
+                    "Cartão externo não foi encontrado. Não será possível exportar os dados.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void selecionarArquivoImportarBancoDados() {
 
         File importFolder = new File(Environment.getExternalStorageDirectory()
                 + "/backup/");
@@ -253,7 +261,7 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
         final File importFiles[] = importFolder.listFiles();
 
         if (importFiles == null || importFiles.length == 0) {
-            Toast.makeText(this, "Pasta de bakcup vazia", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Pasta de backup vazia", Toast.LENGTH_SHORT)
                     .show();
             return;
         }
@@ -265,7 +273,7 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         File importDatabaseFile = importFiles[whichButton];
                         new ImportDatabaseTask(ManutencaoTabelasActivity.this,
-                                importDatabaseFile, AnterosVendasContext.getInstance().getAbsolutPathDb()).execute();
+                                importDatabaseFile, AnterosVendasContext.getInstance().getAbsolutPathDb(), AnterosVendasContext.getInstance().getSession()).execute();
                         dialog.dismiss();
                     }
                 });
@@ -275,33 +283,26 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        try {
-            cursor.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode==REQUEST_PERMISSION_EXPORT) {
+            if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                throw new BackupException("Não foi possível executar a exportação do banco de dados pois você não possuí permissão.");
+            } else {
+                executarExportacaoBancoDados();
+            }
+        } else if (requestCode==REQUEST_PERMISSION_IMPORT) {
+            if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                throw new BackupException("Não foi possível executar a importação do banco de dados pois você não possuí permissão.");
+            } else {
+                executarImportacaoBancoDados();
+            }
+    } else if (requestCode==REQUEST_PERMISSION_SHARE) {
+        if (ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(ManutencaoTabelasActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            throw new BackupException("Não foi possível compartilhar o banco de dados pois você não possuí permissão.");
+        } else {
+            selecionarArquivoCompartilhar();
         }
-        super.onDestroy();
     }
-
-    private Object getObjectValue(Cursor cursor, int columnIndex) throws SQLException {
-        switch (SQLiteResultSet.getDataType((SQLiteCursor) cursor, columnIndex)) {
-            case SQLiteResultSet.FIELD_TYPE_INTEGER:
-                long val = cursor.getLong(columnIndex);
-                if (val > Integer.MAX_VALUE || val < Integer.MIN_VALUE) {
-                    return new Long(val);
-                } else {
-                    return new Integer((int) val);
-                }
-            case SQLiteResultSet.FIELD_TYPE_FLOAT:
-                return new Double(cursor.getDouble(columnIndex));
-            case SQLiteResultSet.FIELD_TYPE_BLOB:
-                return cursor.getBlob(columnIndex);
-            case SQLiteResultSet.FIELD_TYPE_NULL:
-                return null;
-            case SQLiteResultSet.FIELD_TYPE_STRING:
-            default:
-                return cursor.getString(columnIndex);
-        }
     }
 }
