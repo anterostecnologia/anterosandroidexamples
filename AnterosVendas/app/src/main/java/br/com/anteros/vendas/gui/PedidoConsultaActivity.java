@@ -49,7 +49,6 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         lvPedidos.setOnItemLongClickListener(this);
 
         new BuscarPedidos().execute();
-
     }
 
     @Override

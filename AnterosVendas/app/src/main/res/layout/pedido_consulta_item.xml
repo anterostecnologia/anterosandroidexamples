@@ -5,9 +5,10 @@
     android:background="@android:color/transparent">
 
     <LinearLayout
+        android:id="@+id/pedido_consulta_item_layoutPrincipal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bc_round_corner_item">
+        android:background="@drawable/bc_round_corner_item" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -17,39 +18,68 @@
             android:layout_weight=".2"
             android:orientation="vertical"
             android:paddingLeft="5dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp" >
 
             <LinearLayout
-                android:id="@+id/pedido_consulta_item_layoutPedido"
+                android:id="@+id/pedido_consulta_item__layoutDescricaoPedido"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <ImageView
+                        android:id="@+id/pedido_consulta_item_imgItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pedido" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".1"
+                    android:orientation="vertical" >
 
                     <LinearLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content" >
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="fill_parent"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical"
+                            android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/pedido_consulta_item_nomePedido"
+                                android:id="@+id/pedido_consulta_item_descricaoPedido"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical|left"
-                                android:text="Nr. pedido "
+                                android:text="PEDIDO NR 12343"
                                 android:textColor="#000000"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/pedido_consulta_item_dtPedido"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:gravity="center_vertical|left"
+                                android:text="12/01/2015"
+                                android:textColor="#4D4D4D"
+                                android:textSize="16dp"
+                                android:textStyle="italic" />
                         </LinearLayout>
 
                         <ImageView
@@ -61,109 +91,27 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/vw"
                         android:layout_width="fill_parent"
-                        android:layout_height="4dp"
+                        android:layout_height="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_weight=".1"
-                        android:background="@drawable/bc_color_gray" />
+                        android:layout_weight="1"
+                        android:background="@drawable/bc_color_gray"
+                        android:paddingRight="5dp" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:src="@drawable/ic_user_black" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nome Fantasia"
-                            android:textColor="#4D4D4D"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/pedido_consulta_item_fantasia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="NOME FANTASIA"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:src="@drawable/ic_house" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Endereço"
-                            android:textColor="#4D4D4D"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/pedido_consulta_item_endereco"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ENDEREÇO - BAIRRO"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp" >
 
                 <LinearLayout
+                    android:id="@+id/pedido_consulta_item_layoutCliente"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.8">
+                    android:layout_weight="1" >
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -175,27 +123,148 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingLeft="3dp">
+                        android:paddingLeft="3dp" >
 
                         <TextView
+                            android:id="@+id/pedido_consulta_item_cliente"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cidade"
+                            android:text="Cliente"
                             android:textColor="#4D4D4D"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="italic" />
 
                         <TextView
-                            android:id="@+id/pedido_consulta_item_cidade"
+                            android:id="@+id/pedido_consulta_item_nomeCliente"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="CIDADE"
+                            android:text="Nome cliente"
                             android:textColor="#000000"
-                            android:textSize="14sp"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp" >
+
+                <LinearLayout
+                    android:id="@+id/pedido_consulta_item_layoutCondicaoPagamento"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_city" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="3dp" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Condição de Pagamento"
+                            android:textColor="#4D4D4D"
+                            android:textSize="13sp"
+                            android:textStyle="italic" />
+
+                        <TextView
+                            android:id="@+id/pedido_consulta_item_tvCondicaoPagamento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CONDIÇÃO"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/pedido_consulta_item_layoutFormaPagamento"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_city" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="3dp" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Forma de pagamento"
+                            android:textColor="#4D4D4D"
+                            android:textSize="13sp"
+                            android:textStyle="italic" />
+
+                        <TextView
+                            android:id="@+id/pedido_consulta_item_formaPagamento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="FORMA"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pedido_consulta_item_layoutValorPedido"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:src="@drawable/ic_city" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="3dp" >
+
+                    <TextView
+                        android:id="@+id/pedido_consulta_item_descricaoValor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Valor"
+                        android:textColor="#4D4D4D"
+                        android:textSize="13sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/pedido_consulta_item_valorTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VL PEDIDOS"
+                        android:textColor="#FF0000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -35,27 +37,30 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
 
         final PedidoVenda item = (PedidoVenda) getItem(position);
 
-//        TextView tvRazaoCliente = (TextView) convertView.findViewById(R.id.cliente_consulta_item_nomeCliente);
-//        TextView tvFantasia = (TextView) convertView.findViewById(R.id.cliente_consulta_item_fantasia);
-//        TextView tvEndereco = (TextView) convertView.findViewById(R.id.cliente_consulta_item_endereco);
-//        TextView tvCidade = (TextView) convertView.findViewById(R.id.cliente_consulta_item_cidade);
-//        ImageView imgDelete = (ImageView) convertView.findViewById(R.id.cliente_consulta_item_imgDelete);
-//
-//        imgDelete.setEnabled(item != null);
-//
-//        imgDelete.setOnClickListener(new OnClickListener() {
-//
-//            public void onClick(View v) {
-//                delete(item);
-//            }
-//        });
-//
-//        if (item != null) {
-//            tvRazaoCliente.setText(item.getId() + " - " + item.getRazaoSocial());
-//            tvFantasia.setText(item.getNomeFantasia());
-//            tvEndereco.setText(item.getTpLogradouro() + " " + item.getLogradouro() + ", Nr. " + item.getNrLogradouro() + " - " + item.getBairro());
-//            tvCidade.setText(item.getCidade() + "/" + item.getEstado().name());
-//        }
+        TextView tvDescricaoPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_descricaoPedido);
+        TextView tvDataPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_dtPedido);
+        TextView tvCliente = (TextView) convertView.findViewById(R.id.pedido_consulta_item_nomeCliente);
+        TextView tvCondicao = (TextView) convertView.findViewById(R.id.pedido_consulta_item_tvCondicaoPagamento);
+        TextView tvFormaPgto = (TextView) convertView.findViewById(R.id.pedido_consulta_item_formaPagamento);
+        TextView tvValorTotal = (TextView) convertView.findViewById(R.id.pedido_consulta_item_valorTotal);
+        ImageView imgDelete = (ImageView) convertView.findViewById(R.id.pedido_consulta_item_imgDelete);
+
+        imgDelete.setEnabled(item != null);
+        imgDelete.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                delete(item);
+            }
+        });
+
+        if (item != null) {
+            tvDescricaoPedido.setText("PEDIDO NR. " + item.getNrPedido());
+            tvDataPedido.setText(item.getDtPedido().toString());
+            tvCliente.setText(item.getCliente().getId() + " - " + item.getCliente().getRazaoSocial());
+            tvCondicao.setText(item.getCondicaoPagamento().name());
+            tvFormaPgto.setText(item.getFormaPagamento().name());
+            tvValorTotal.setText(item.getVlTotalPedido().toString());
+        }
 
         return convertView;
     }

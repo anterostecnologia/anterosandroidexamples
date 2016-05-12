@@ -16,10 +16,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.modelo.PedidoVenda;
 
 public class PedidoCadastroActivity extends AppCompatActivity {
 
-
+    private PedidoVenda pedido;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
@@ -38,8 +39,17 @@ public class PedidoCadastroActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        if (getIntent().hasExtra("pedido")) {
+            pedido = (PedidoVenda) getIntent().getSerializableExtra("pedido");
+        } else {
+            pedido = new PedidoVenda();
+        }
+        bindView();
     }
 
+    private void bindView() {
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
