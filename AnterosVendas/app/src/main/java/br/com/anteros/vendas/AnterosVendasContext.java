@@ -168,36 +168,59 @@ public class AnterosVendasContext {
     }
 
     public void populateDatabase() {
-        Cliente cliente1 = new Cliente();
-        cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
-        cliente1.setNomeFantasia("JOAO DA SILVA");
-        cliente1.setTpLogradouro(TipoLogradouro.AVENIDA);
-        cliente1.setNrLogradouro("240");
-        cliente1.setLogradouro("PRESIDENTE VARGAS");
-        cliente1.setBairro("CENTRO");
-        cliente1.setComplemento("");
-        cliente1.setCep("87300000");
-        cliente1.setCidade("CAMPO MOURAO");
-        cliente1.setEstado(Estado.PR);
-        cliente1.setDtCadastro(new Date());
-
         try {
             getSession().getTransaction().begin();
-            getSession().save(cliente1);
-            getSession().getTransaction().commit();
 
-            getSession().getTransaction().begin();
+            Cliente cliente1 = new Cliente();
+            cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
+            cliente1.setNomeFantasia("JOAO DA SILVA");
+            cliente1.setTpLogradouro(TipoLogradouro.AVENIDA);
+            cliente1.setNrLogradouro("240");
+            cliente1.setLogradouro("PRESIDENTE VARGAS");
+            cliente1.setBairro("CENTRO");
+            cliente1.setComplemento("");
+            cliente1.setCep("87300000");
+            cliente1.setCidade("CAMPO MOURAO");
+            cliente1.setEstado(Estado.PR);
+            cliente1.setDtCadastro(new Date());
+
+            getSession().save(cliente1);
+
             TypedSQLQuery<Cliente> query = getSession().createQuery("SELECT * FROM CLIENTE", Cliente.class);
             List<Cliente> clientes = query.getResultList();
             for (Cliente cliente : clientes) {
-                Log.d(AnterosVendasContext.class.getName(), cliente.toString());
+                Produto p = new Produto();
+                p.setVlProduto(new BigDecimal(750));
+                p.setNomeProduto("Monitor LG 22");
+
+                getSession().save(p);
+
+                PedidoVenda ped = new PedidoVenda();
+                ped.setVlTotalPedido(new BigDecimal(750));
+                ped.setNrPedido(new Long(12345));
+                ped.setFormaPagamento(FormaPagamento.BOLETO);
+                ped.setCondicaoPagamento(CondicaoPagamento.A_VISTA);
+                ped.setCliente(cliente);
+                ped.setDtPedido(new Date());
+
+                ItemPedido ite = new ItemPedido();
+                ite.setVlTotal(new BigDecimal(750));
+                ite.setVlProduto(new BigDecimal(750));
+                ite.setQtProduto(new BigDecimal(1));
+                ite.setPedidoVenda(ped);
+                ite.setProduto(p);
+
+                List<ItemPedido> itens = new ArrayList<ItemPedido>();
+                itens.add(ite);
+
+                ped.setItens(itens);
+
+                getSession().save(ped);
+                getSession().save(ite);
             }
-
-
+            getSession().getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }

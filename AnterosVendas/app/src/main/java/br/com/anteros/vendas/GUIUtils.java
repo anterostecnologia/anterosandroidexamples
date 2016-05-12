@@ -2,18 +2,28 @@ package br.com.anteros.vendas;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
+import java.util.Locale;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 
 public class GUIUtils {
+
+	private static Locale ptBr;
+	public static DecimalFormat moedaFormat;
+	private static DecimalFormatSymbols symbols;
+	private static final String PERCENTUAL = "0.01";
+	private static final String PATTERN = "###,###,##0.00";
+
+	static {
+		ptBr = new Locale("pt", "BR");
+		moedaFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(ptBr);
+		moedaFormat.setNegativePrefix("-");
+		moedaFormat.setNegativeSuffix("");
+		symbols = new DecimalFormatSymbols(ptBr);
+	}
 
 	public static boolean isTablet(Activity activity) {
 		if (activity == null)
@@ -35,6 +45,12 @@ public class GUIUtils {
 		bd = bd.setScale(0, BigDecimal.ROUND_CEILING);
 
 		return !(Math.round(diagonalInches) < 7 || (Math.round(diagonalInches) >= 7 && (displayMetrics.densityDpi >= DisplayMetrics.DENSITY_HIGH)));
+	}
 
+	public static String formatMoeda(BigDecimal valor) {
+		if (valor == null) {
+			valor = BigDecimal.ZERO;
+		}
+		return moedaFormat.format(valor).replace("R$", "");
 	}
 }

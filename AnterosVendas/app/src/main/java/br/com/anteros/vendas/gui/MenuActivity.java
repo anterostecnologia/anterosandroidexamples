@@ -58,7 +58,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
          */
         AnterosVendasContext.setApplication(this.getApplication());
 
-       // AnterosVendasContext.getInstance().populateDatabase();
+        //AnterosVendasContext.getInstance().populateDatabase();
 
         gridMenu = (GridView) findViewById(R.id.activity_menu_gridMenu
         );

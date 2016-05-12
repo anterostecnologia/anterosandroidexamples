@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:src="@drawable/ic_city" />
+                        android:src="@drawable/ic_user_black" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -162,7 +162,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_city" />
+                        android:src="@drawable/ic_money_wallet" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -173,7 +173,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Condição de Pagamento"
+                            android:text="Condição de pagamento"
                             android:textColor="#4D4D4D"
                             android:textSize="13sp"
                             android:textStyle="italic" />
@@ -198,7 +198,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_city" />
+                        android:src="@drawable/ic_payment" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -236,7 +236,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:src="@drawable/ic_city" />
+                    android:src="@drawable/ic_dollar_black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"

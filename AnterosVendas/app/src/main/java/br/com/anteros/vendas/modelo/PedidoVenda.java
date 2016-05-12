@@ -44,6 +44,7 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
 import br.com.anteros.validation.api.groups.Default;
+import br.com.anteros.vendas.GUIUtils;
 
 /**
  * Created by edson on 09/05/16.
@@ -118,8 +119,6 @@ public class PedidoVenda implements Serializable, Parcelable {
     }
 
     protected PedidoVenda(Parcel in) {
-        cliente = in.readParcelable(Cliente.class.getClassLoader());
-
         id = in.readLong();
         nrPedido = in.readLong();
         dtPedido = new Date(in.readLong());
@@ -176,6 +175,10 @@ public class PedidoVenda implements Serializable, Parcelable {
 
     public BigDecimal getVlTotalPedido() {
         return vlTotalPedido;
+    }
+
+    public String getVlTotalPedidoAsString() {
+        return GUIUtils.formatMoeda(getVlTotalPedido());
     }
 
     public void setVlTotalPedido(BigDecimal vlTotalPedido) {
