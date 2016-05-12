@@ -12,35 +12,15 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Consulta de clientes"
+        app:title="Cadastro de clientes"
         app:titleTextColor="@android:color/white"/>
-
-    <LinearLayout
-        android:id="@+id/cliente_cadastro_barraBotoes"
-        style="@style/BarraBotes"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/cliente_cadastro_img_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/sel_save" />
-
-        <ImageView
-            android:id="@+id/cliente_cadastro_img_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/sel_cancela" />
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:id="@+id/scrollView" >
 
         <LinearLayout

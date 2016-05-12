@@ -1,9 +1,14 @@
 package br.com.anteros.vendas.gui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,13 +48,18 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     private EditText edComplemento;
     private EditText edCidade;
     private Spinner spEstado;
-    private ImageView imgSave;
-    private ImageView imgCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cliente_cadastro);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
 
         edRazao = (EditText) findViewById(R.id.cliente_cadastro_razaoSocial);
         edFantasia = (EditText) findViewById(R.id.cliente_cadastro_fantasia);
@@ -61,12 +71,6 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         edComplemento = (EditText) findViewById(R.id.cliente_cadastro_complemento);
         edCidade = (EditText) findViewById(R.id.cliente_cadastro_cidade);
         spEstado = (Spinner) findViewById(R.id.cliente_cadastro_cb_estado);
-
-        imgSave = (ImageView) findViewById(R.id.cliente_cadastro_img_save);
-        imgSave.setOnClickListener(this);
-
-        imgCancel = (ImageView) findViewById(R.id.cliente_cadastro_img_cancel);
-        imgCancel.setOnClickListener(this);
 
         spTipoLogradouro.setAdapter(new TipoLogradouroAdapter(this, Arrays.asList(TipoLogradouro.values())));
         spEstado.setAdapter(new EstadoAdapter(this, Arrays.asList(Estado.values())));
@@ -99,38 +103,75 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == imgSave) {
-            new QuestionAlert(this, this.getResources().getString(R.string.app_name), "Deseja salvar o cliente?",
-                    new QuestionAlert.QuestionListener() {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.cliente_cadastro_action);
+        tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
 
-                        @Override
-                        public void onPositiveClick() {
-                            new SalvarCliente().execute();
-                        }
+        return true;
+    }
 
-                        @Override
-                        public void onNegativeClick() {
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                cancelarCliente();
+                break;
 
-                        }
+            case R.id.cliente_cadastro_action_salvar:
+                new QuestionAlert(this, this.getResources().getString(R.string.app_name), "Deseja salvar o cliente?",
+                        new QuestionAlert.QuestionListener() {
 
-                    }).show();
-        } else if (v == imgCancel) {
-            new QuestionAlert(this, this.getResources().getString(
-                    R.string.app_name), "Deseja cancelar o cliente?",
-                    new QuestionAlert.QuestionListener() {
+                            @Override
+                            public void onPositiveClick() {
+                                new SalvarCliente().execute();
+                            }
 
-                        public void onPositiveClick() {
-                            setResult(RESULT_CANCELED);
-                            finish();
-                        }
+                            @Override
+                            public void onNegativeClick() {
 
-                        public void onNegativeClick() {
+                            }
 
-                        }
-
-                    }).show();
+                        }).show();
+                break;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            cancelarCliente();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+    }
+
+    private void cancelarCliente() {
+        new QuestionAlert(this, this.getResources().getString(
+                R.string.app_name), "Deseja cancelar o cliente?",
+                new QuestionAlert.QuestionListener() {
+
+                    public void onPositiveClick() {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }
+
+                    public void onNegativeClick() {
+
+                    }
+
+                }).show();
     }
 
     private void salvarDadosCliente() {
