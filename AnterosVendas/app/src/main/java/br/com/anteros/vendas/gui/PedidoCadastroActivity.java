@@ -1,6 +1,5 @@
 package br.com.anteros.vendas.gui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import br.com.anteros.vendas.R;
@@ -24,7 +22,6 @@ import br.com.anteros.vendas.modelo.PedidoVenda;
 public class PedidoCadastroActivity extends AppCompatActivity {
 
     private PedidoVenda pedido;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager viewPager;
 
     private PedidoCadastroDadosFragment pedidoCadastroDadosFragment;
@@ -38,11 +35,6 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//
-//        mViewPager = (ViewPager) findViewById(R.id.container);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
@@ -51,8 +43,8 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-        if (getIntent().hasExtra("pedido")) {
-            pedido = (PedidoVenda) getIntent().getSerializableExtra("pedido");
+        if (getIntent().hasExtra("pedidoCadastro")) {
+            pedido = (PedidoVenda) getIntent().getSerializableExtra("pedidoCadastro");
         } else {
             pedido = new PedidoVenda();
         }
@@ -139,7 +131,7 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         PedidoCadastroPageViewAdapter adapter = new PedidoCadastroPageViewAdapter(getSupportFragmentManager());
 
         Bundle arguments = new Bundle();
-        arguments.putParcelable("teste", pedido);
+        arguments.putParcelable("pedido", pedido);
 
         pedidoCadastroDadosFragment = new PedidoCadastroDadosFragment();
         pedidoCadastroDadosFragment.setArguments(arguments);

@@ -12,11 +12,11 @@ import java.util.List;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.core.utils.DateUtil;
 import br.com.anteros.persistence.parameter.NamedParameter;
 import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.persistence.transaction.impl.TransactionException;
 import br.com.anteros.vendas.AnterosVendasContext;
-import br.com.anteros.vendas.DateFormat;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 
@@ -56,7 +56,7 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
 
         if (item != null) {
             tvDescricaoPedido.setText("PEDIDO NR. " + item.getNrPedido());
-            tvDataPedido.setText((DateFormat.format(item.getDtPedido(), "/", DateFormat.DDMMYYYY)));
+            tvDataPedido.setText(DateUtil.toStringDateDMA(item.getDtPedido()));
             tvCliente.setText(item.getCliente().getId() + " - " + item.getCliente().getRazaoSocial());
             tvCondicao.setText(item.getCondicaoPagamento().name());
             tvFormaPgto.setText(item.getFormaPagamento().name());

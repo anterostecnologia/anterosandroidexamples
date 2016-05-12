@@ -43,7 +43,7 @@ public class PedidoCadastroDadosFragment extends Fragment {
         View view = inflater.inflate(R.layout.pedido_cadastro_dados, null);
 
         try {
-          //  PedidoVenda pedido = getArguments().getParcelable("teste");
+          //  PedidoVenda pedido = getArguments().getParcelable("pedido");
         } catch (Exception e) {
             e.printStackTrace();
         }

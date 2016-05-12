@@ -110,7 +110,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         if (parent == lvPedidos) {
             PedidoVenda pedido = adapter.getItem(position);
             Intent intent = new Intent(this, PedidoCadastroActivity.class);
-            intent.putExtra("pedido", (Parcelable) pedido);
+            intent.putExtra("pedidoCadastro", (Parcelable) pedido);
 
             startActivityForResult(intent, REQUISICAO);
         }

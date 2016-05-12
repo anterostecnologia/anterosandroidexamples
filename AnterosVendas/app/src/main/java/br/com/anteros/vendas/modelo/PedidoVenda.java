@@ -21,10 +21,14 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
 import br.com.anteros.persistence.metadata.annotation.Column;
@@ -44,7 +48,6 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
 import br.com.anteros.validation.api.groups.Default;
-import br.com.anteros.vendas.GUIUtils;
 
 /**
  * Created by edson on 09/05/16.
@@ -178,7 +181,7 @@ public class PedidoVenda implements Serializable, Parcelable {
     }
 
     public String getVlTotalPedidoAsString() {
-        return GUIUtils.formatMoeda(getVlTotalPedido());
+        return formatMoeda(getVlTotalPedido());
     }
 
     public void setVlTotalPedido(BigDecimal vlTotalPedido) {
@@ -228,5 +231,19 @@ public class PedidoVenda implements Serializable, Parcelable {
             dest.writeInt(formaPagamento.ordinal());
         }
         dest.writeList(itens);
+    }
+
+    public static String formatMoeda(BigDecimal valor) {
+        Locale ptBr;
+        ptBr = new Locale("pt", "BR");
+
+        DecimalFormat moedaFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(ptBr);
+        moedaFormat.setNegativePrefix("-");
+        moedaFormat.setNegativeSuffix("");
+
+        if (valor == null) {
+            valor = BigDecimal.ZERO;
+        }
+        return moedaFormat.format(valor).replace("R$", "");
     }
 }
