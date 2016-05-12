@@ -31,11 +31,13 @@ import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.Estado;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
 import br.com.anteros.vendas.modelo.ValidacaoCliente;
+import br.com.anteros.vendas.ws.PostmonResponse;
+import br.com.anteros.vendas.ws.PostmonWebService;
 
 /**
  * Created by eduardogreco on 5/10/16.
  */
-public class ClienteCadastroActivity extends AppCompatActivity implements View.OnClickListener {
+public class ClienteCadastroActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private Cliente cliente;
     private EditText edRazao;
@@ -67,6 +69,8 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         edLogradouro = (EditText) findViewById(R.id.cliente_cadastro_logradouro);
         edNrLogradouro = (EditText) findViewById(R.id.cliente_cadastro_numero);
         edCep = (EditText) findViewById(R.id.cliente_cadastro_CEP);
+        edCep.setOnFocusChangeListener(this);
+
         edBairro = (EditText) findViewById(R.id.cliente_cadastro_bairro);
         edComplemento = (EditText) findViewById(R.id.cliente_cadastro_complemento);
         edCidade = (EditText) findViewById(R.id.cliente_cadastro_cidade);
@@ -152,7 +156,6 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     }
 
 
-
     @Override
     public void onClick(View v) {
     }
@@ -188,11 +191,26 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
     }
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v == edCep) {
+            if (!hasFocus) {
+                new PostmonWebService() {
+                    @Override
+                    protected void onPostExecute(PostmonResponse postmonResponse) {
+                        edCidade.setText(postmonResponse.getCidade());
+                        spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
+                    }
+                }.execute(edCep.getText().toString());
+            }
+        }
+    }
+
     public class SalvarCliente extends AsyncTask<Integer, Void, String> {
 
         SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
-        private ProgressDialog dialog;
         Set<ConstraintViolation<Cliente>> violations;
+        private ProgressDialog dialog;
 
         @Override
         protected void onPreExecute() {

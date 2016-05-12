@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'br.com.anteros:Anteros-Core:1.0.0'
@@ -56,5 +56,6 @@ dependencies {
     compile 'br.com.anteros:anteros-core-android:1.0.+'
     compile 'br.com.anteros:anteros-ui-controls-android:1.0.2'
     compile 'br.com.anteros:anteros-persistence-android:1.0.10'
-    compile 'org.smali:dexlib2:2.0.3'
+    compile files('libs/ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
 }
