@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.anteros.persistence.session.repository.SQLRepository;
@@ -26,6 +27,7 @@ import br.com.anteros.vendas.modelo.PedidoVenda;
  */
 public class PedidoConsultaActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
+    public static PedidoVenda pedido;
     private ListView lvPedidos;
     private PedidoConsultaAdapter adapter;
     private final int REQUISICAO = 1000;
@@ -73,6 +75,9 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
                 break;
 
             case R.id.pedido_consulta_action_adicionar:
+                pedido = new PedidoVenda();
+                pedido.setNrPedido(Long.valueOf(new Date().getTime()));
+                pedido.setDtPedido(new Date());
                 Intent intent = new Intent(this, PedidoCadastroActivity.class);
                 startActivityForResult(intent, REQUISICAO);
                 break;
@@ -108,10 +113,8 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvPedidos) {
-            PedidoVenda pedido = adapter.getItem(position);
+            pedido = adapter.getItem(position);
             Intent intent = new Intent(this, PedidoCadastroActivity.class);
-            intent.putExtra("pedidoCadastro", (Parcelable) pedido);
-
             startActivityForResult(intent, REQUISICAO);
         }
         return false;

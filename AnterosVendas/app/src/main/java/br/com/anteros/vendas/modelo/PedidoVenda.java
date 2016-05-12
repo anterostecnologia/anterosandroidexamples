@@ -107,7 +107,7 @@ public class PedidoVenda implements Serializable, Parcelable {
      */
     @Required(groups = {Default.class, ValidacaoCliente.class})
     @Enumerated
-    @Column(name = "FORMA_PAGTO", required = true, length = 20)
+    @Column(name = "FORMA_PAGTO", required = true, length = 20, label = "Forma de pagamento")
     private FormaPagamento formaPagamento;
 
     /*

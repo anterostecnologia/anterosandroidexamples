@@ -1,40 +1,38 @@
 package br.com.anteros.vendas.gui;
 
-import android.net.Uri;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Calendar;
 
+import br.com.anteros.core.utils.DateUtil;
 import br.com.anteros.vendas.R;
-import br.com.anteros.vendas.modelo.PedidoVenda;
+import br.com.anteros.vendas.gui.adapter.CondicaoPagamentoAdapter;
+import br.com.anteros.vendas.gui.adapter.FormaPagamentoAdapter;
+import br.com.anteros.vendas.modelo.CondicaoPagamento;
+import br.com.anteros.vendas.modelo.FormaPagamento;
 
 
 /**
  * Created by eduardogreco on 5/12/16.
  */
-public class PedidoCadastroDadosFragment extends Fragment {
+public class PedidoCadastroDadosFragment extends Fragment implements View.OnClickListener {
 
-    private static Uri replaceUriParameter(Uri uri, String key, String newValue) {
-        final Set<String> params = uri.getQueryParameterNames();
-        final Uri.Builder newUri = uri.buildUpon().clearQuery();
-        for (String param : params) {
-            String value;
-            if (param.equals(key)) {
-                value = newValue;
-            } else {
-                value = uri.getQueryParameter(param);
-            }
-
-            newUri.appendQueryParameter(param, value);
-        }
-
-        return newUri.build();
-    }
+    private EditText edNumero;
+    private EditText edValorTotal;
+    public static EditText edData;
+    private static EditText edCliente;
+    public static Spinner spCondicaoPagamento;
+    public static Spinner spFormaPagamento;
 
     @Nullable
     @Override
@@ -42,12 +40,68 @@ public class PedidoCadastroDadosFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.pedido_cadastro_dados, null);
 
+        edNumero = (EditText) view.findViewById(R.id.pedido_cadastro_dados_nr_pedido);
+        edData = (EditText) view.findViewById(R.id.pedido_cadastro_dados_data_pedido);
+        edData.setOnClickListener(this);
+        spCondicaoPagamento = (Spinner) view.findViewById(R.id.pedido_cadastro_dados_cb_condicao_pagamento);
+        spFormaPagamento = (Spinner) view.findViewById(R.id.pedido_cadastro_dados__cb_tipo_formaPagamento);
+        edCliente = (EditText) view.findViewById(R.id.pedido_cadastro_dados_cliente);
+        edCliente.setOnClickListener(this);
+        edValorTotal = (EditText) view.findViewById(R.id.pedido_cadastro_dados_valor);
+
+        spCondicaoPagamento.setAdapter(new CondicaoPagamentoAdapter(getContext(), Arrays.asList(CondicaoPagamento.values())));
+        spFormaPagamento.setAdapter(new FormaPagamentoAdapter(getContext(), Arrays.asList(FormaPagamento.values())));
+
         try {
-          //  PedidoVenda pedido = getArguments().getParcelable("pedido");
+            bindView();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return view;
     }
 
+    private void bindView() {
+        edNumero.setText(PedidoConsultaActivity.pedido.getNrPedido().toString());
+        edData.setText(DateUtil.toStringDateDMA(PedidoConsultaActivity.pedido.getDtPedido()));
+
+        setDadosEdCliente();
+
+        edValorTotal.setText(PedidoConsultaActivity.pedido.getVlTotalPedidoAsString());
+
+        if (PedidoConsultaActivity.pedido.getCondicaoPagamento() != null) {
+            spCondicaoPagamento.setSelection(PedidoConsultaActivity.pedido.getCondicaoPagamento().ordinal());
+        }
+        if (PedidoConsultaActivity.pedido.getFormaPagamento() != null) {
+            spFormaPagamento.setSelection(PedidoConsultaActivity.pedido.getFormaPagamento().ordinal());
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == edCliente) {
+            new ClienteConsultaDialog(getContext()).show();
+        } else if (v == edData) {
+            selecionarData();
+        }
+    }
+
+    public static void setDadosEdCliente() {
+        if (PedidoConsultaActivity.pedido.getCliente() != null) {
+            edCliente.setText(PedidoConsultaActivity.pedido.getCliente().getId() + " - " + PedidoConsultaActivity.pedido.getCliente().getRazaoSocial());
+        }
+    }
+
+    private void selecionarData() {
+        Calendar cal = Calendar.getInstance();
+        if (edData.getText().length() > 0)
+            cal.setTime(DateUtil.stringToDate(edData.getText().toString(), DateUtil.DATE));
+        new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                edData.setText(dayOfMonth + "/" + (monthOfYear + 1)
+                        + "/" + year);
+            }
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show();
+    }
 }

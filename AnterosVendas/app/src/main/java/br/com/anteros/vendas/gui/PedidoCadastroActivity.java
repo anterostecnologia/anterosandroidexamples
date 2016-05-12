@@ -1,5 +1,7 @@
 package br.com.anteros.vendas.gui;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,15 +15,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import java.util.Set;
+
+import br.com.anteros.android.ui.controls.ErrorAlert;
+import br.com.anteros.android.ui.controls.InfoAlert;
+import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.core.utils.DateUtil;
+import br.com.anteros.persistence.session.repository.SQLRepository;
+import br.com.anteros.validation.api.ConstraintViolation;
+import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.PedidoCadastroPageViewAdapter;
+import br.com.anteros.vendas.modelo.CondicaoPagamento;
+import br.com.anteros.vendas.modelo.FormaPagamento;
 import br.com.anteros.vendas.modelo.PedidoVenda;
+import br.com.anteros.vendas.modelo.ValidacaoCliente;
 
 public class PedidoCadastroActivity extends AppCompatActivity {
 
-    private PedidoVenda pedido;
     private ViewPager viewPager;
 
     private PedidoCadastroDadosFragment pedidoCadastroDadosFragment;
@@ -41,17 +53,6 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         }
         TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_pedido_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
-        if (getIntent().hasExtra("pedidoCadastro")) {
-            pedido = (PedidoVenda) getIntent().getSerializableExtra("pedidoCadastro");
-        } else {
-            pedido = new PedidoVenda();
-        }
-        bindView();
-    }
-
-    private void bindView() {
     }
 
     @Override
@@ -67,8 +68,38 @@ public class PedidoCadastroActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
 
-            case R.id.menu_action_settings:
-                //
+            case R.id.menu_pedido_salvar:
+                new QuestionAlert(this, this.getResources().getString(R.string.app_name), "Deseja salvar o pedido?",
+                        new QuestionAlert.QuestionListener() {
+
+                            @Override
+                            public void onPositiveClick() {
+                                new SalvarPedido().execute();
+                            }
+
+                            @Override
+                            public void onNegativeClick() {
+
+                            }
+
+                        }).show();
+                break;
+
+            case R.id.menu_pedido_cancelar:
+                new QuestionAlert(this, this.getResources().getString(
+                        R.string.app_name), "Deseja cancelar o pedido?",
+                        new QuestionAlert.QuestionListener() {
+
+                            public void onPositiveClick() {
+                                setResult(RESULT_CANCELED);
+                                finish();
+                            }
+
+                            public void onNegativeClick() {
+
+                            }
+
+                        }).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -93,8 +124,6 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_pedido, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
@@ -130,17 +159,85 @@ public class PedidoCadastroActivity extends AppCompatActivity {
     private void setupViewPager(final ViewPager viewPager) {
         PedidoCadastroPageViewAdapter adapter = new PedidoCadastroPageViewAdapter(getSupportFragmentManager());
 
-        Bundle arguments = new Bundle();
-        arguments.putParcelable("pedido", pedido);
-
         pedidoCadastroDadosFragment = new PedidoCadastroDadosFragment();
-        pedidoCadastroDadosFragment.setArguments(arguments);
         adapter.addFragment(pedidoCadastroDadosFragment, "Dados");
 
         pedidoCadastroItensFragment = new PedidoCadastroItensFragment();
-        pedidoCadastroItensFragment.setArguments(arguments);
         adapter.addFragment(pedidoCadastroItensFragment, "Itens");
 
         viewPager.setAdapter(adapter);
+    }
+
+    public class SalvarPedido extends AsyncTask<Integer, Void, String> {
+
+        SQLRepository<PedidoVenda, Long> pedidoRepository = AnterosVendasContext.getInstance().getSQLRepository(PedidoVenda.class);
+        private ProgressDialog dialog;
+        Set<ConstraintViolation<PedidoVenda>> violations;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(PedidoCadastroActivity.this);
+            dialog.setTitle(getResources().getString(R.string.app_name));
+            dialog.setMessage("Salvando pedido...");
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            try {
+                salvarDadosPedido();
+
+                violations = AnterosVendasContext.getInstance().getDefaultValidator().validate(PedidoConsultaActivity.pedido, ValidacaoCliente.class);
+                if (violations.size() > 0) {
+                    return "ERRO_VALIDACAO";
+                }
+                pedidoRepository.getTransaction().begin();
+                pedidoRepository.save(PedidoConsultaActivity.pedido);
+                pedidoRepository.getTransaction().commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    pedidoRepository.getTransaction().rollback();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                return e.getMessage() + "";
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (dialog.isShowing())
+                dialog.dismiss();
+
+            if (result == null) {
+
+                new InfoAlert(PedidoCadastroActivity.this, getString(R.string.app_name),
+                        "Pedido salvo com sucesso!", new InfoAlert.InfoListener() {
+                    @Override
+                    public void onOkClick() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).show();
+
+            } else if (result.equals("ERRO_VALIDACAO")) {
+                new MensagemErrorDialog<PedidoVenda>(PedidoCadastroActivity.this,
+                        "Atenção!", violations).show();
+            } else {
+                new ErrorAlert(PedidoCadastroActivity.this, getString(R.string.app_name),
+                        "Salvando pedido: " + result).show();
+            }
+        }
+
+    }
+
+    private void salvarDadosPedido() {
+        PedidoConsultaActivity.pedido.setCondicaoPagamento((CondicaoPagamento) PedidoCadastroDadosFragment.spCondicaoPagamento.getSelectedItem());
+        PedidoConsultaActivity.pedido.setFormaPagamento((FormaPagamento) PedidoCadastroDadosFragment.spFormaPagamento.getSelectedItem());
+        PedidoConsultaActivity.pedido.setDtPedido(DateUtil.stringToDate(PedidoCadastroDadosFragment.edData.getText().toString(), DateUtil.DATE));
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cliente_consulta_dialog_linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    android:padding="10dip" >
+        
+        <RelativeLayout
+            android:id="@+id/cliente_consulta_dialog_linearLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="10dp" >
+
+            <ImageView
+                android:id="@+id/cliente_consulta_dialog_img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_close_black" />
+ 
+            <TextView
+                android:id="@+id/cliente_consulta_dialog_titulo"
+                style="@style/TextoTituloDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Consulta de clientes" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/cliente_consulta_dialog_list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent" >
+        </ListView>
+
+    </LinearLayout>

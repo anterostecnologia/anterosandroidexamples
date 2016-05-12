@@ -7,10 +7,18 @@
         <!--android:orderInCategory="100"-->
         <!--android:title="teste"-->
         <!--app:showAsAction="never" />-->
+
     <item
-        android:id="@+id/menu_action_settings"
+        android:id="@+id/menu_pedido_salvar"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_settings"
-        android:title="Configuração"/>
+        android:icon="@drawable/ic_save"
+        android:title="Salvar"/>
+
+    <item
+        android:id="@+id/menu_pedido_cancelar"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_cancel"
+        android:title="Salvar"/>
 </menu>
