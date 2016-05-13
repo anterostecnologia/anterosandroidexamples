@@ -82,7 +82,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
 
         //AnterosVendasContext.getInstance().populateDatabase();
-        //AnterosVendasContext.getInstance().populateProdutos();
+        AnterosVendasContext.getInstance().populateProdutos();
     }
 
     private void verificaQtdeColunasPorLinha() {
