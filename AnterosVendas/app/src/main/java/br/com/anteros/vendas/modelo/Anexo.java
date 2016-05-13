@@ -20,6 +20,7 @@ package br.com.anteros.vendas.modelo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.File;
 import java.io.Serializable;
 
 import br.com.anteros.bean.validation.constraints.Required;
@@ -65,9 +66,12 @@ public class Anexo implements Serializable, Parcelable {
      * Conteúdo do Anexo
      */
     @Lob
-    @Column(name = "CONTEUDO", label = "Conteúdo", required = true)
-
+    @Column(name = "CONTEUDO", label = "Conteúdo")
     private byte[] conteudo;
+
+
+    @Column(name = "CONTEUDO_PATH", label = "Conteúdo")
+    private String conteudoPath;
 
     /*
      * Tipo de Conteúdo do Anexo
@@ -84,8 +88,13 @@ public class Anexo implements Serializable, Parcelable {
     @ForeignKey
     private Cliente cliente;
 
+    public Anexo(){
+
+    }
+
     protected Anexo(Parcel in) {
         nome = in.readString();
+        conteudoPath = in.readString();
         conteudo = in.createByteArray();
         cliente = in.readParcelable(Cliente.class.getClassLoader());
         tipoConteudo = TipoConteudoAnexo.values()[in.readInt()];
@@ -143,6 +152,22 @@ public class Anexo implements Serializable, Parcelable {
         this.cliente = cliente;
     }
 
+    public String getConteudoPath() {
+        return conteudoPath;
+    }
+
+    public void setConteudoPath(String conteudoPath) {
+        this.conteudoPath = conteudoPath;
+    }
+
+    public boolean hasConteudo() {
+        return getConteudoPath() != null;
+    }
+
+    public File getFile() {
+        return new File(getConteudoPath());
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -151,6 +176,7 @@ public class Anexo implements Serializable, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nome);
+        dest.writeString(conteudoPath);
         dest.writeByteArray(conteudo);
         dest.writeParcelable(cliente, flags);
         dest.writeInt(tipoConteudo.ordinal());

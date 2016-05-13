@@ -70,16 +70,16 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
-                        SQLRepository<Cliente, Long> clienteFactory = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
+                        SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
 
                         try {
-                            Cliente cli = clienteFactory.findOne(
+                            Cliente cli = clienteRepository.findOne(
                                     "SELECT P.* FROM CLIENTE P WHERE P.ID_CLIENTE = :PID_CLIENTE",
                                     new NamedParameter("PID_CLIENTE", cliente.getId()));
 
-                            clienteFactory.getTransaction().begin();
-                            clienteFactory.remove(cli);
-                            clienteFactory.getTransaction().commit();
+                            clienteRepository.getTransaction().begin();
+                            clienteRepository.remove(cli);
+                            clienteRepository.getTransaction().commit();
 
                             remove(cliente);
                             notifyDataSetChanged();
@@ -87,7 +87,7 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
                         } catch (Exception e) {
                             e.printStackTrace();
                             try {
-                                clienteFactory.getTransaction().rollback();
+                                clienteRepository.getTransaction().rollback();
                             } catch (Exception e1) {
                             }
                             if (e instanceof TransactionException) {

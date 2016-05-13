@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.anteros.persistence.parameter.NamedParameter;
@@ -29,9 +32,11 @@ import br.com.anteros.vendas.modelo.Cliente;
  */
 public class AnexoConsultaActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
+    private static final int REQ_NOVO_ANEXO = 0;
+    private static final int REQ_EDITAR_ANEXO = 2;
     private ListView lvAnexos;
     private AnexoConsultaAdapter adapter;
-    private final int REQUISICAO = 1000;
+    public static List<Anexo> anexosCliente;
     private SQLRepository<Anexo, Long> anexoRepository;
 
     @Override
@@ -77,7 +82,10 @@ public class AnexoConsultaActivity extends AppCompatActivity implements AdapterV
                 break;
 
             case R.id.anexo_consulta_action_adicionar:
-                startActivity(new Intent(this, AnexoCadastroActivity.class));
+                Anexo novoAnexo = new Anexo();
+                novoAnexo.setCliente(ClienteConsultaActivity.cliente);
+                AnexoCadastroActivity.setAnexo(novoAnexo);
+                startActivityForResult(new Intent(this, AnexoCadastroActivity.class), REQ_NOVO_ANEXO);
                 break;
         }
         return true;
@@ -103,7 +111,8 @@ public class AnexoConsultaActivity extends AppCompatActivity implements AdapterV
 
         @Override
         public void onPostExecute(List<Anexo> anexos) {
-            adapter = new AnexoConsultaAdapter(AnexoConsultaActivity.this, anexos);
+            anexosCliente = anexos;
+            adapter = new AnexoConsultaAdapter(AnexoConsultaActivity.this, anexosCliente);
             lvAnexos.setAdapter(adapter);
             progress.dismiss();
         }
@@ -113,13 +122,9 @@ public class AnexoConsultaActivity extends AppCompatActivity implements AdapterV
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvAnexos) {
-//            Anexo anexo = adapter.getItem(position);
-//            Intent intent = new Intent(this, AnexoActivity.class);
-//            intent.putExtra("anexo", (Parcelable) anexo);
-//
-//            startActivityForResult(intent, REQUISICAO);
-
-            //AQUI
+            Anexo anexo = adapter.getItem(position);
+            AnexoCadastroActivity.setAnexo(anexo);
+            startActivityForResult(new Intent(this, AnexoCadastroActivity.class), REQ_EDITAR_ANEXO);
         }
         return false;
     }
@@ -127,9 +132,25 @@ public class AnexoConsultaActivity extends AppCompatActivity implements AdapterV
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUISICAO) {
-            if (resultCode == RESULT_OK) {
-                new BuscarAnexos().execute();
+        if (requestCode == REQ_NOVO_ANEXO) {
+            switch (resultCode) {
+                case AnexoCadastroActivity.ALTEROU_ANEXO:
+
+                    if (anexosCliente == Collections.EMPTY_LIST) {
+                        anexosCliente = new ArrayList<Anexo>();
+                    }
+
+                    anexosCliente.add(AnexoCadastroActivity.getAnexo());
+                    adapter = new AnexoConsultaAdapter(AnexoConsultaActivity.this, anexosCliente);
+                    lvAnexos.setAdapter(adapter);
+                    break;
+            }
+        } else if (requestCode == REQ_EDITAR_ANEXO) {
+            switch (resultCode) {
+                case AnexoCadastroActivity.ALTEROU_ANEXO:
+                    adapter = new AnexoConsultaAdapter(AnexoConsultaActivity.this, anexosCliente);
+                    lvAnexos.setAdapter(adapter);
+                    break;
             }
         }
     }

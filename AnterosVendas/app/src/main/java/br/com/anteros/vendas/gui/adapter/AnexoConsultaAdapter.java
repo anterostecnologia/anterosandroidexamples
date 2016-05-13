@@ -65,7 +65,7 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         });
 
         if (item != null) {
-            tvIdAnexo.setText(item.getId().toString());
+            tvIdAnexo.setText(item.getId() + "");
             tvNomeAnexo.setText(item.getNome());
             tvDescricao.setText(item.getNome());
 
@@ -119,24 +119,27 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
-                        SQLRepository<Anexo, Long> anexoFactory = AnterosVendasContext.getInstance().getSQLRepository(Anexo.class);
+                        SQLRepository<Anexo, Long> anexoRepository = AnterosVendasContext.getInstance().getSQLRepository(Anexo.class);
 
                         try {
-                            Anexo an = anexoFactory.findOne(
-                                    "SELECT A.* FROM ANEXO A WHERE A.ID_ANEXO = :PID_ANEXO",
-                                    new NamedParameter("PID_ANEXO", anexo.getId()));
+                            if (anexo.getId() != null) {
 
-                            anexoFactory.getTransaction().begin();
-                            anexoFactory.remove(an);
-                            anexoFactory.getTransaction().commit();
 
+                                Anexo an = anexoRepository.findOne(
+                                        "SELECT A.* FROM ANEXO A WHERE A.ID_ANEXO = :PID_ANEXO",
+                                        new NamedParameter("PID_ANEXO", anexo.getId()));
+
+                                anexoRepository.getTransaction().begin();
+                                anexoRepository.remove(an);
+                                anexoRepository.getTransaction().commit();
+                            }
                             remove(anexo);
                             notifyDataSetChanged();
 
                         } catch (Exception e) {
                             e.printStackTrace();
                             try {
-                                anexoFactory.getTransaction().rollback();
+                                anexoRepository.getTransaction().rollback();
                             } catch (Exception e1) {
                             }
                             if (e instanceof TransactionException) {

@@ -71,4 +71,5 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'commons-io:commons-io:2.5'
 }

@@ -20,6 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -180,6 +181,9 @@ public class Cliente implements Serializable, Parcelable {
     }
 
     public Long getId() {
+        if (id == null) {
+            id = new Long(0);
+        }
         return id;
     }
 
@@ -268,6 +272,9 @@ public class Cliente implements Serializable, Parcelable {
     }
 
     public List<Anexo> getAnexos() {
+        if (anexos == null) {
+            anexos = new ArrayList<Anexo>();
+        }
         return anexos;
     }
 
