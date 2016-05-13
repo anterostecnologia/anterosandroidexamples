@@ -30,6 +30,7 @@ import br.com.anteros.persistence.metadata.annotation.Id;
 import br.com.anteros.persistence.metadata.annotation.Lob;
 import br.com.anteros.persistence.metadata.annotation.Table;
 import br.com.anteros.persistence.metadata.annotation.TableGenerator;
+import br.com.anteros.persistence.metadata.annotation.Transient;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.validation.api.groups.Default;
 
@@ -45,29 +46,32 @@ public class Produto implements Serializable, Parcelable {
     @Id
     @GeneratedValue(strategy = GeneratedType.TABLE)
     @TableGenerator(value = "SEQ_PRODUTO", name = "SEQUENCIA", initialValue = 1, pkColumnName = "ID_SEQUENCIA", valueColumnName = "NR_SEQUENCIA")
-    @Column(name = "ID_PRODUTO", required = true, length = 8)
+    @Column(name = "ID_PRODUTO", required = true, length = 8, label = "Id.produto")
     private Long id;
 
     /*
      * Nome do produto
      */
     @Required(groups = {Default.class, ValidacaoCliente.class})
-    @Column(name = "DS_PRODUTO", required = true, length = 50)
+    @Column(name = "DS_PRODUTO", required = true, length = 50, label="Nome do produto")
     private String nomeProduto;
 
     /*
      * Foto do produto
      */
     @Lob
-    @Column(name = "FOTO_PRODUTO")
+    @Column(name = "FOTO_PRODUTO", required=true, label = "Foto do produto")
     private byte[] fotoProduto;
 
     /*
      * Valor do produto
      */
     @Required(groups = {Default.class, ValidacaoCliente.class})
-    @Column(name = "VL_PRODUTO", required = true, precision = 14, scale = 2, defaultValue = "0")
+    @Column(name = "VL_PRODUTO", required = true, precision = 14, scale = 2, defaultValue = "0", label="Valor do produto")
     private BigDecimal vlProduto;
+
+    @Transient
+    private Boolean selected=false;
 
     public Produto(){
 
@@ -135,5 +139,13 @@ public class Produto implements Serializable, Parcelable {
         dest.writeString(nomeProduto);
         dest.writeByteArray(fotoProduto);
         dest.writeString(vlProduto.toString());
+    }
+
+    public Boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 }

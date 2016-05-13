@@ -44,6 +44,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     public static final int CLIENTE = 0;
     public static final int PEDIDO = 1;
     public static final int CADASTRO_SELECIONAR_CLIENTE = 3;
+    public static final int PRODUTO = 4;
     private GridView gridMenu;
 
     @Override
@@ -66,6 +67,8 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
         adicionarItensMenu();
         verificaQtdeColunasPorLinha();
+
+        AnterosVendasContext.getInstance().populateProdutos();
     }
 
     private void verificaQtdeColunasPorLinha() {
@@ -92,6 +95,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
         itens.add(new MenuItem(CLIENTE, "Cliente", "Cadastro e consulta de clientes", "", getResources().getDrawable(R.drawable.ic_menu_cliente), Color.TRANSPARENT));
         itens.add(new MenuItem(PEDIDO, "Pedido", "Cadastro e consulta de pedidos", "", getResources().getDrawable(R.drawable.ic_menu_pedido), Color.TRANSPARENT));
+        itens.add(new MenuItem(PRODUTO, "Produto", "Consulta de produtos", "", getResources().getDrawable(R.drawable.ic_menu_produto), Color.TRANSPARENT));
 
         gridMenu.setAdapter(new MenuAdapter(this, R.layout.menu_item, itens));
     }
@@ -140,6 +144,9 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                 break;
             case PEDIDO:
                 startActivity(new Intent(this, PedidoConsultaActivity.class));
+                break;
+            case PRODUTO:
+                startActivity(new Intent(this, ProdutoConsultaActivity.class));
                 break;
         }
     }

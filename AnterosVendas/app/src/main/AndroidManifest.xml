@@ -18,7 +18,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -29,23 +29,34 @@
         <meta-data
             android:name="DatabaseName"
             android:value="vendas.db" />
+
         <activity
             android:name=".gui.SplashActivity"
             android:theme="@style/Base.AppTheme.NoActionBar">
+
              
 
+
             <intent-filter>
+
                  
+
 
                 <action android:name="android.intent.action.MAIN" />
+
                  
 
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                  
+
 
             </intent-filter>
 
+
              
+
 
         </activity>
         <activity
@@ -71,24 +82,29 @@
         <activity
             android:name=".gui.PedidoCadastroActivity"
             android:label="@string/title_activity_pedido"
-            android:theme="@style/Base.AppTheme.NoActionBar"></activity>
+            android:theme="@style/Base.AppTheme.NoActionBar" />
         <activity
             android:name=".gui.ManutencaoTabelasActivity"
             android:configChanges="orientation"
             android:theme="@style/Base.AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
-        <activity android:name="br.com.anteros.android.persistence.backup.RecordsOfTableActivity"/>
+        <activity android:name="br.com.anteros.android.persistence.backup.RecordsOfTableActivity" />
 
         <!-- SERVICO PARA REGISTRAR EXECUCAO DO BACKUP -->
         <service android:name="br.com.anteros.android.persistence.backup.BackupService" />
 
         <!-- RECEIVER PARA INICIAR SERVICO DE BACKUP APÓS O BOOT DO ANDROID -->
-        <receiver android:name="br.com.anteros.android.persistence.backup.BackupReceiver" >
+        <receiver android:name="br.com.anteros.android.persistence.backup.BackupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".gui.ProdutoConsultaActivity"
+            android:configChanges="orientation"
+            android:theme="@style/Base.AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+        </activity>
     </application>
 
 </manifest>

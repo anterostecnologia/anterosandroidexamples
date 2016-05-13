@@ -198,8 +198,10 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                 new PostmonWebService() {
                     @Override
                     protected void onPostExecute(PostmonResponse postmonResponse) {
-                        edCidade.setText(postmonResponse.getCidade());
-                        spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
+                        if (postmonResponse!=null) {
+                            edCidade.setText(postmonResponse.getCidade());
+                            spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
+                        }
                     }
                 }.execute(edCep.getText().toString());
             }
