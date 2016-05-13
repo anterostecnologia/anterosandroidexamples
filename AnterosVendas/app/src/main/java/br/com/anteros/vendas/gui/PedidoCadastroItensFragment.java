@@ -8,21 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.adapter.PedidoCadastroItensFragmentAdapter;
 
 /**
  * Created by eduardogreco on 5/12/16.
  */
 public class PedidoCadastroItensFragment extends Fragment {
 
-    private ImageView imgDelete;
-    private TextView tvProduto;
-    private EditText edQuantidade;
-    private EditText edPreco;
-    private TextView tvValorTotal;
-    private ImageView imgProduto;
+    private ListView lvItens;
+    private PedidoCadastroItensFragmentAdapter adapter;
 
     @Nullable
     @Override
@@ -30,23 +28,12 @@ public class PedidoCadastroItensFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.pedido_cadastro_itens, null);
 
-        tvProduto = (TextView) view.findViewById(R.id.pedido_cadastro_itens_produto);
-        edQuantidade = (EditText) view.findViewById(R.id.pedido_cadastro_itens_edQuantidade);
-        edPreco = (EditText) view.findViewById(R.id.pedido_cadastro_itens_edPreco);
-        tvValorTotal = (TextView) view.findViewById(R.id.pedido_cadastro_itens_valorTotal);
-        imgDelete = (ImageView) view.findViewById(R.id.pedido_cadastro_itens_imgDelete);
-        imgProduto = (ImageView) view.findViewById(R.id.pedido_cadastro_itens_item_fotoProduto);
+        lvItens = (ListView) view.findViewById(R.id.pedido_cadastro_itens_list_view);
 
-        try {
-            bindView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        adapter = new PedidoCadastroItensFragmentAdapter(getContext(), PedidoConsultaActivity.pedido.getItens());
+        lvItens.setAdapter(adapter);
+
         return view;
-    }
-
-    private void bindView() {
-
     }
 
 }

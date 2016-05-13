@@ -22,7 +22,10 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Column;
@@ -132,12 +135,20 @@ public class ItemPedido implements Serializable, Parcelable {
         return vlProduto;
     }
 
+    public String getVlProdutoAsString() {
+        return formatMoeda(getVlProduto());
+    }
+
     public void setVlProduto(BigDecimal vlProduto) {
         this.vlProduto = vlProduto;
     }
 
     public BigDecimal getVlTotal() {
         return vlTotal;
+    }
+
+    public String getVlTotalAsString() {
+        return formatMoeda(getVlTotal());
     }
 
     public void setVlTotal(BigDecimal vlTotal) {
@@ -157,5 +168,19 @@ public class ItemPedido implements Serializable, Parcelable {
         dest.writeString(qtProduto.toString());
         dest.writeString(vlProduto.toString());
         dest.writeString(vlTotal.toString());
+    }
+
+    public static String formatMoeda(BigDecimal valor) {
+        Locale ptBr;
+        ptBr = new Locale("pt", "BR");
+
+        DecimalFormat moedaFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(ptBr);
+        moedaFormat.setNegativePrefix("-");
+        moedaFormat.setNegativeSuffix("");
+
+        if (valor == null) {
+            valor = BigDecimal.ZERO;
+        }
+        return moedaFormat.format(valor).replace("R$", "");
     }
 }

@@ -290,15 +290,13 @@ public class AnterosVendasContext {
 
             getSession().save(cliente1);
 
+            getSession().getTransaction().commit();
+
+            getSession().getTransaction().begin();
+
             TypedSQLQuery<Cliente> query = getSession().createQuery("SELECT * FROM CLIENTE", Cliente.class);
             List<Cliente> clientes = query.getResultList();
             for (Cliente cliente : clientes) {
-                Produto p = new Produto();
-                p.setVlProduto(new BigDecimal(750));
-                p.setNomeProduto("Monitor LG 22");
-
-                getSession().save(p);
-
                 PedidoVenda ped = new PedidoVenda();
                 ped.setVlTotalPedido(new BigDecimal(750));
                 ped.setNrPedido(new Long(12345));
@@ -307,20 +305,21 @@ public class AnterosVendasContext {
                 ped.setCliente(cliente);
                 ped.setDtPedido(new Date());
 
-                ItemPedido ite = new ItemPedido();
-                ite.setVlTotal(new BigDecimal(750));
-                ite.setVlProduto(new BigDecimal(750));
-                ite.setQtProduto(new BigDecimal(1));
-                ite.setPedidoVenda(ped);
-                ite.setProduto(p);
-
                 List<ItemPedido> itens = new ArrayList<ItemPedido>();
-                itens.add(ite);
 
+                TypedSQLQuery<Produto> queryProdutos = getSession().createQuery("SELECT * FROM PRODUTO", Produto.class);
+                List<Produto> produtos = queryProdutos.getResultList();
+                for (Produto produto : produtos) {
+                    ItemPedido ite = new ItemPedido();
+                    ite.setVlTotal(produto.getVlProduto());
+                    ite.setVlProduto(produto.getVlProduto());
+                    ite.setQtProduto(new BigDecimal(1));
+                    ite.setPedidoVenda(ped);
+                    ite.setProduto(produto);
+                    itens.add(ite);
+                }
                 ped.setItens(itens);
-
                 getSession().save(ped);
-                getSession().save(ite);
             }
             getSession().getTransaction().commit();
         } catch (Exception e) {
