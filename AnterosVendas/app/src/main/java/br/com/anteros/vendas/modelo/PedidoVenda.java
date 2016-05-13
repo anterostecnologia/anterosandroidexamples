@@ -48,6 +48,7 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchMode;
 import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
+import br.com.anteros.validation.api.constraints.Past;
 import br.com.anteros.validation.api.groups.Default;
 
 /**
@@ -78,6 +79,7 @@ public class PedidoVenda implements Serializable, Parcelable {
      */
     @Required(groups = {Default.class, ValidacaoCliente.class})
     @Temporal(TemporalType.DATE)
+    @Past
     @Column(name = "DT_PEDIDO", required = true, label = "Data do pedido")
     private Date dtPedido;
 
