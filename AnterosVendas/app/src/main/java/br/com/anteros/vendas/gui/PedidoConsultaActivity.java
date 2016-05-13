@@ -16,6 +16,7 @@ import android.widget.ListView;
 import java.util.Date;
 import java.util.List;
 
+import br.com.anteros.persistence.parameter.NamedParameter;
 import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
@@ -50,7 +51,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         lvPedidos = (ListView) findViewById(R.id.pedido_consulta_list_view);
         lvPedidos.setOnItemLongClickListener(this);
 
-        new BuscarPedidos().execute();
+        new BuscarPedidosConsulta().execute();
     }
 
     @Override
@@ -85,7 +86,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         return true;
     }
 
-    private class BuscarPedidos extends AsyncTask<Void, Void, List<PedidoVenda>> {
+    private class BuscarPedidosConsulta extends AsyncTask<Void, Void, List<PedidoVenda>> {
 
         private ProgressDialog progress;
 
@@ -98,7 +99,16 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
 
         @Override
         protected List<PedidoVenda> doInBackground(Void... params) {
-            return pedidoRepository.find("SELECT P.* FROM PEDIDOVENDA P");
+            return pedidoRepository.find("SELECT  P.ID_PEDIDOVENDA,                " +
+                                                " P.NR_PEDIDO,                     " +
+                                                " P.DT_PEDIDO,                     " +
+                                                " P.TP_CONDICAO_PGTO,              " +
+                                                " P.FORMA_PAGTO,                   " +
+                                                " P.VL_TOTAL_PEDIDO,               " +
+                                                " C.ID_CLIENTE,                    " +
+                                                " C.RAZAO_SOCIAL                   " +
+                                         " FROM PEDIDOVENDA P, CLIENTE C           " +
+                                        " WHERE C.ID_CLIENTE = P.ID_CLIENTE        ");
         }
 
         @Override
@@ -113,7 +123,10 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvPedidos) {
-            pedido = adapter.getItem(position);
+            PedidoVenda p = adapter.getItem(position);
+            pedido = pedidoRepository.findOne(
+                    "SELECT P.* FROM PEDIDOVENDA P WHERE P.ID_PEDIDOVENDA = :PID_PEDIDOVENDA",
+                    new NamedParameter("PID_PEDIDOVENDA", p.getId()));
             Intent intent = new Intent(this, PedidoCadastroActivity.class);
             startActivityForResult(intent, REQUISICAO);
         }
@@ -125,7 +138,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUISICAO) {
             if (resultCode == RESULT_OK) {
-                new BuscarPedidos().execute();
+                new BuscarPedidosConsulta().execute();
             }
         }
     }
