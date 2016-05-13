@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,41 +35,21 @@
         <meta-data
             android:name="DatabaseName"
             android:value="vendas.db" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".gui.SplashActivity"
             android:theme="@style/Base.AppTheme.NoActionBar">
 
-
-             
-
-
             <intent-filter>
-
-
-                 
-
-
                 <action android:name="android.intent.action.MAIN" />
-
-
-                 
-
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
-
-                 
-
-
             </intent-filter>
-
-
-             
-
-
         </activity>
         <activity
             android:name=".gui.MenuActivity"
@@ -125,17 +106,18 @@
             android:name=".gui.ProdutoConsultaActivity"
             android:configChanges="orientation"
             android:theme="@style/Base.AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".gui.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/Base.AppTheme.NoActionBar"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name="br.com.anteros.social.instagram.AnterosOAuthActivity"/>
+        <activity android:name="br.com.anteros.social.instagram.AnterosOAuthActivity" />
 
     </application>
 
