@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -205,6 +206,8 @@ public class PedidoVenda implements Serializable, Parcelable {
     }
 
     public List<ItemPedido> getItens() {
+        if (itens == null)
+            itens = new ArrayList<ItemPedido>();
         return itens;
     }
 
