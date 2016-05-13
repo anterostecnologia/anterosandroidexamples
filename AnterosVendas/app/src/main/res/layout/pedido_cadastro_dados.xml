@@ -123,7 +123,6 @@
 
                         <Spinner
                             android:id="@+id/pedido_cadastro_dados_cb_condicao_pagamento"
-                            style="@style/EstiloSpinner"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -151,7 +150,6 @@
 
                         <Spinner
                             android:id="@+id/pedido_cadastro_dados__cb_tipo_formaPagamento"
-                            style="@style/EstiloSpinner"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>

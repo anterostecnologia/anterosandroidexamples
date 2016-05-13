@@ -1,7 +1,6 @@
 package br.com.anteros.vendas.gui;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,10 +11,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
@@ -26,8 +23,6 @@ import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.validation.api.ConstraintViolation;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
-import br.com.anteros.vendas.gui.adapter.EstadoAdapter;
-import br.com.anteros.vendas.gui.adapter.TipoLogradouroAdapter;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.Estado;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
