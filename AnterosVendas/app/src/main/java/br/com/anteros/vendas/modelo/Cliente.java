@@ -145,7 +145,7 @@ public class Cliente implements Serializable, Parcelable {
      * Anexos do cliente: FOTOS, DOCUMENTOS, CONTRATOS, etc
      */
     @Fetch(type = FetchType.LAZY, mode = FetchMode.ONE_TO_MANY, mappedBy = "cliente")
-    @Cascade(values = {CascadeType.DELETE_ORPHAN})
+    @Cascade(values = {CascadeType.ALL})
     private List<Anexo> anexos;
 
 

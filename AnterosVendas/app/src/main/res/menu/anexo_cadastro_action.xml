@@ -3,10 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/cliente_cadastro_action_anexo"
-        android:icon="@drawable/ic_anexo"
+        android:id="@+id/cliente_cadastro_action_upload"
+        android:icon="@drawable/ic_upload"
         android:orderInCategory="100"
-        android:title="Anexo"
+        android:title="Salvar"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/cliente_cadastro_action_camera"
+        android:icon="@drawable/ic_foto"
+        android:orderInCategory="100"
+        android:title="Salvar"
         app:showAsAction="always" />
 
     <item
@@ -15,5 +22,4 @@
         android:orderInCategory="100"
         android:title="Salvar"
         app:showAsAction="always" />
-
 </menu>

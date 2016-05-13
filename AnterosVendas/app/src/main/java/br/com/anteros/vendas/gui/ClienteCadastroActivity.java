@@ -1,6 +1,7 @@
 package br.com.anteros.vendas.gui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -35,7 +36,6 @@ import br.com.anteros.vendas.ws.PostmonWebService;
  */
 public class ClienteCadastroActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private Cliente cliente;
     private EditText edRazao;
     private EditText edFantasia;
     private Spinner spTipoLogradouro;
@@ -76,30 +76,25 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         spTipoLogradouro.setAdapter(new ArrayAdapter<TipoLogradouro>(this, android.R.layout.simple_list_item_1, TipoLogradouro.values()));
         spEstado.setAdapter(new ArrayAdapter<Estado>(this, android.R.layout.simple_list_item_1, Estado.values()));
 
-        if (getIntent().hasExtra("cliente")) {
-            cliente = (Cliente) getIntent().getSerializableExtra("cliente");
-        } else {
-            cliente = new Cliente();
-        }
         bindView();
     }
 
     private void bindView() {
-        edRazao.setText(cliente.getRazaoSocial());
-        edFantasia.setText(cliente.getNomeFantasia());
-        edLogradouro.setText(cliente.getLogradouro());
-        edNrLogradouro.setText(cliente.getNrLogradouro());
-        edCep.setText(cliente.getCep());
-        edBairro.setText(cliente.getBairro());
-        edComplemento.setText(cliente.getComplemento());
-        edCidade.setText(cliente.getCidade());
+        edRazao.setText(ClienteConsultaActivity.cliente.getRazaoSocial());
+        edFantasia.setText(ClienteConsultaActivity.cliente.getNomeFantasia());
+        edLogradouro.setText(ClienteConsultaActivity.cliente.getLogradouro());
+        edNrLogradouro.setText(ClienteConsultaActivity.cliente.getNrLogradouro());
+        edCep.setText(ClienteConsultaActivity.cliente.getCep());
+        edBairro.setText(ClienteConsultaActivity.cliente.getBairro());
+        edComplemento.setText(ClienteConsultaActivity.cliente.getComplemento());
+        edCidade.setText(ClienteConsultaActivity.cliente.getCidade());
 
-        if (cliente.getTpLogradouro() != null) {
-            spTipoLogradouro.setSelection(cliente.getTpLogradouro().ordinal());
+        if (ClienteConsultaActivity.cliente.getTpLogradouro() != null) {
+            spTipoLogradouro.setSelection(ClienteConsultaActivity.cliente.getTpLogradouro().ordinal());
         }
 
-        if (cliente.getEstado() != null) {
-            spEstado.setSelection(cliente.getEstado().ordinal());
+        if (ClienteConsultaActivity.cliente.getEstado() != null) {
+            spEstado.setSelection(ClienteConsultaActivity.cliente.getEstado().ordinal());
         }
     }
 
@@ -140,6 +135,10 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
 
                         }).show();
                 break;
+
+            case R.id.cliente_cadastro_action_anexo:
+                startActivity(new Intent(this, AnexoConsultaActivity.class));
+                break;
         }
         return true;
     }
@@ -175,17 +174,17 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     }
 
     private void salvarDadosCliente() {
-        cliente.setRazaoSocial(edRazao.getText().toString());
-        cliente.setNomeFantasia(edFantasia.getText().toString());
-        cliente.setLogradouro(edLogradouro.getText().toString());
-        cliente.setNrLogradouro(edNrLogradouro.getText().toString());
-        cliente.setCep(edCep.getText().toString());
-        cliente.setBairro(edBairro.getText().toString());
-        cliente.setComplemento(edComplemento.getText().toString());
-        cliente.setCidade(edCidade.getText().toString());
-        cliente.setDtCadastro(cliente.getDtCadastro() != null ? cliente.getDtCadastro() : new Date());
-        cliente.setEstado((Estado) spEstado.getSelectedItem());
-        cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
+        ClienteConsultaActivity.cliente.setRazaoSocial(edRazao.getText().toString());
+        ClienteConsultaActivity.cliente.setNomeFantasia(edFantasia.getText().toString());
+        ClienteConsultaActivity.cliente.setLogradouro(edLogradouro.getText().toString());
+        ClienteConsultaActivity.cliente.setNrLogradouro(edNrLogradouro.getText().toString());
+        ClienteConsultaActivity.cliente.setCep(edCep.getText().toString());
+        ClienteConsultaActivity.cliente.setBairro(edBairro.getText().toString());
+        ClienteConsultaActivity.cliente.setComplemento(edComplemento.getText().toString());
+        ClienteConsultaActivity.cliente.setCidade(edCidade.getText().toString());
+        ClienteConsultaActivity.cliente.setDtCadastro(ClienteConsultaActivity.cliente.getDtCadastro() != null ? ClienteConsultaActivity.cliente.getDtCadastro() : new Date());
+        ClienteConsultaActivity.cliente.setEstado((Estado) spEstado.getSelectedItem());
+        ClienteConsultaActivity.cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
     }
 
     @Override
@@ -195,7 +194,7 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                 new PostmonWebService() {
                     @Override
                     protected void onPostExecute(PostmonResponse postmonResponse) {
-                        if (postmonResponse!=null) {
+                        if (postmonResponse != null) {
                             edCidade.setText(postmonResponse.getCidade().toUpperCase());
                             spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
                         }
@@ -226,12 +225,12 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
             try {
                 salvarDadosCliente();
 
-                violations = AnterosVendasContext.getInstance().getDefaultValidator().validate(cliente, ValidacaoCliente.class);
+                violations = AnterosVendasContext.getInstance().getDefaultValidator().validate(ClienteConsultaActivity.cliente, ValidacaoCliente.class);
                 if (violations.size() > 0) {
                     return "ERRO_VALIDACAO";
                 }
                 clienteRepository.getTransaction().begin();
-                clienteRepository.save(cliente);
+                clienteRepository.save(ClienteConsultaActivity.cliente);
                 clienteRepository.getTransaction().commit();
             } catch (Exception e) {
                 e.printStackTrace();
