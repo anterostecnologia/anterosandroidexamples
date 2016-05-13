@@ -43,8 +43,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     public static final int CLIENTE = 0;
     public static final int PEDIDO = 1;
-    public static final int CADASTRO_SELECIONAR_CLIENTE = 3;
-    public static final int PRODUTO = 4;
+    public static final int PRODUTO = 2;
     private GridView gridMenu;
 
     @Override
@@ -59,7 +58,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
          */
         AnterosVendasContext.setApplication(this.getApplication());
 
-        //AnterosVendasContext.getInstance().populateDatabase();
+
 
         gridMenu = (GridView) findViewById(R.id.activity_menu_gridMenu
         );
@@ -68,7 +67,8 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         adicionarItensMenu();
         verificaQtdeColunasPorLinha();
 
-        AnterosVendasContext.getInstance().populateProdutos();
+        //AnterosVendasContext.getInstance().populateDatabase();
+        //AnterosVendasContext.getInstance().populateProdutos();
     }
 
     private void verificaQtdeColunasPorLinha() {

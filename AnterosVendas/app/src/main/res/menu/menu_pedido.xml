@@ -2,11 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".gui.PedidoCadastroActivity">
-    <!--<item-->
-        <!--android:id="@+id/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="teste"-->
-        <!--app:showAsAction="never" />-->
 
     <item
         android:id="@+id/menu_pedido_salvar"
@@ -16,9 +11,9 @@
         android:title="Salvar"/>
 
     <item
-        android:id="@+id/menu_pedido_cancelar"
+        android:id="@+id/menu_pedido_adicionarProduto"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_cancel"
-        android:title="Salvar"/>
+        android:icon="@drawable/ic_add_item"
+        android:title="Adicionar item"/>
 </menu>

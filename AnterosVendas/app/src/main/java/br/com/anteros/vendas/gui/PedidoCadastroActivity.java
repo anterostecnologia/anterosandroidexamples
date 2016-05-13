@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ public class PedidoCadastroActivity extends AppCompatActivity {
 
     private PedidoCadastroDadosFragment pedidoCadastroDadosFragment;
     private PedidoCadastroItensFragment pedidoCadastroItensFragment;
+    private int tabAtiva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +50,45 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
+
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
         TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_pedido_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tabAtiva = position;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (tabAtiva == 1) {
+            menu.findItem(R.id.menu_pedido_adicionarProduto).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_pedido_adicionarProduto).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -62,10 +98,18 @@ public class PedidoCadastroActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            cancelarPedido();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                cancelarPedido();
                 break;
 
             case R.id.menu_pedido_salvar:
@@ -85,21 +129,8 @@ public class PedidoCadastroActivity extends AppCompatActivity {
                         }).show();
                 break;
 
-            case R.id.menu_pedido_cancelar:
-                new QuestionAlert(this, this.getResources().getString(
-                        R.string.app_name), "Deseja cancelar o pedido?",
-                        new QuestionAlert.QuestionListener() {
-
-                            public void onPositiveClick() {
-                                setResult(RESULT_CANCELED);
-                                finish();
-                            }
-
-                            public void onNegativeClick() {
-
-                            }
-
-                        }).show();
+            case R.id.menu_pedido_adicionarProduto:
+                //
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -239,5 +270,22 @@ public class PedidoCadastroActivity extends AppCompatActivity {
         PedidoConsultaActivity.pedido.setCondicaoPagamento((CondicaoPagamento) PedidoCadastroDadosFragment.spCondicaoPagamento.getSelectedItem());
         PedidoConsultaActivity.pedido.setFormaPagamento((FormaPagamento) PedidoCadastroDadosFragment.spFormaPagamento.getSelectedItem());
         PedidoConsultaActivity.pedido.setDtPedido(DateUtil.stringToDate(PedidoCadastroDadosFragment.edData.getText().toString(), DateUtil.DATE));
+    }
+
+    private void cancelarPedido() {
+        new QuestionAlert(this, this.getResources().getString(
+                R.string.app_name), "Deseja cancelar o pedido?",
+                new QuestionAlert.QuestionListener() {
+
+                    public void onPositiveClick() {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }
+
+                    public void onNegativeClick() {
+
+                    }
+
+                }).show();
     }
 }
