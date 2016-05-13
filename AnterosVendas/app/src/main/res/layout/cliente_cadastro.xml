@@ -66,7 +66,6 @@
 
             <Spinner
                 android:id="@+id/cliente_cadastro_cb_tipo_logradouro"
-                style="@style/EstiloSpinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 
@@ -75,7 +74,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logradouro" />
+                android:text="Logradouro"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_logradouro"
@@ -91,7 +91,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Número" />
+                android:text="Número"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_numero"
@@ -100,7 +101,7 @@
                 android:digits="0123456789"
                 android:ems="10"
                 android:imeOptions="actionNext"
-                android:inputType="number|text"
+                android:inputType="number"
                 android:maxLength="9"
                 android:singleLine="true" />
 
@@ -109,7 +110,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CEP" />
+                android:text="CEP"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_CEP"
@@ -124,7 +126,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bairro" />
+                android:text="Bairro"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_bairro"
@@ -140,7 +143,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complemento" />
+                android:text="Complemento"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_complemento"
@@ -156,7 +160,8 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cidade" />
+                android:text="Cidade"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_cidade"
@@ -172,11 +177,11 @@
                 style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estado" />
+                android:text="Estado"
+                android:textSize="15sp" />
 
             <Spinner
                 android:id="@+id/cliente_cadastro_cb_estado"
-                style="@style/EstiloSpinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 

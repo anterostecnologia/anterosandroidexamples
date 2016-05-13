@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -76,8 +77,9 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         edCidade = (EditText) findViewById(R.id.cliente_cadastro_cidade);
         spEstado = (Spinner) findViewById(R.id.cliente_cadastro_cb_estado);
 
-        spTipoLogradouro.setAdapter(new TipoLogradouroAdapter(this, Arrays.asList(TipoLogradouro.values())));
-        spEstado.setAdapter(new EstadoAdapter(this, Arrays.asList(Estado.values())));
+
+        spTipoLogradouro.setAdapter(new ArrayAdapter<TipoLogradouro>(this, android.R.layout.simple_list_item_1, TipoLogradouro.values()));
+        spEstado.setAdapter(new ArrayAdapter<Estado>(this, android.R.layout.simple_list_item_1, Estado.values()));
 
         if (getIntent().hasExtra("cliente")) {
             cliente = (Cliente) getIntent().getSerializableExtra("cliente");
@@ -199,7 +201,7 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                     @Override
                     protected void onPostExecute(PostmonResponse postmonResponse) {
                         if (postmonResponse!=null) {
-                            edCidade.setText(postmonResponse.getCidade());
+                            edCidade.setText(postmonResponse.getCidade().toUpperCase());
                             spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
                         }
                     }
