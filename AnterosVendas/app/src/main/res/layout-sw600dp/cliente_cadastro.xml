@@ -203,7 +203,7 @@
                         android:id="@+id/cliente_cadastro_cidade"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionDone"
                         android:inputType="textCapCharacters"
                         android:lines="1"
                         android:singleLine="true" />

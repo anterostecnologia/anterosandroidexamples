@@ -121,6 +121,8 @@ public class Produto implements Serializable, Parcelable {
     }
 
     public BigDecimal getVlProduto() {
+        if (vlProduto == null)
+            vlProduto = BigDecimal.ZERO;
         return vlProduto;
     }
 

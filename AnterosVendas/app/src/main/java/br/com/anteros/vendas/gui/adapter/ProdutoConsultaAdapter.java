@@ -12,8 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Produto;
@@ -25,6 +29,7 @@ public class ProdutoConsultaAdapter  extends BaseAdapter {
     private Context context;
     private LayoutInflater lInflater;
     private List<Produto> produtos;
+    private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     public ProdutoConsultaAdapter(Context context, List<Produto> produtos) {
         this.context = context;
@@ -58,7 +63,10 @@ public class ProdutoConsultaAdapter  extends BaseAdapter {
         Produto p = getProduto(position);
 
         ((TextView) view.findViewById(R.id.produto_descricao)).setText(p.getNomeProduto());
-        ((TextView) view.findViewById(R.id.produto_preco)).setText(p.getVlProduto() + "");
+        TextView tvPreco = (TextView) view.findViewById(R.id.produto_preco);
+        BigDecimal price = p.getVlProduto().setScale(2, RoundingMode.HALF_EVEN);
+        tvPreco.setText(currencyFormat.format(price));
+
         ((ImageView) view.findViewById(R.id.produto_foto)).setImageBitmap(BitmapFactory.decodeStream(new ByteArrayInputStream(p.getFotoProduto())));
 
         CheckBox cbBuy = (CheckBox) view.findViewById(R.id.cbBox);

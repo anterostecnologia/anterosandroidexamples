@@ -30,12 +30,12 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto_consulta);
 
-        //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //ActionBar mActionBar = getSupportActionBar();
-        //mActionBar.setDisplayHomeAsUpEnabled(true);
-        //mActionBar.setDisplayShowHomeEnabled(true);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
 
         produtoRepository = AnterosVendasContext.getInstance().getSQLRepository(Produto.class);
         lvProdutos = (ListView) findViewById(R.id.lv_produto);
@@ -44,7 +44,7 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
 
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         tb.inflateMenu(R.menu.cliente_consulta_action);
@@ -57,7 +57,7 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
 
         return true;
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
@@ -65,10 +65,10 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
 
-            case R.id.cliente_consulta_action_adicionar:
-                Intent intent = new Intent(this, ClienteCadastroActivity.class);
-                startActivityForResult(intent, REQUISICAO);
-                break;
+//            case R.id.cliente_consulta_action_adicionar:
+//                Intent intent = new Intent(this, ClienteCadastroActivity.class);
+//                startActivityForResult(intent, REQUISICAO);
+//                break;
         }
         return true;
     }

@@ -76,7 +76,9 @@ public class PedidoCadastroDadosFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == edCliente) {
-            new ClienteConsultaDialog(getContext()).show();
+            ClienteConsultaDialog clienteConsultaDialog = new ClienteConsultaDialog();
+            clienteConsultaDialog.show(getFragmentManager(), "clienteConsultaDialog");
+
         } else if (v == edData) {
             selecionarData();
         }
@@ -93,8 +95,7 @@ public class PedidoCadastroDadosFragment extends Fragment implements View.OnClic
         if (edData.getText().length() > 0)
             cal.setTime(DateUtil.stringToDate(edData.getText().toString(), DateUtil.DATE));
         new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 edData.setText(dayOfMonth + "/" + (monthOfYear + 1)
                         + "/" + year);
             }
