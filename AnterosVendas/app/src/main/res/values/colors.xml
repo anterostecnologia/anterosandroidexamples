@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">#007FBF</color>
     <color name="colorPrimaryLight">#2ED9FF</color>
     <color name="colorWindowBackground">#EEEEEE</color>
+    <color name="colorRedGooglePlus">#d34836</color>
+    <color name="colorBlueFacebook">#3b5998</color>
+    <color name="colorBlueInstagram">#427296</color>
+    <color name="colorBlueLinkedin">#0077B5</color>
+    <color name="colorBlue">#253F74</color>
+    <color name="colorRed">#D50000</color>
+
 
     <color name="colorAccent">#3F51B5</color>
 </resources>

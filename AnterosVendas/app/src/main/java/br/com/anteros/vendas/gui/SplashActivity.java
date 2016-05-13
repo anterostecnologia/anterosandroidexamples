@@ -20,8 +20,6 @@ import br.com.anteros.vendas.R;
  *         Data: 11/05/16.
  */
 public class SplashActivity extends AppCompatActivity {
-    private TextView tvCarregando;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

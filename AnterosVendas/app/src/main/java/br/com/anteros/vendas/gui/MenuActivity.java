@@ -36,6 +36,7 @@ import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import android.support.design.widget.FloatingActionButton;
 import br.com.anteros.social.core.SocialProfile;
+import br.com.anteros.social.core.image.CircularImageView;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.MenuItem;
 import br.com.anteros.vendas.R;
@@ -48,13 +49,13 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     public static final int PRODUTO = 2;
     public static SocialProfile perfilUsuario;
     private GridView gridMenu;
-    private FloatingActionButton btnUserSocial;
+    private CircularImageView imgUserSocial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
 
         /*
@@ -71,13 +72,13 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         adicionarItensMenu();
         verificaQtdeColunasPorLinha();
 
-        btnUserSocial = (FloatingActionButton) findViewById(R.id.btn_user_social
-        );
+        imgUserSocial = (CircularImageView) findViewById(R.id.activity_menu_gridMenu_imgusuario);
 
         if (perfilUsuario!=null){
-            btnUserSocial.setImageBitmap(perfilUsuario.getImageBitmap());
+            imgUserSocial.setVisibility(View.VISIBLE);
+            imgUserSocial.setImageBitmap(perfilUsuario.getImageBitmap());
         } else {
-            btnUserSocial.setVisibility(View.INVISIBLE);
+            imgUserSocial.setVisibility(View.INVISIBLE);
         }
 
 
@@ -116,7 +117,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.top_toolbar);
         tb.inflateMenu(R.menu.menu_action);
         tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

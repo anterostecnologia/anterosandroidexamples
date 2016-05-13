@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -80,11 +81,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-    private AnterosSocialFloatingActionButton mBtnFacebook;
-    private AnterosSocialFloatingActionButton mBtnGoogle;
-    private AnterosSocialFloatingActionButton mBtnInstagram;
+    private FloatingActionButton mBtnFacebook;
+    private FloatingActionButton mBtnGoogle;
+    private FloatingActionButton mBtnInstagram;
     public static AnterosSocialNetwork anterosGoogle;
     public static AnterosSocialNetwork anterosFacebook;
     public static AnterosSocialNetwork anterosInstagram;
@@ -115,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        FloatingActionButton mEmailSignInButton = (FloatingActionButton) findViewById(R.id.main_search_floatLogin);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,13 +122,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
 
-
-        mBtnFacebook = (AnterosSocialFloatingActionButton) findViewById(R.id.social_layout_btn_facebook);
-        mBtnGoogle = (AnterosSocialFloatingActionButton) findViewById(R.id.social_layout_btn_google);
-        mBtnInstagram = (AnterosSocialFloatingActionButton) findViewById(R.id.social_layout_btn_Instagram);
+        mBtnFacebook = (FloatingActionButton) findViewById(R.id.activity_login_floatFacebook);
+        mBtnGoogle = (FloatingActionButton) findViewById(R.id.activity_login_floatGoogle);
+        mBtnInstagram = (FloatingActionButton) findViewById(R.id.activity_login_floatInstagram);
 
         mBtnFacebook.setOnClickListener(this);
         mBtnGoogle.setOnClickListener(this);
@@ -238,7 +234,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -250,36 +245,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
     }
 
     @Override
@@ -323,15 +288,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.social_layout_btn_facebook:
+            case R.id.activity_login_floatFacebook:
                 loginType = LOGIN_FACEBOOK;
                 anterosFacebook.login();
                 break;
-            case R.id.social_layout_btn_google:
+            case R.id.activity_login_floatGoogle:
                 loginType = LOGIN_GOOGLE;
                 anterosGoogle.login();
                 break;
-            case R.id.social_layout_btn_Instagram:
+            case R.id.activity_login_floatInstagram:
                 loginType = LOGIN_INSTAGRAM;
                 anterosInstagram.login();
                 break;
@@ -486,7 +451,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
             if (success) {
                 startActivity(new Intent(LoginActivity.this, MenuActivity.class));
@@ -500,7 +464,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
         }
     }
 }
