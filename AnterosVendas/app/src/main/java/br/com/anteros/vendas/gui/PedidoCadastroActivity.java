@@ -1,6 +1,7 @@
 package br.com.anteros.vendas.gui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
@@ -31,6 +33,7 @@ import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.PedidoCadastroPageViewAdapter;
 import br.com.anteros.vendas.modelo.CondicaoPagamento;
 import br.com.anteros.vendas.modelo.FormaPagamento;
+import br.com.anteros.vendas.modelo.ItemPedido;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 import br.com.anteros.vendas.modelo.ValidacaoCliente;
 
@@ -130,10 +133,28 @@ public class PedidoCadastroActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_pedido_adicionarProduto:
-                //
+                ProdutoConsultaDialog produtoConsultaDialog = new ProdutoConsultaDialog();
+                produtoConsultaDialog.setOnDismissListener(new ProdutoConsultaDialog.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        PedidoCadastroItensFragment.adapter.notifyDataSetChanged();
+
+                        calcularTotalPedido();
+                    }
+                });
+                produtoConsultaDialog.show(getSupportFragmentManager(), "produtoConsultaDialog");
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void calcularTotalPedido() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (ItemPedido item : PedidoConsultaActivity.pedido.getItens()) {
+            total = total.add(item.getVlTotal());
+        }
+        PedidoConsultaActivity.pedido.setVlTotalPedido(total);
+        PedidoCadastroDadosFragment.atualizarValorTotal();
     }
 
     public static class PlaceholderFragment extends Fragment {

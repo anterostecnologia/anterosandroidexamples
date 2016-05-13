@@ -80,7 +80,7 @@ public class ProdutoConsultaAdapter  extends BaseAdapter {
         return ((Produto) getItem(position));
     }
 
-    private List<Produto> getBox() {
+    public List<Produto> getSelectedItens() {
         List<Produto> box = new ArrayList<>();
         for (Produto p : produtos) {
             if (p.isSelected())

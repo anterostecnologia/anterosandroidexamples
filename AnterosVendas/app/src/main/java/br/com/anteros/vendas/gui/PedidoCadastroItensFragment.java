@@ -20,7 +20,7 @@ import br.com.anteros.vendas.gui.adapter.PedidoCadastroItensFragmentAdapter;
 public class PedidoCadastroItensFragment extends Fragment {
 
     private ListView lvItens;
-    private PedidoCadastroItensFragmentAdapter adapter;
+    public static PedidoCadastroItensFragmentAdapter adapter;
 
     @Nullable
     @Override

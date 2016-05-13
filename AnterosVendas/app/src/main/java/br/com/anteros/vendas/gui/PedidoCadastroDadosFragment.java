@@ -26,7 +26,7 @@ import br.com.anteros.vendas.modelo.FormaPagamento;
 public class PedidoCadastroDadosFragment extends Fragment implements View.OnClickListener {
 
     private EditText edNumero;
-    private EditText edValorTotal;
+    private static EditText edValorTotal;
     public static EditText edData;
     private static EditText edCliente;
     public static Spinner spCondicaoPagamento;
@@ -61,7 +61,7 @@ public class PedidoCadastroDadosFragment extends Fragment implements View.OnClic
         edNumero.setText(PedidoConsultaActivity.pedido.getNrPedido().toString());
         edData.setText(DateUtil.toStringDateDMA(PedidoConsultaActivity.pedido.getDtPedido()));
 
-        setDadosEdCliente();
+        atualizarCliente();
 
         edValorTotal.setText(PedidoConsultaActivity.pedido.getVlTotalPedidoAsString());
 
@@ -84,9 +84,15 @@ public class PedidoCadastroDadosFragment extends Fragment implements View.OnClic
         }
     }
 
-    public static void setDadosEdCliente() {
+    public static void atualizarCliente() {
         if (PedidoConsultaActivity.pedido.getCliente() != null) {
             edCliente.setText(PedidoConsultaActivity.pedido.getCliente().getId() + " - " + PedidoConsultaActivity.pedido.getCliente().getRazaoSocial());
+        }
+    }
+
+    public static void atualizarValorTotal(){
+        if (PedidoConsultaActivity.pedido.getVlTotalPedido() != null) {
+            edValorTotal.setText(PedidoConsultaActivity.pedido.getVlTotalPedidoAsString());
         }
     }
 

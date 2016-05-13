@@ -80,7 +80,7 @@ public class ClienteConsultaDialog extends DialogFragment implements AdapterView
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         Cliente cliente = adapter.getItem(position);
         PedidoConsultaActivity.pedido.setCliente(cliente);
-        PedidoCadastroDadosFragment.setDadosEdCliente();
+        PedidoCadastroDadosFragment.atualizarCliente();
         dismiss();
         return false;
     }
