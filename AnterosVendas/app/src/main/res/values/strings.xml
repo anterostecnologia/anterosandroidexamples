@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Anteros Vendas</string>
     <string name="filtro">Filtro</string>
+    <string name="facebook_app_id">1743374472565594</string>
 
     <string-array name="consulta_cliente_filtro_values">
         <item>ID</item>
@@ -11,5 +12,18 @@
     </string-array>
     <string name="title_activity_pedido">Pedido</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Senha (opcional)</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="error_invalid_email">E-mail inválido</string>
+    <string name="error_invalid_password">A senha é muito curta</string>
+    <string name="error_incorrect_password">A senha está incorreta.</string>
+    <string name="error_field_required">O campo é requerido</string>
+    <string name="permission_rationale">"É necessário ter permissão para acesso ao contatos para autocompletar o e-mail."
+    </string>
 
 </resources>

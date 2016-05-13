@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
             protected Boolean doInBackground(Void... params) {
                 try {
                     Thread.sleep(2000);
-                    startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
 
                     return Boolean.TRUE;

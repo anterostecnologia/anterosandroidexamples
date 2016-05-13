@@ -34,6 +34,8 @@ import java.util.List;
 
 import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import android.support.design.widget.FloatingActionButton;
+import br.com.anteros.social.core.SocialProfile;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.MenuItem;
 import br.com.anteros.vendas.R;
@@ -44,7 +46,9 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     public static final int CLIENTE = 0;
     public static final int PEDIDO = 1;
     public static final int PRODUTO = 2;
+    public static SocialProfile perfilUsuario;
     private GridView gridMenu;
+    private FloatingActionButton btnUserSocial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,16 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
         adicionarItensMenu();
         verificaQtdeColunasPorLinha();
+
+        btnUserSocial = (FloatingActionButton) findViewById(R.id.btn_user_social
+        );
+
+        if (perfilUsuario!=null){
+            btnUserSocial.setImageBitmap(perfilUsuario.getImageBitmap());
+        } else {
+            btnUserSocial.setVisibility(View.INVISIBLE);
+        }
+
 
         //AnterosVendasContext.getInstance().populateDatabase();
         //AnterosVendasContext.getInstance().populateProdutos();
