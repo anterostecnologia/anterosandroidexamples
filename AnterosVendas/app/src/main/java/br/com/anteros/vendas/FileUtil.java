@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 
 public class FileUtil {
@@ -28,15 +29,17 @@ public class FileUtil {
         }
     }
 
-    public static String getFilePathByURI(Context context, Uri uri) {
-        Uri filePathUri = uri;
-        if (uri.getScheme().toString().compareTo("content") == 0) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (cursor.moveToFirst()) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                filePathUri = Uri.parse(cursor.getString(column_index));
-            }
-        }
-        return filePathUri.getPath();
-    }
+//    public static String getFilePathByURI(Context context, Uri uri) {
+//        Uri filePathUri = uri;
+//        if (uri.getScheme().toString().compareTo("content") == 0) {
+//            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+//            if (cursor.moveToFirst()) {
+//                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                filePathUri = Uri.parse(cursor.getString(column_index));
+//            }
+//        }
+//        return filePathUri.getPath();
+//    }
+
+
 }

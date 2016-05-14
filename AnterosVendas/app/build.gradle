@@ -57,7 +57,7 @@ dependencies {
     compile 'br.com.anteros:anteros-core-android:1.0.+'
     compile 'br.com.anteros:anteros-ui-controls-android:1.0.+'
     compile 'br.com.anteros:anteros-persistence-android:1.0.11'
-    compile 'br.com.anteros.social:anteros-social-android-core:1.0.+@aar'
+    compile 'br.com.anteros.social:anteros-social-android-core:1.0.3@aar'
     compile 'br.com.anteros.social:anteros-social-android-facebook:1.0.+@aar'
     compile 'br.com.anteros.social:anteros-social-android-google:1.0.+@aar'
     compile 'br.com.anteros.social:anteros-social-android-instagram:1.0.+@aar'

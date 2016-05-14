@@ -25,5 +25,10 @@
     <string name="error_field_required">O campo é requerido</string>
     <string name="permission_rationale">"É necessário ter permissão para acesso ao contatos para autocompletar o e-mail."
     </string>
+    <string name="empty_directory">Empty Directory</string>
+    <string name="storage_removed">Storage was removed or unmounted.</string>
+    <string name="choose_file">Select a file</string>
+    <string name="error_selecting_file">Error selecting File</string>
+    <string name="internal_storage">Internal storage</string>
 
 </resources>

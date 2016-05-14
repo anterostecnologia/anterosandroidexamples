@@ -1,8 +1,8 @@
 package br.com.anteros.vendas.gui.adapter;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
@@ -22,7 +23,6 @@ import br.com.anteros.persistence.transaction.impl.TransactionException;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Anexo;
-import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
 
 /**
  * Created by eduardogreco on 5/10/16.
@@ -54,13 +54,13 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         imgDelete.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-                delete(item);
+                removerAnexo(item);
             }
         });
 
         imgVisualizar.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                openAnexo(item);
+                abrirAnexo(item);
             }
         });
 
@@ -113,7 +113,7 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         return convertView;
     }
 
-    protected void delete(final Anexo anexo) {
+    protected void removerAnexo(final Anexo anexo) {
         new QuestionAlert(getContext(), getContext().getString(
                 R.string.app_name), "Remover Anexo ?",
                 new QuestionAlert.QuestionListener() {
@@ -159,35 +159,17 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
 
     }
 
-    private void openAnexo(Anexo anexo) {
-        try {
+    private void abrirAnexo(Anexo anexo) {
+        File file = new File(anexo.getConteudoPath());
+        Uri uri = Uri.fromFile(file);
+        String extension = anexo.getNome().substring(anexo.getNome().lastIndexOf(".") + 1);
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
-            if (anexo.getTipoConteudo() == TipoConteudoAnexo.IMAGEM)
-                if ((anexo.getNome().substring(anexo.getNome().lastIndexOf(".") + 1).equals(anexo.getNome())))
-                    anexo.setNome(anexo.getNome() + ".png");
-
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-
-            String extension = anexo.getNome().substring(anexo.getNome().lastIndexOf(".") + 1);
-            String type = mime.getMimeTypeFromExtension(extension);
-
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().getApplicationContext().startActivity(intent);
-
-        } catch (ActivityNotFoundException e) {
-            new ErrorAlert(getContext(), getContext().getResources().getString(R.string.app_name),
-                    "Não foi encontrado nenhum aplicativo nesse aparelho que suporte abrir a extensão '"
-                            + anexo.getNome().substring(anexo.getNome().lastIndexOf("."))
-                            + "', entre em contato com a equipe de Suporte para resolver esse problema.").show();
-        } catch (Exception e) {
-            new ErrorAlert(getContext(), getContext().getResources().getString(R.string.app_name),
-                    "Não foi possível abrir o anexo " + anexo.getId()
-                            + ". " + e.getMessage()).show();
-            e.printStackTrace();
-        }
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, mime);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().getApplicationContext().startActivity(intent);
     }
 }

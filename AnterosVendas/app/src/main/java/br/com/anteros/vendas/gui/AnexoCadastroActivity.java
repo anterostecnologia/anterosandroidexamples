@@ -1,10 +1,12 @@
 package br.com.anteros.vendas.gui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,6 +14,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,7 +38,6 @@ import java.util.Date;
 import br.com.anteros.android.core.util.ImageUtils;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
-import br.com.anteros.vendas.FileUtil;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
@@ -47,6 +51,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     public static final int ALTEROU_ANEXO = 1;
     private static final int TIRAR_FOTO = 2;
     private static final int SELECIONAR_ARQUIVO = 3;
+    public static final String ANTEROSVENDAS_ANEXO = "/anterosvendas/anexo";
     private static Anexo anexo;
     private ImageView imgVisualizar;
     private ImageView imgFoto;
@@ -146,7 +151,11 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                 break;
 
             case R.id.cliente_cadastro_action_camera:
-                iniciaCamera();
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+                } else {
+                    iniciaCamera();
+                }
                 break;
 
             case R.id.cliente_cadastro_action_salvar:
@@ -169,8 +178,22 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public boolean onLongClick(View v) {
-        iniciaCamera();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        } else {
+            iniciaCamera();
+        }
         return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                iniciaCamera();
+            }
+        }
     }
 
     @Override
@@ -221,59 +244,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    public class SalvaArquivoAnexo extends AsyncTask<Integer, Void, String> {
 
-        private ProgressDialog pg;
-
-        @Override
-        protected void onPreExecute() {
-            pg = ProgressDialog.show(AnexoCadastroActivity.this, getResources()
-                    .getString(R.string.app_name), "Salvando Anexo...");
-            pg.setCancelable(false);
-            pg.setCanceledOnTouchOutside(false);
-            imgFoto.setBackgroundDrawable(null);
-        }
-
-        @Override
-        protected String doInBackground(Integer... params) {
-            try {
-                int requestCode = params[0];
-                if (requestCode == TIRAR_FOTO) {
-                    fotoGaleria = ImageUtils.resizeAndStorageImage(mUri.getEncodedPath(), 800, 600);
-                } else if (requestCode == SELECIONAR_ARQUIVO) {
-                    File sourceFile = new File(FileUtil.getFilePathByURI(AnexoCadastroActivity.this, mUri));
-                    File destinationFile = new File(filePath, getFileName());
-
-                    if (!sourceFile.exists())
-                        throw new RuntimeException("Arquivo de origem não encontrado! Source path["
-                                + sourceFile.getPath() + "]");
-
-                    FileUtils.copyFile(sourceFile, destinationFile);
-                    mUri = Uri.fromFile(destinationFile);
-
-                    setImageFileToFotoGaleria(destinationFile);
-                }
-                return null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return e.getMessage() + "";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            pg.dismiss();
-            if (result == null) {
-                imgFoto.setImageBitmap(fotoGaleria);
-                imgVisualizar.setEnabled(true);
-            } else {
-                imgFoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_arquivo_nao_encontrado));
-                imgVisualizar.setEnabled(false);
-                new ErrorAlert(AnexoCadastroActivity.this, getResources().getString(
-                        R.string.app_name), "Ocorreu um erro ao salvar o anexo: " + result).show();
-            }
-        }
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -296,7 +267,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
 
     private String getFilePath() {
         if (filePath == null) {
-            filePath = Environment.getExternalStorageDirectory() + "/anterosvendas/anexo";
+            filePath = Environment.getExternalStorageDirectory() + ANTEROSVENDAS_ANEXO;
             File path = new File(filePath);
             if (!path.exists()) {
                 path.mkdirs();
@@ -306,29 +277,13 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     public String getFileName() {
-        String extensao = "";
-        if (mUri != null) {
-            extensao = FilenameUtils.getExtension(FileUtil.getFilePathByURI(AnexoCadastroActivity.this, mUri));
-            if (extensao != null && !extensao.equals(""))
-                extensao = "." + extensao;
-        }
-
-        if (fileName == null) {
-            fileName = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                    .format(new Date()) + extensao;
-        }
-        String fileExtensao = "." + FilenameUtils.getExtension(fileName);
-        if (fileExtensao == null || fileExtensao.equals("") || !fileExtensao.equals(extensao))
-            fileName = FilenameUtils.removeExtension(fileName) + extensao;
-        return fileName;
+        return "img_"+new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date()) + ".png";
     }
 
     private Uri getUriFile() {
-        if (mUri == null) {
-            File f = new File(getFilePath(), getFileName());
-            mUri = Uri.fromFile(f);
-        }
-        return mUri;
+        File f = new File(getFilePath(), getFileName());
+        return Uri.fromFile(f);
     }
 
     private void iniciaCamera() {
@@ -416,7 +371,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     protected void salva() {
-        File file = new File(filePath, getFileName());
+        File file = br.com.anteros.vendas.FileUtils.getFile(this, mUri);
         if (edDescricao.getText().length() == 0) {
             new ErrorAlert(this, getResources().getString(R.string.app_name),
                     "O campo DESCRIÇÃO deve ser informado.").show();
@@ -444,7 +399,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     private void openAnexo(Uri mUri) {
-        String extension = FilenameUtils.getExtension(FileUtil.getFilePathByURI(AnexoCadastroActivity.this, mUri));
+        String extension = FilenameUtils.getExtension(br.com.anteros.vendas.FileUtils.getPath(AnexoCadastroActivity.this, mUri));
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -476,5 +431,59 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
 
     public static Anexo getAnexo() {
         return anexo;
+    }
+
+    public class SalvaArquivoAnexo extends AsyncTask<Integer, Void, String> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(AnexoCadastroActivity.this, getResources()
+                    .getString(R.string.app_name), "Salvando Anexo...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            imgFoto.setBackgroundDrawable(null);
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            try {
+                int requestCode = params[0];
+                if (requestCode == TIRAR_FOTO) {
+                    fotoGaleria = ImageUtils.resizeAndStorageImage(mUri.getEncodedPath(), 800, 600);
+                } else if (requestCode == SELECIONAR_ARQUIVO) {
+                    File sourceFile = br.com.anteros.vendas.FileUtils.getFile(AnexoCadastroActivity.this, mUri);
+                    File destinationFile = new File(filePath, getFileName());
+
+                    if (!sourceFile.exists())
+                        throw new RuntimeException("Arquivo de origem não encontrado! Source path["
+                                + sourceFile.getPath() + "]");
+
+                    FileUtils.copyFile(sourceFile, destinationFile);
+                    mUri = Uri.fromFile(destinationFile);
+
+                    setImageFileToFotoGaleria(destinationFile);
+                }
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return e.getMessage() + "";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            if (result == null) {
+                imgFoto.setImageBitmap(fotoGaleria);
+                imgVisualizar.setEnabled(true);
+            } else {
+                imgFoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_arquivo_nao_encontrado));
+                imgVisualizar.setEnabled(false);
+                new ErrorAlert(AnexoCadastroActivity.this, getResources().getString(
+                        R.string.app_name), "Ocorreu um erro ao salvar o anexo: " + result).show();
+            }
+        }
     }
 }
