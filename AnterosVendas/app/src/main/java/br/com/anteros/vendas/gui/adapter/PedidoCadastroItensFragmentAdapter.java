@@ -2,21 +2,21 @@ package br.com.anteros.vendas.gui.adapter;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.android.ui.controls.adapter.AnterosArrayAdapterWithViewHolder;
 import br.com.anteros.core.utils.StringUtils;
 import br.com.anteros.persistence.parameter.NamedParameter;
 import br.com.anteros.persistence.session.repository.SQLRepository;
@@ -31,7 +31,7 @@ import br.com.anteros.vendas.modelo.ItemPedido;
 /**
  * Created by eduardogreco on 5/13/16.
  */
-public class PedidoCadastroItensFragmentAdapter extends ArrayAdapter<ItemPedido> {
+public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithViewHolder<ItemPedido> {
 
     private List<ItemPedido> itens;
 
@@ -41,71 +41,69 @@ public class PedidoCadastroItensFragmentAdapter extends ArrayAdapter<ItemPedido>
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = null;
+    public void loadValuesFromCurrentBean(AnterosViewHolder viewHolder, ItemPedido currentBean) {
+        TextView produto = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_produto);
+        TextView vlTotal = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_valorTotal);
+        TextView preco = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_edPreco);
+        EditText quantidade = (EditText) viewHolder.getViewById(R.id.pedido_cadastro_itens_edQuantidade);
+        ImageView fotoProduto = (ImageView) viewHolder.getViewById(R.id.pedido_cadastro_itens_item_fotoProduto);
+        ItemPedido item = viewHolder.getBean();
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.pedido_cadastro_itens_lista, null);
-
-            final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.edQuantidade = (EditText) view.findViewById(R.id.pedido_cadastro_itens_edQuantidade);
-
-            view.setTag(viewHolder);
-            viewHolder.edQuantidade.setTag(itens.get(position));
-        } else {
-            view = convertView;
-            ((ViewHolder) view.getTag()).edQuantidade.setTag(itens.get(position));
+        produto.setText(item.getProduto().getId() + " - " + item.getProduto().getNomeProduto());
+        vlTotal.setText(item.getVlTotalAsString());
+        preco.setText(item.getVlProdutoAsString());
+        quantidade.setText(item.getQtProduto().toPlainString());
+        if (item.getProduto().getFotoProduto() != null) {
+            fotoProduto.setImageBitmap(BitmapFactory.decodeByteArray(item.getProduto().getFotoProduto(), 0, item.getProduto().getFotoProduto().length));
         }
+    }
 
-        final ItemPedido item = itens.get(position);
+    @Override
+    public Set<View> getViewsToHolderController(View row) {
+        Set<View> result = new HashSet<>();
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_produto));
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_valorTotal));
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_edQuantidade));
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_edPreco));
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_item_fotoProduto));
+        result.add(row.findViewById(R.id.pedido_cadastro_itens_imgDelete));
+        return result;
+    }
 
-        TextView tvProduto = (TextView) view.findViewById(R.id.pedido_cadastro_itens_produto);
-        final TextView tvValorTotal = (TextView) view.findViewById(R.id.pedido_cadastro_itens_valorTotal);
-        TextView edPreco = (TextView) view.findViewById(R.id.pedido_cadastro_itens_edPreco);
-        ImageView imgProduto = (ImageView) view.findViewById(R.id.pedido_cadastro_itens_item_fotoProduto);
-        ImageView imgDelete = (ImageView) view.findViewById(R.id.pedido_cadastro_itens_imgDelete);
-        imgDelete.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public List<ItemPedido> geBeans() {
+        return itens;
+    }
 
-            public void onClick(View v) {
-                delete(item);
+    @Override
+    public View getRowView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(R.layout.pedido_cadastro_itens_lista, null);
+    }
+
+    @Override
+    public void onTextChanged(View view, String text, AnterosViewHolder viewHolder) {
+        if (viewHolder.viewEqualsTo(view, R.id.pedido_cadastro_itens_edQuantidade)) {
+            if (!StringUtils.isEmpty(text)) {
+                viewHolder.getBean().setQtProduto(new BigDecimal(text));
+                viewHolder.getBean().setVlTotal(viewHolder.getBean().getVlProduto().multiply(viewHolder.getBean().getQtProduto()));
+                TextView vlTotal = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_valorTotal);
+                vlTotal.setText(viewHolder.getBean().getVlTotalAsString());
+                PedidoCadastroActivity.calcularTotalPedido();
             }
-        });
-
-
-        if (item != null) {
-            tvProduto.setText(item.getProduto().getId() + " - " + item.getProduto().getNomeProduto());
-            edPreco.setText(item.getVlProdutoAsString());
-
-            if (item.getProduto().getFotoProduto() != null) {
-                imgProduto.setImageBitmap(BitmapFactory.decodeByteArray(item.getProduto().getFotoProduto(), 0, item.getProduto().getFotoProduto().length));
-            }
-
-            final ViewHolder holder = (ViewHolder) view.getTag();
-            holder.edQuantidade.setText(item.getQtProduto().toPlainString());
-            tvValorTotal.setText(item.getVlTotalAsString());
-            holder.edQuantidade.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (!StringUtils.isEmpty(s.toString())) {
-                        item.setQtProduto(new BigDecimal(s.toString()));
-                        item.setVlTotal(item.getVlProduto().multiply(item.getQtProduto()));
-                        tvValorTotal.setText(item.getVlTotalAsString());
-                        PedidoCadastroActivity.calcularTotalPedido();
-                    }
-                }
-            });
         }
+    }
 
-        return view;
+    @Override
+    public void onAfterTextChanged(View view, String text, AnterosViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void onClickView(View view, AnterosViewHolder viewHolder) {
+        if (viewHolder.viewEqualsTo(view, R.id.pedido_cadastro_itens_imgDelete)) {
+            delete(viewHolder.getBean());
+        }
     }
 
     protected void delete(final ItemPedido itemPedido) {
@@ -154,9 +152,6 @@ public class PedidoCadastroItensFragmentAdapter extends ArrayAdapter<ItemPedido>
 
     }
 
-    static class ViewHolder {
-        protected EditText edQuantidade;
-    }
 }
 
 

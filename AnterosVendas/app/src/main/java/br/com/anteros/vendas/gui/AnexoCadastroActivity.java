@@ -35,6 +35,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import br.com.anteros.android.core.util.AndroidFileUtils;
 import br.com.anteros.android.core.util.ImageUtils;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
@@ -371,7 +372,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     protected void salva() {
-        File file = br.com.anteros.vendas.FileUtils.getFile(this, mUri);
+        File file = AndroidFileUtils.getFile(this, mUri);
         if (edDescricao.getText().length() == 0) {
             new ErrorAlert(this, getResources().getString(R.string.app_name),
                     "O campo DESCRIÇÃO deve ser informado.").show();
@@ -399,7 +400,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     private void openAnexo(Uri mUri) {
-        String extension = FilenameUtils.getExtension(br.com.anteros.vendas.FileUtils.getPath(AnexoCadastroActivity.this, mUri));
+        String extension = FilenameUtils.getExtension(AndroidFileUtils.getPath(AnexoCadastroActivity.this, mUri));
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -453,7 +454,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                 if (requestCode == TIRAR_FOTO) {
                     fotoGaleria = ImageUtils.resizeAndStorageImage(mUri.getEncodedPath(), 800, 600);
                 } else if (requestCode == SELECIONAR_ARQUIVO) {
-                    File sourceFile = br.com.anteros.vendas.FileUtils.getFile(AnexoCadastroActivity.this, mUri);
+                    File sourceFile = AndroidFileUtils.getFile(AnexoCadastroActivity.this, mUri);
                     File destinationFile = new File(filePath, getFileName());
 
                     if (!sourceFile.exists())

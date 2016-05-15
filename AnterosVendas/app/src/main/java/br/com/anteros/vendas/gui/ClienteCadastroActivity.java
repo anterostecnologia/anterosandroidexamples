@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.Spinner;
 import java.util.Date;
 import java.util.Set;
 
+import br.com.anteros.android.core.communication.ws.PostmonResponse;
+import br.com.anteros.android.core.communication.ws.PostmonWebService;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.InfoAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
@@ -28,8 +31,6 @@ import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.Estado;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
 import br.com.anteros.vendas.modelo.ValidacaoCliente;
-import br.com.anteros.vendas.ws.PostmonResponse;
-import br.com.anteros.vendas.ws.PostmonWebService;
 
 /**
  * Created by eduardogreco on 5/10/16.

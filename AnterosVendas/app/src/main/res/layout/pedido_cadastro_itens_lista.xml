@@ -109,7 +109,8 @@
                                 android:imeOptions="actionDone"
                                 android:inputType="phone"
                                 android:maxLength="9"
-                                android:singleLine="true" />
+                                android:singleLine="true">
+                            </EditText>
                         </LinearLayout>
 
                         <LinearLayout

@@ -19,7 +19,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "br.com.anteros.vendas"
@@ -38,6 +37,16 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/log4j-provider.properties'
+        exclude 'META-INF/services/org.xmlpull.v1.XmlPullParserFactory'
+        exclude 'META-INF/maven/net.sourceforge.kobjects/kobjects-j2me/pom.xml';
+        exclude 'META-INF/maven/org.xmlpull/xmlpull/pom.properties';
+        exclude 'META-INF/maven/com.google.code.ksoap2-android/ksoap2-base/pom.properties';
+        exclude 'META-INF/maven/net.sourceforge.kobjects/kobjects-j2me/pom.properties';
+        exclude 'META-INF/maven/org.xmlpull/xmlpull/pom.xml';
+        exclude 'META-INF/maven/net.sourceforge.kxml/kxml/pom.xml';
+        exclude 'META-INF/maven/com.google.code.ksoap2-android/ksoap2-base/pom.xml';
+        exclude 'META-INF/maven/net.sourceforge.kxml/kxml/pom.properties';
+
     }
     dexOptions {
         incremental = true;
@@ -54,9 +63,9 @@ dependencies {
     compile 'br.com.anteros:Anteros-Persistence-Core:1.0.3'
     compile 'br.com.anteros:Anteros-Bean-Validation:1.0.1'
     compile 'br.com.anteros:Anteros-Bean-Validation-Api:1.0.1'
-    compile 'br.com.anteros:anteros-core-android:1.0.+'
-    compile 'br.com.anteros:anteros-ui-controls-android:1.0.+'
-    compile 'br.com.anteros:anteros-persistence-android:1.0.11'
+    compile 'br.com.anteros:anteros-core-android:1.0.3'
+    compile 'br.com.anteros:anteros-ui-controls-android:1.0.3'
+    compile 'br.com.anteros:anteros-persistence-android:1.0.12'
     compile 'br.com.anteros.social:anteros-social-android-core:1.0.3@aar'
     compile 'br.com.anteros.social:anteros-social-android-facebook:1.0.+@aar'
     compile 'br.com.anteros.social:anteros-social-android-google:1.0.+@aar'
@@ -72,4 +81,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'commons-io:commons-io:2.5'
+    compile 'com.google.code.ksoap2-android:ksoap2-extra-ntlm:3.6.0'
 }

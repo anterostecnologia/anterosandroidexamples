@@ -88,6 +88,7 @@ public class PedidoVenda implements Serializable, Parcelable {
      */
     @Required(groups = {Default.class, ValidacaoCliente.class})
     @ForeignKey
+    @Column(name = "ID_CLIENTE", required = true, label = "Cliente")
     private Cliente cliente;
 
     /*
