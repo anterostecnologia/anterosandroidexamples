@@ -78,7 +78,7 @@ public class ClienteConsultaDialog extends DialogFragment implements AdapterView
                 "CLI.BAIRRO,          " +
                 "CLI.DS_CIDADE,       " +
                 "CLI.UF               " +
-                "FROM OPCAO_CLIENTE CLI         ");
+                "FROM CLIENTE CLI         ");
 
         /**
          * Cria e atribui um adapter para a consulta de clientes

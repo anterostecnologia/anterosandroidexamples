@@ -132,7 +132,7 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
                              * do adapter é parcial
                              */
                             Cliente cli = clienteRepository.findOne(
-                                    "SELECT P.* FROM OPCAO_CLIENTE P WHERE P.ID_CLIENTE = :PID_CLIENTE",
+                                    "SELECT P.* FROM CLIENTE P WHERE P.ID_CLIENTE = :PID_CLIENTE",
                                     new NamedParameter("PID_CLIENTE", cliente.getId()));
 
                             /**

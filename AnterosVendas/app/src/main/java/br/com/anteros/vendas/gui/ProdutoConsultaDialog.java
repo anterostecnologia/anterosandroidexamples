@@ -72,7 +72,7 @@ public class ProdutoConsultaDialog extends DialogFragment {
          * Obtém o repositório e busca a lista de produtos
          */
         produtoRepository = AnterosVendasContext.getInstance().getSQLRepository(Produto.class);
-        List<Produto> produtos = produtoRepository.find("SELECT PRO.* FROM OPCAO_PRODUTO PRO");
+        List<Produto> produtos = produtoRepository.find("SELECT PRO.* FROM PRODUTO PRO");
         /**
          * Cria o adapter e atribui a lista
          */

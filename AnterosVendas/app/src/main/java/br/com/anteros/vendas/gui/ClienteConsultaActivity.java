@@ -149,7 +149,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
             /**
              * Retorna a lista de clientes
              */
-            return clienteRepository.find("SELECT CLI.* FROM OPCAO_CLIENTE CLI");
+            return clienteRepository.find("SELECT CLI.* FROM CLIENTE CLI");
         }
 
         @Override

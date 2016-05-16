@@ -49,7 +49,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 
 @Entity
-@Table(name = "OPCAO_CLIENTE")
+@Table(name = "CLIENTE")
 public class Cliente implements Serializable, Parcelable {
 
     /*

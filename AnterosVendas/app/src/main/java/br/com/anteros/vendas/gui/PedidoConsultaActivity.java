@@ -161,7 +161,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
                     " P.VL_TOTAL_PEDIDO,               " +
                     " C.ID_CLIENTE,                    " +
                     " C.RAZAO_SOCIAL                   " +
-                    " FROM PEDIDOVENDA P, OPCAO_CLIENTE C           " +
+                    " FROM PEDIDOVENDA P, CLIENTE C    " +
                     " WHERE C.ID_CLIENTE = P.ID_CLIENTE        ");
         }
 

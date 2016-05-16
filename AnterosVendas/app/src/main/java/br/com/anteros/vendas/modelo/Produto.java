@@ -39,7 +39,7 @@ import br.com.anteros.validation.api.groups.Default;
  *         Data: 09/05/16.
  */
 @Entity
-@Table(name = "OPCAO_PRODUTO")
+@Table(name = "PRODUTO")
 public class Produto implements Serializable, Parcelable {
     /*
      * Id do Produto

@@ -112,7 +112,7 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
             /**
              * Retorna a lista de todos os produtos.
              */
-            return produtoRepository.find("SELECT PRO.* FROM OPCAO_PRODUTO PRO");
+            return produtoRepository.find("SELECT PRO.* FROM PRODUTO PRO");
         }
 
         @Override
