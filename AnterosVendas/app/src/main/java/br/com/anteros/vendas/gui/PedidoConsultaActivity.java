@@ -120,15 +120,15 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         @Override
         protected List<PedidoVenda> doInBackground(Void... params) {
             return pedidoRepository.find("SELECT  P.ID_PEDIDOVENDA,                " +
-                                                " P.NR_PEDIDO,                     " +
-                                                " P.DT_PEDIDO,                     " +
-                                                " P.TP_CONDICAO_PGTO,              " +
-                                                " P.FORMA_PAGTO,                   " +
-                                                " P.VL_TOTAL_PEDIDO,               " +
-                                                " C.ID_CLIENTE,                    " +
-                                                " C.RAZAO_SOCIAL                   " +
-                                         " FROM PEDIDOVENDA P, CLIENTE C           " +
-                                        " WHERE C.ID_CLIENTE = P.ID_CLIENTE        ");
+                    " P.NR_PEDIDO,                     " +
+                    " P.DT_PEDIDO,                     " +
+                    " P.TP_CONDICAO_PGTO,              " +
+                    " P.FORMA_PAGTO,                   " +
+                    " P.VL_TOTAL_PEDIDO,               " +
+                    " C.ID_CLIENTE,                    " +
+                    " C.RAZAO_SOCIAL                   " +
+                    " FROM PEDIDOVENDA P, CLIENTE C           " +
+                    " WHERE C.ID_CLIENTE = P.ID_CLIENTE        ");
         }
 
         @Override
@@ -157,9 +157,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUISICAO) {
-            if (resultCode == RESULT_OK) {
-                new BuscarPedidosConsulta().execute();
-            }
+            new BuscarPedidosConsulta().execute();
         }
     }
 }

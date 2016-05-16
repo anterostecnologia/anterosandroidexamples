@@ -34,10 +34,6 @@ import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.android.ui.controls.adapter.AnterosArrayAdapterWithViewHolder;
 import br.com.anteros.core.utils.StringUtils;
-import br.com.anteros.persistence.parameter.NamedParameter;
-import br.com.anteros.persistence.session.repository.SQLRepository;
-import br.com.anteros.persistence.transaction.impl.TransactionException;
-import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.PedidoCadastroActivity;
 import br.com.anteros.vendas.gui.PedidoCadastroDadosFragment;
@@ -131,36 +127,17 @@ public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithV
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
-                        SQLRepository<ItemPedido, Long> pedidoItemFactory = AnterosVendasContext.getInstance().getSQLRepository(ItemPedido.class);
-
                         try {
-                            if (itemPedido.getId() != null) {
-                                ItemPedido ite = pedidoItemFactory.findOne(
-                                        "SELECT PI.* FROM PEDIDO_ITEM PI WHERE PI.ID_ITEM = :PID_ITEM",
-                                        new NamedParameter("PID_ITEM", itemPedido.getId()));
-
-                                pedidoItemFactory.getTransaction().begin();
-                                pedidoItemFactory.remove(ite);
-                                pedidoItemFactory.getTransaction().commit();
-                            }
-
                             remove(itemPedido);
+
                             PedidoConsultaActivity.pedido.setVlTotalPedido(PedidoConsultaActivity.pedido.getVlTotalPedido().subtract(itemPedido.getVlTotal()));
                             PedidoCadastroDadosFragment.atualizarValorTotal();
                             notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            try {
-                                pedidoItemFactory.getTransaction().rollback();
-                            } catch (Exception e1) {
-                            }
-                            if (e instanceof TransactionException) {
-                                new ErrorAlert(getContext(), getContext().getResources().getString(
-                                        R.string.app_name), "Ocorreu um erro ao remover o item do pedido. " + e.getCause()).show();
-                            } else {
-                                new ErrorAlert(getContext(), getContext().getResources().getString(
-                                        R.string.app_name), "Ocorreu um erro ao remover o item do pedido. " + e.getMessage()).show();
-                            }
+                            new ErrorAlert(getContext(), getContext().getResources().getString(
+                                    R.string.app_name), "Ocorreu um erro ao remover o item do pedido. " + e.getMessage()).show();
+
                         }
                     }
 
