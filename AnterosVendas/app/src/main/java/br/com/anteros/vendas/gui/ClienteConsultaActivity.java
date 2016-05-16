@@ -30,6 +30,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import br.com.anteros.persistence.parameter.NamedParameter;
 import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
@@ -71,7 +72,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
         clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
 
         /**
-     * Atribui evento long click para lista para permitir selecionar o cliente para edição.
+         * Atribui evento long click para lista para permitir selecionar o cliente para edição.
          */
         lvClientes = (ListView) findViewById(R.id.cliente_consulta_list_view);
         lvClientes.setOnItemLongClickListener(this);
@@ -85,6 +86,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
 
     /**
      * Cria as opções no menu para a consulta de cliente
+     *
      * @param menu
      * @return
      */
@@ -104,6 +106,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
 
     /**
      * Se selecionou um item do menu
+     *
      * @param item
      * @return
      */
@@ -147,9 +150,19 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
         @Override
         protected List<Cliente> doInBackground(Void... params) {
             /**
-             * Retorna a lista de clientes
+             * Busca os objetos dos clientes contendo dados parciais
+             * apenas para apresentação na lista.
              */
-            return clienteRepository.find("SELECT CLI.* FROM CLIENTE CLI");
+            return clienteRepository.find("SELECT CLI.ID_CLIENTE, " +
+                    "CLI.RAZAO_SOCIAL,                            " +
+                    "CLI.FANTASIA,                                " +
+                    "CLI.TP_LOGRADOURO,                           " +
+                    "CLI.LOGRADOURO,                              " +
+                    "CLI.NR_LOGRADOURO,                           " +
+                    "CLI.BAIRRO,                                  " +
+                    "CLI.DS_CIDADE,                               " +
+                    "CLI.UF                                       " +
+                    "FROM CLIENTE CLI                             ");
         }
 
         @Override
@@ -164,16 +177,31 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
     /**
      * Evento que ocorre quando um long click foi executado. Se o evento
      * ocorreu na lista de clientes abre a activity de edição.
-     * @param parent Pai da view
-     * @param view View
+     *
+     * @param parent   Pai da view
+     * @param view     View
      * @param position Posição
-     * @param id id da view
+     * @param id       id da view
      * @return False para não propagar o evento pois já foi tratado.
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvClientes) {
-            cliente = adapter.getItem(position);
+            /**
+             * Pega o objeto cliente parcial usado apenas para apresentação na lista
+             */
+            Cliente c = adapter.getItem(position);
+
+            /**
+             * Busca objeto completo usado para edição
+             */
+            cliente = clienteRepository.findOne(
+                    "SELECT C.* FROM CLIENTE C WHERE C.ID_CLIENTE = :PID_CLIENTE",
+                    new NamedParameter("PID_CLIENTE", c.getId()));
+
+            /**
+             * Inicia activity para edição do cliente
+             */
             Intent intent = new Intent(this, ClienteCadastroActivity.class);
             startActivityForResult(intent, EDITAR_CLIENTE);
         }
@@ -182,9 +210,10 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
 
     /**
      * Evento que ocorre quando retorna de outras activities.
+     *
      * @param requestCode Código da requisição
-     * @param resultCode Código do resultado
-     * @param data Dados
+     * @param resultCode  Código do resultado
+     * @param data        Dados
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
