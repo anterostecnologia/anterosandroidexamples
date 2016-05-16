@@ -77,12 +77,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
-    compile 'com.tonicartos:stickygridheaders:1.0.1'
     compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.google.maps.android:android-maps-utils:+'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'commons-io:commons-io:2.5'
 }
