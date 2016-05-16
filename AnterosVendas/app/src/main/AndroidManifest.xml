@@ -16,17 +16,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.anteros.vendas">
 
+    <!--LISTA DE PERMISSÕES NECESSÁRIOS PARA O FUNCIONAMENTO-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <!-- HABILITA O MULTIDEX DA APLICAÇÃO-->
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -35,12 +35,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- METADA CONTÉM NOME DO BANCO DE DADOS DA APLICAÇÃO USADO PELA CLASSE BACKUPSERVICE-->
         <meta-data
             android:name="br.com.anteros.persistence.DatabaseName"
             android:value="vendas.db" />
+        <!-- ID DA APLICAÇÃO FACEBOOK-->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <!-- VERSÃO DA PLAY SERVICE DO GOOGLE-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -96,10 +99,10 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name="br.com.anteros.android.persistence.backup.RecordsOfTableActivity" />
 
-        <!-- SERVICO PARA REGISTRAR EXECUCAO DO BACKUP -->
+        <!-- SERVICO PARA REGISTRAR EXECUÇÃO DO BACKUP -->
         <service android:name="br.com.anteros.android.persistence.backup.BackupService" />
 
-        <!-- RECEIVER PARA INICIAR SERVICO DE BACKUP APÓS O BOOT DO ANDROID -->
+        <!-- RECEIVER PARA INICIAR SERVIÇO DE BACKUP APÓS O BOOT DO ANDROID -->
         <receiver android:name="br.com.anteros.android.persistence.backup.BackupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -115,12 +118,15 @@
             android:name=".gui.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/Base.AppTheme.NoActionBar"/>
+
+        <!-- ACTIVITY NECESSÁRIA PARA LOGIN COM FACEBOOK-->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- ACTIVITY NECESSÁRIA PARA LOGIN PELO INSTAGRAM-->
         <activity android:name="br.com.anteros.social.instagram.AnterosOAuthActivity" />
 
     </application>

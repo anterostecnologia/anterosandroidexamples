@@ -26,6 +26,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // Habilita aplicação multidex
         multiDexEnabled true
     }
     buildTypes {
@@ -34,6 +35,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    /**
+     * Exclui arquivos duplicados.
+     */
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/log4j-provider.properties'
@@ -50,7 +55,6 @@ android {
     }
     dexOptions {
         incremental = true;
-        //preDexLibraries = false
         javaMaxHeapSize "4g"
     }
 }
@@ -81,5 +85,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'commons-io:commons-io:2.5'
-    compile 'com.google.code.ksoap2-android:ksoap2-extra-ntlm:3.6.0'
 }
