@@ -30,6 +30,7 @@ Esta aplicação foi construída para demonstrar a utilização dos frameworks A
 * Adicionado logo na toolbar;
 * Personalização do tema do android para a aplicação. styles.xml no resources/values;
 * Adicionado icone para a aplicação nos resources/mipmap;
+* Implementado tratamento de permissões para ficar compatível com Android 6 acima;
 
 
 #### Dependências do projeto ####
@@ -74,3 +75,8 @@ Veja abaixo algumas telas da aplicação exemplo:
 Apache 2.0
 
 http://www.apache.org/licenses/LICENSE-2.0
+
+
+<center>
+![alt text](https://avatars0.githubusercontent.com/u/16067889?v=3&u=ab2eb482a16fd90a17d7ce711885f0bdc0640997&s=64)  
+Anteros Tecnologia
