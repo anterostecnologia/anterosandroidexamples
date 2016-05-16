@@ -144,9 +144,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUISICAO) {
-            if (resultCode == RESULT_OK) {
-                new BuscarClientes().execute();
-            }
+            new BuscarClientes().execute();
         }
     }
 }

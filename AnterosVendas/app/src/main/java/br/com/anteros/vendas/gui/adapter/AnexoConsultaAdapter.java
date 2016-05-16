@@ -38,6 +38,7 @@ import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.persistence.transaction.impl.TransactionException;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.AnexoConsultaActivity;
 import br.com.anteros.vendas.modelo.Anexo;
 
 /**
@@ -138,36 +139,13 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
-                        SQLRepository<Anexo, Long> anexoRepository = AnterosVendasContext.getInstance().getSQLRepository(Anexo.class);
-
                         try {
-                            if (anexo.getId() != null) {
-
-
-                                Anexo an = anexoRepository.findOne(
-                                        "SELECT A.* FROM ANEXO A WHERE A.ID_ANEXO = :PID_ANEXO",
-                                        new NamedParameter("PID_ANEXO", anexo.getId()));
-
-                                anexoRepository.getTransaction().begin();
-                                anexoRepository.remove(an);
-                                anexoRepository.getTransaction().commit();
-                            }
                             remove(anexo);
                             notifyDataSetChanged();
-
                         } catch (Exception e) {
                             e.printStackTrace();
-                            try {
-                                anexoRepository.getTransaction().rollback();
-                            } catch (Exception e1) {
-                            }
-                            if (e instanceof TransactionException) {
-                                new ErrorAlert(getContext(), getContext().getResources().getString(
-                                        R.string.app_name), "Ocorreu um erro ao remover Anexo. " + e.getCause()).show();
-                            } else {
-                                new ErrorAlert(getContext(), getContext().getResources().getString(
-                                        R.string.app_name), "Ocorreu um erro ao remover Anexo. " + e.getMessage()).show();
-                            }
+                            new ErrorAlert(getContext(), getContext().getResources().getString(
+                                    R.string.app_name), "Ocorreu um erro ao remover Anexo. " + e.getMessage()).show();
                         }
                     }
 

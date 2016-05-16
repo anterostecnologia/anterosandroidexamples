@@ -250,7 +250,6 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                     return "ERRO_VALIDACAO";
                 }
 
-                ClienteConsultaActivity.cliente.setAnexos(AnexoConsultaActivity.anexosCliente);
                 clienteRepository.getTransaction().begin();
                 clienteRepository.save(ClienteConsultaActivity.cliente);
                 clienteRepository.getTransaction().commit();
