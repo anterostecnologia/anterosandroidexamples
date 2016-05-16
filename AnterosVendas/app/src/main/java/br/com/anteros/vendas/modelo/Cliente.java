@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
@@ -50,7 +49,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 
 @Entity
-@Table(name = "CLIENTE")
+@Table(name = "OPCAO_CLIENTE")
 public class Cliente implements Serializable, Parcelable {
 
     /*
@@ -65,21 +64,21 @@ public class Cliente implements Serializable, Parcelable {
     /*
      * Razão social do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "RAZAO_SOCIAL", required = true, length = 50, label = "Razão social")
     private String razaoSocial;
 
     /*
      * Nome fantasia do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "FANTASIA", required = true, length = 40, label = "Nome fantasia")
     private String nomeFantasia;
 
     /*
      * Tipo de logradouro: RUA, AVENIDA, etc
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Enumerated(EnumType.STRING)
     @Column(name = "TP_LOGRADOURO", length = 20, required = true, label = "Tipo de logradouro")
     private TipoLogradouro tpLogradouro;
@@ -87,28 +86,28 @@ public class Cliente implements Serializable, Parcelable {
     /*
      * Logradouro do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "LOGRADOURO", length = 40, required = true, label = "Logradouro")
     private String logradouro;
 
     /*
      * Número do logradouro do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "NR_LOGRADOURO", length = 20, required = true, label = "Nr.logradouro")
     private String nrLogradouro;
 
     /*
      * Cep do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "CEP", length = 8, required = true, label = "Cep")
     private String cep;
 
     /*
      * Bairro do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "BAIRRO", length = 30, required = true, label = "Bairro")
     private String bairro;
 
@@ -121,14 +120,14 @@ public class Cliente implements Serializable, Parcelable {
     /*
      * Cidade do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "DS_CIDADE", length = 40, required = true, label = "Cidade")
     private String Cidade;
 
     /*
      * Estado do cliente
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "UF", required = true, length = 2, label = "Estado")
     private Estado estado;
 
@@ -136,7 +135,7 @@ public class Cliente implements Serializable, Parcelable {
      * Data do cadastro do cliente
 	 */
     @Past
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Temporal(TemporalType.DATE_TIME)
     @Column(name = "DT_CADASTRO", required = true, label = "Data do cadastro")
     private Date dtCadastro;

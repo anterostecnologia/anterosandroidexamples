@@ -50,11 +50,28 @@ import br.com.anteros.vendas.gui.adapter.MenuAdapter;
  */
 public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
 
-    public static final int CLIENTE = 0;
-    public static final int PEDIDO = 1;
-    public static final int PRODUTO = 2;
+    public static final int OPCAO_CLIENTE = 0;
+    public static final int OPCAO_PEDIDO = 1;
+    public static final int OPCAO_PRODUTO = 2;
+    public static final String MENU_CLIENTE = "Cliente";
+    public static final String MENU_PEDIDO = "Pedido";
+    public static final String MENU_PRODUTO = "Produto";
+    public static final String DESCRICAO_MENU_CLIENTES = "Cadastro e consulta de clientes";
+    public static final String DESCRICAO_MENU_PEDIDOS = "Cadastro e consulta de pedidos";
+    public static final String DESCRICAO_MENU_PRODUTOS = "Consulta de produtos";
+
+    /**
+     * Perfil do usuário
+     */
     public static SocialProfile perfilUsuario;
+    /**
+     * Grid do menu
+     */
     private GridView gridMenu;
+    /**
+     * Image view em forma circular para mostra a foto do perfil
+     * do usuário na rede social
+     */
     private CircularImageView imgUserSocial;
 
     @Override
@@ -74,10 +91,13 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         gridMenu.setOnItemClickListener(this);
 
         adicionarItensMenu();
-        verificaQtdeColunasPorLinha();
+        calculaEConfiguraLayoutMenu();
 
         imgUserSocial = (CircularImageView) findViewById(R.id.activity_menu_gridMenu_imgusuario);
 
+        /**
+         * Atribui a imagem do perfil
+         */
         if (perfilUsuario!=null){
             imgUserSocial.setVisibility(View.VISIBLE);
             imgUserSocial.setImageBitmap(perfilUsuario.getImageBitmap());
@@ -91,7 +111,11 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         AnterosVendasContext.getInstance().adicionaProdutos();
     }
 
-    private void verificaQtdeColunasPorLinha() {
+    /**
+     * Calcula e configura o layout do menu. Verifica se é tablet ou outro tamanho
+     * de dispositivo.
+     */
+    private void calculaEConfiguraLayoutMenu() {
         if (gridMenu != null) {
             if (GUIUtils.isTablet(MenuActivity.this)) {
                 gridMenu.setVerticalSpacing(5);
@@ -110,12 +134,15 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     }
 
 
+    /**
+     * Adiciona as opções no menu
+     */
     private void adicionarItensMenu() {
         List<MenuItem> itens = new ArrayList<MenuItem>();
 
-        itens.add(new MenuItem(CLIENTE, "Cliente", "Cadastro e consulta de clientes", "", getResources().getDrawable(R.drawable.ic_menu_cliente), Color.TRANSPARENT));
-        itens.add(new MenuItem(PEDIDO, "Pedido", "Cadastro e consulta de pedidos", "", getResources().getDrawable(R.drawable.ic_menu_pedido), Color.TRANSPARENT));
-        itens.add(new MenuItem(PRODUTO, "Produto", "Consulta de produtos", "", getResources().getDrawable(R.drawable.ic_menu_produto), Color.TRANSPARENT));
+        itens.add(new MenuItem(OPCAO_CLIENTE, MENU_CLIENTE, DESCRICAO_MENU_CLIENTES, "", getResources().getDrawable(R.drawable.ic_menu_cliente), Color.TRANSPARENT));
+        itens.add(new MenuItem(OPCAO_PEDIDO, MENU_PEDIDO, DESCRICAO_MENU_PEDIDOS, "", getResources().getDrawable(R.drawable.ic_menu_pedido), Color.TRANSPARENT));
+        itens.add(new MenuItem(OPCAO_PRODUTO, MENU_PRODUTO, DESCRICAO_MENU_PRODUTOS, "", getResources().getDrawable(R.drawable.ic_menu_produto), Color.TRANSPARENT));
 
         gridMenu.setAdapter(new MenuAdapter(this, R.layout.menu_item, itens));
     }
@@ -124,6 +151,9 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.top_toolbar);
         tb.inflateMenu(R.menu.menu_action);
+        /**
+         * Configura evento MenuItem click.
+         */
         tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(android.view.MenuItem item) {
@@ -134,43 +164,73 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         return true;
     }
 
+    /**
+     * Evento menu item selecionado.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_action_settings:
+                /**
+                 * Abre activity de manutenção das tabelas.
+                 */
                 startActivity(new Intent(this, ManutencaoTabelasActivity.class));
                 break;
             case R.id.menu_action_exit:
+                /**
+                 * Sai do sistema
+                 */
                 sairDoSistema();
                 break;
         }
         return true;
     }
 
+    /**
+     * Evento tecla pressionada
+     * @param keyCode Código da tecla
+     * @param event Evento
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        /**
+         * Pressionou tecla voltar, sai do sistema.
+         */
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             sairDoSistema();
         }
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Evento onClick no Menu.
+     * @param adapterView Adapter
+     * @param view View
+     * @param position Posição
+     * @param id id da View
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view,
                             int position, long id) {
         switch ((int) id) {
-            case CLIENTE:
+            case OPCAO_CLIENTE:
                 startActivity(new Intent(this, ClienteConsultaActivity.class));
                 break;
-            case PEDIDO:
+            case OPCAO_PEDIDO:
                 startActivity(new Intent(this, PedidoConsultaActivity.class));
                 break;
-            case PRODUTO:
+            case OPCAO_PRODUTO:
                 startActivity(new Intent(this, ProdutoConsultaActivity.class));
                 break;
         }
     }
 
+    /**
+     * Fecha o sistema
+     */
     private void sairDoSistema() {
         new QuestionAlert(this, "Atenção!", "Deseja sair do sistema?",
                 new QuestionAlert.QuestionListener() {

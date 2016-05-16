@@ -19,6 +19,8 @@ package br.com.anteros.vendas;
 import android.graphics.drawable.Drawable;
 
 /**
+ * Classe que representa um item do menu.
+ * 
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)

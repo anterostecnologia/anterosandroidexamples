@@ -40,8 +40,11 @@ import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.AnexoConsultaActivity;
 import br.com.anteros.vendas.modelo.Anexo;
+import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
 
 /**
+ *  Adapter responsável por apresentar a consulta de anexos.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -53,15 +56,31 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         super(context, R.layout.anexo_consulta_item, objects);
     }
 
+    /**
+     * Retorna a view para apresentação na lista
+     * @param position Posição dentro da view
+     * @param convertView View
+     * @param parent View pai
+     * @return View criada
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /**
+         * Cria a view com o layout da consulta de anexo
+         */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.anexo_consulta_item, null);
         }
 
+        /**
+         * Obtém o anexo de acordo com a posição
+         */
         final Anexo item = (Anexo) getItem(position);
 
+        /**
+         * Obtém os campos dentro do layout
+         */
         TextView tvIdAnexo = (TextView) convertView.findViewById(R.id.anexo_consulta_item_idAnexo);
         TextView tvNomeAnexo = (TextView) convertView.findViewById(R.id.anexo_consulta_item_nomeAnexo);
         TextView tvTipoAnexo = (TextView) convertView.findViewById(R.id.anexo_consulta_item_tipoAnexo);
@@ -71,6 +90,9 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         ImageView imgIcone = (ImageView) convertView.findViewById(R.id.anexo_consulta_item_imgIcon);
 
 
+        /**
+         * Atribui o evento de click na imagem removerCliente
+         */
         imgDelete.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
@@ -78,61 +100,39 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
             }
         });
 
+        /**
+         * Atribui o evento de click na imagem visualizar
+         */
         imgVisualizar.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 abrirAnexo(item);
             }
         });
 
+        /**
+         * Se o item não for nulo atribui os valores nos campos da view
+         */
         if (item != null) {
             tvIdAnexo.setText(item.getId() + "");
             tvNomeAnexo.setText(item.getNome());
             tvDescricao.setText(item.getNome());
 
+            /**
+             * Atribui a imagem de acordo com o conteúdo
+             */
             if (item.getTipoConteudo() != null) {
                 tvTipoAnexo.setText(item.getTipoConteudo().name());
-
-                switch (item.getTipoConteudo()) {
-                    case IMAGEM:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_image);
-                        break;
-                    case PDF:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_pdf);
-                        break;
-                    case PLANILHA:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_xls);
-                        break;
-                    case TEXTO:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_txt);
-                        break;
-                    case DOCUMENTO:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_doc);
-                        break;
-                    case APRESENTACAO:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_ppt);
-                        break;
-                    case HTML:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_html);
-                        break;
-                    case RAR:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_rar);
-                        break;
-                    case ZIP:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_zip);
-                        break;
-                    case XML:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_xml);
-                        break;
-                    default:
-                        imgIcone.setImageResource(R.drawable.ic_file_extension_unk);
-                        break;
-                }
+                imgIcone.setImageResource(item.getTipoConteudo().getResourcePorTipoConteudo());
             }
         }
 
         return convertView;
     }
 
+    /**
+     * Remove o anexo passado como parâmetro
+     * @param anexo Anexo
+     */
     protected void removerAnexo(final Anexo anexo) {
         new QuestionAlert(getContext(), getContext().getString(
                 R.string.app_name), "Remover Anexo ?",
@@ -141,6 +141,9 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
                     public void onPositiveClick() {
                         try {
                             remove(anexo);
+                            /**
+                             * Notifica o adapter que houve alteração na lista
+                             */
                             notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -156,13 +159,31 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
 
     }
 
+
+    /**
+     * Abre o anexo para visualizção
+     * @param anexo Anexo
+     */
     private void abrirAnexo(Anexo anexo) {
+        /**
+         * Obtém o arquivo correspondente a url armazenada
+         */
         File file = new File(anexo.getConteudoPath());
         Uri uri = Uri.fromFile(file);
+        /**
+         * Obtém a extensão do arquivo
+         */
         String extension = anexo.getNome().substring(anexo.getNome().lastIndexOf(".") + 1);
 
+        /**
+         * Cria um MIME type correspondente a extensão para passar para Intent como parâmetro
+         * para que possa filtrar as possíveis activities que podem abrir o arquivo
+         */
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
+        /**
+         * Inicia a activity com a intenção.
+         */
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(uri, mime);

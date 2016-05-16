@@ -34,6 +34,8 @@ import br.com.anteros.vendas.gui.adapter.ProdutoConsultaAdapter;
 import br.com.anteros.vendas.modelo.Produto;
 
 /**
+ * Activity responsável pela consulta de produtos.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -43,7 +45,10 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
 
     private ListView lvProdutos;
     private ProdutoConsultaAdapter adapter;
-    private final int REQUISICAO = 1000;
+    private final int EDITAR_PRODUTO = 1000;
+    /**
+     * Repositório do produto
+     */
     private SQLRepository<Produto, Long> produtoRepository;
 
     @Override
@@ -58,23 +63,39 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
 
+        /**
+         * Obtém o repositório do produto
+         */
         produtoRepository = AnterosVendasContext.getInstance().getSQLRepository(Produto.class);
         lvProdutos = (ListView) findViewById(R.id.lv_produto);
 
+        /**
+         * Busca a lista de produtos.
+         */
         new BuscarProdutos().execute();
-
     }
 
+    /**
+     * Evento opção do menu selecionada.
+     * @param item Item do menu
+     * @return True para propagar evento.
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /**
+                 * Sair da consulta de produtos.
+                 */
                 onBackPressed();
                 break;
         }
         return true;
     }
 
+    /**
+     * AsyncTask para buscar produtos.
+     */
     private class BuscarProdutos extends AsyncTask<Void, Void, List<Produto>> {
 
         private ProgressDialog progress;
@@ -88,7 +109,10 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
 
         @Override
         protected List<Produto> doInBackground(Void... params) {
-            return produtoRepository.find("SELECT PRO.* FROM PRODUTO PRO");
+            /**
+             * Retorna a lista de todos os produtos.
+             */
+            return produtoRepository.find("SELECT PRO.* FROM OPCAO_PRODUTO PRO");
         }
 
         @Override
@@ -99,10 +123,16 @@ public class ProdutoConsultaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Evento que ocorre quando retorna de outras activities.
+     * @param requestCode Código da requisição
+     * @param resultCode Código do resultado
+     * @param data Dados
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUISICAO) {
+        if (requestCode == EDITAR_PRODUTO) {
             if (resultCode == RESULT_OK) {
                 new BuscarProdutos().execute();
             }

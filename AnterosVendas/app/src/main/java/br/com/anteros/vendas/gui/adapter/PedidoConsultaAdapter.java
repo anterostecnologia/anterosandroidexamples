@@ -37,6 +37,7 @@ import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 
 /**
+ * Adapter responsável por apresentar a consulta dos pedidos.
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -48,15 +49,31 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
         super(context, R.layout.pedido_consulta_item, objects);
     }
 
+    /**
+     * Retorna a view para apresentação na lista
+     * @param position Posição dentro da view
+     * @param convertView View
+     * @param parent View pai
+     * @return View criada
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /**
+         * Cria a view com o layout da consulta de pedido
+         */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.pedido_consulta_item, null);
         }
 
+        /**
+         * Obtém o pedido de venda de acordo com a posição
+         */
         final PedidoVenda item = (PedidoVenda) getItem(position);
 
+        /**
+         * Obtém os campos dentro do layout
+         */
         TextView tvDescricaoPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_descricaoPedido);
         TextView tvDataPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_dtPedido);
         TextView tvCliente = (TextView) convertView.findViewById(R.id.pedido_consulta_item_nomeCliente);
@@ -65,16 +82,26 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
         TextView tvValorTotal = (TextView) convertView.findViewById(R.id.pedido_consulta_item_valorTotal);
         ImageView imgDelete = (ImageView) convertView.findViewById(R.id.pedido_consulta_item_imgDelete);
 
+        /**
+         * Desabilita o image removerPedido caso o pedido seja nulo
+         */
         imgDelete.setEnabled(item != null);
+
+        /**
+         * Atribui o evento onClick para a imagem delete
+         */
         imgDelete.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                delete(item);
+                removerPedido(item);
             }
         });
 
+        /**
+         * Se o item não for nulo atribui os valores nos campos da view
+         */
         if (item != null) {
-            tvDescricaoPedido.setText("PEDIDO NR. " + item.getNrPedido());
+            tvDescricaoPedido.setText("OPCAO_PEDIDO NR. " + item.getNrPedido());
             tvDataPedido.setText(DateUtil.toStringDateDMA(item.getDtPedido()));
             tvCliente.setText(item.getCliente().getId() + " - " + item.getCliente().getRazaoSocial());
             tvCondicao.setText(item.getCondicaoPagamento().name());
@@ -85,24 +112,43 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
         return convertView;
     }
 
-    protected void delete(final PedidoVenda pedido) {
+    /**
+     * Remove o pedido de venda.
+     * @param pedido Pedido
+     */
+    protected void removerPedido(final PedidoVenda pedido) {
         new QuestionAlert(getContext(), getContext().getString(
-                R.string.app_name), "Remover Pedido ?",
+                R.string.app_name), "Remover o pedido de venda ?",
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
+                        /**
+                         * Obtém o repositório do pedido de venda
+                         */
                         SQLRepository<PedidoVenda, Long> pedidoFactory = AnterosVendasContext.getInstance().getSQLRepository(PedidoVenda.class);
 
                         try {
+                            /**
+                             * Busca o pedido de venda
+                             */
                             PedidoVenda p = pedidoFactory.findOne(
                                     "SELECT P.* FROM PEDIDOVENDA P WHERE P.ID_PEDIDOVENDA = :PID_PEDIDOVENDA",
                                     new NamedParameter("PID_PEDIDOVENDA", pedido.getId()));
 
+                            /**
+                             * Inicia a transação e remove pedido e itens
+                             */
                             pedidoFactory.getTransaction().begin();
                             pedidoFactory.remove(p);
                             pedidoFactory.getTransaction().commit();
 
+                            /**
+                             * Remove o pedido do adapter
+                             */
                             remove(pedido);
+                            /**
+                             * Notifica o adapter que a lista alterou.
+                             */
                             notifyDataSetChanged();
 
                         } catch (Exception e) {

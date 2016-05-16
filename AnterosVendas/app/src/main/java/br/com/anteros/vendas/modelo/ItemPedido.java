@@ -16,7 +16,6 @@
 
 package br.com.anteros.vendas.modelo;
 
-import android.content.ClipData;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,7 +23,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import br.com.anteros.bean.validation.constraints.Required;
@@ -55,23 +53,23 @@ public class ItemPedido implements Serializable, Parcelable {
     @Column(name = "ID_ITEM", required = true, length = 8)
     private Long id;
 
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @ForeignKey
     private PedidoVenda pedidoVenda;
 
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @ForeignKey
     private Produto produto;
 
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "QT_PRODUTO", precision = 11, scale = 3, defaultValue = "0", label = "Quantidade do produto")
     private BigDecimal qtProduto;
 
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "VL_PRODUTO", precision = 14, scale = 2, defaultValue = "0", label = "Valor do produto")
     private BigDecimal vlProduto;
 
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "VL_TOTAL", precision = 14, scale = 2, defaultValue = "0", label = "Valor total")
     private BigDecimal vlTotal;
 

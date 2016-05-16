@@ -16,6 +16,8 @@
 
 package br.com.anteros.vendas.modelo;
 
+import br.com.anteros.vendas.R;
+
 /**
  * @author Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 09/05/16.
@@ -52,5 +54,45 @@ public enum TipoConteudoAnexo {
                 return TipoConteudoAnexo.RAR;
         }
         return TipoConteudoAnexo.OUTROS;
+    }
+
+    public  int getResourcePorTipoConteudo(){
+        int result;
+        switch (this) {
+            case IMAGEM:
+                result = R.drawable.ic_file_extension_image;
+                break;
+            case PDF:
+                result = R.drawable.ic_file_extension_pdf;
+                break;
+            case PLANILHA:
+                result = R.drawable.ic_file_extension_xls;
+                break;
+            case TEXTO:
+                result = R.drawable.ic_file_extension_txt;
+                break;
+            case DOCUMENTO:
+                result = R.drawable.ic_file_extension_doc;
+                break;
+            case APRESENTACAO:
+                result = R.drawable.ic_file_extension_ppt;
+                break;
+            case HTML:
+                result = R.drawable.ic_file_extension_html;
+                break;
+            case RAR:
+                result = R.drawable.ic_file_extension_rar;
+                break;
+            case ZIP:
+                result = R.drawable.ic_file_extension_zip;
+                break;
+            case XML:
+                result = R.drawable.ic_file_extension_xml;
+                break;
+            default:
+                result = R.drawable.ic_file_extension_unk;
+                break;
+        }
+        return result;
     }
 }

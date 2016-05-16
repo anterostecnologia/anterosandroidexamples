@@ -264,8 +264,8 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
     private void executarExportacaoBancoDados() {
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
-            new ExportDatabaseTask(ManutencaoTabelasActivity.this, AnterosVendasContext.getInstance().getAbsolutPathDb(),
-                    AnterosVendasContext.getInstance().getDatabaseName(), getSharedPreferences(
+            new ExportDatabaseTask(ManutencaoTabelasActivity.this, AnterosVendasContext.getInstance().getCaminhoAbsolutoBancoDados(),
+                    AnterosVendasContext.getInstance().getNomeBancoDados(), getSharedPreferences(
                     BackupService.PREFERENCES_NAME, MODE_PRIVATE)).execute();
         } else {
             Toast.makeText(
@@ -295,7 +295,7 @@ public class ManutencaoTabelasActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         File importDatabaseFile = importFiles[whichButton];
                         new ImportDatabaseTask(ManutencaoTabelasActivity.this,
-                                importDatabaseFile, AnterosVendasContext.getInstance().getAbsolutPathDb(), AnterosVendasContext.getInstance().getSession()).execute();
+                                importDatabaseFile, AnterosVendasContext.getInstance().getCaminhoAbsolutoBancoDados(), AnterosVendasContext.getInstance().getSession()).execute();
                         dialog.dismiss();
                     }
                 });

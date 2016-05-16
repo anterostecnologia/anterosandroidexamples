@@ -31,7 +31,8 @@ import android.widget.TextView;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 
-/**
+/** Activity responsável por apresenta a tela de abertura do sistema.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -45,7 +46,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.splash);
 
         /**
-         * Atribui o contexto da aplicação
+         * IMPORTANTE: Atribui o contexto da aplicação que será usado em vários pontos
+         * da aplicação.
          */
         AnterosVendasContext.setApplication(getApplication());
         AnterosVendasContext.getInstance();

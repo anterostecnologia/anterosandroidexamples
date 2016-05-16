@@ -17,10 +17,7 @@
 package br.com.anteros.vendas;
 
 import android.app.Application;
-import android.graphics.Bitmap;
 import android.util.Log;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,7 +50,12 @@ import br.com.anteros.vendas.modelo.Produto;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
 
 /**
- * @author Edson Martins (edsonmartins2005@gmail.com)
+ * Contexto da aplicação. Responsável pela criação da fábrica e sessões da persistência.
+ * Armazenamento de dados globais da aplicação.
+ *
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 09/05/16.
  */
 public class AnterosVendasContext {
@@ -91,6 +93,12 @@ public class AnterosVendasContext {
         return appContext;
     }
 
+    /**
+     * Cria a fábrica de sessões do Anteros Persistence for Android.
+     * @param context Contexto da aplicação
+     * @return Fábrica criada
+     * @throws Exception Se ocorreu algum erro criando a fábrica.
+     */
     public static SQLSessionFactory createSessionFactory(Application context) throws Exception {
         return new AndroidSQLConfiguration().context(context.getApplicationContext())
                 .addAnnotatedClass(Anexo.class)
@@ -113,38 +121,54 @@ public class AnterosVendasContext {
                 .addProperty(AnterosPersistenceProperties.APPLICATION_LOCATION, "/mnt/sdcard/backup").buildSessionFactory();
     }
 
+    /**
+     * Atribui o objeto Application
+     * @param application Objeto Application.
+     */
     public static void setApplication(Application application) {
         AnterosVendasContext.application = application;
     }
 
+    /**
+     * Retorna a fábrica de sessões criado anteriormente
+     * @return
+     */
     public SQLSessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    public void setSessionFactory(SQLSessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+    /**
+     * Retorna a sessão de persistência.
+     * @return Objeto sessão.
+     */
     public SQLSession getSession() {
         return session;
     }
 
-    public void setSession(SQLSession session) {
-        this.session = session;
+    /**
+     * Caminho absoluto do banco de dados.
+     * @return
+     */
+    public String getCaminhoAbsolutoBancoDados() {
+        return application.getDatabasePath(getNomeBancoDados()).getAbsolutePath();
     }
 
-    public String getAbsolutPathDb() {
-        return application.getDatabasePath(getDatabaseName()).getAbsolutePath();
-    }
-
-    public Validator getDefaultValidator() {
+    /**
+     * Retorna o validador padrão
+     * @return Validador
+     */
+    public Validator getValidadorPadrao() {
         if (validator == null)
             validator = Validation.buildDefaultValidatorFactory().getValidator();
 
         return validator;
     }
 
-    public String getDatabaseName() {
+    /**
+     * Retorna o nome do banco de dados.
+     * @return Nome do banco
+     */
+    public String getNomeBancoDados() {
         SQLiteConnection connection;
         try {
             connection = (SQLiteConnection) getSession().getConnection();
@@ -155,29 +179,51 @@ public class AnterosVendasContext {
         return "";
     }
 
+    /**
+     * Recria o banco de dados.
+     * @throws Exception
+     */
     public void recriarBancoDados() throws Exception {
         ((AndroidSQLSessionFactory) getSessionFactory()).generateDDL(TableCreationType.DROP,
                 TableCreationType.NONE, false);
     }
 
+    /**
+     * Retorna o nome da aplicação.
+     * @return
+     */
     public String getApplicationName() {
         return application.getString(R.string.app_name);
     }
 
+    /**
+     * Retorna a fábrica de repositórios.
+     * @return Fábrica.
+     */
     public AbstractSQLRepositoryFactory getSQLRepositoryFactory() {
         return AbstractSQLRepositoryFactory.getInstance();
     }
 
+    /**
+     * Cria e retorna um repositório
+     * @param clazz Classe
+     * @param <T> Tipo
+     * @param <ID> Id
+     * @return Repositório
+     */
     public <T, ID extends Serializable> SQLRepository<T, ID> getSQLRepository(Class<T> clazz) {
         SQLRepository<T, ID> repository = getSQLRepositoryFactory().getRepository(getSession(), clazz);
         return repository;
     }
 
+    /**
+     * Adiciona alguns produtos como exemplo
+     */
     public void adicionaProdutos() {
 
         try {
             getSession().getTransaction().begin();
-            SQLQuery query = getSession().createQuery("select count(*) as quant from produto");
+            SQLQuery query = getSession().createQuery("SELECT COUNT(*) AS QUANT FROM PRODUTO");
             ResultSet resultSet = query.executeQuery();
             getSession().getTransaction().commit();
             if (resultSet.next()){
@@ -185,7 +231,6 @@ public class AnterosVendasContext {
                     new DownloadImagesTask() {
                         @Override
                         protected void onPostExecute(List<byte[]> bitmaps) {
-
                             try {
                                 getSession().getTransaction().begin();
                                 Produto notebookDell1 = new Produto();
@@ -266,65 +311,23 @@ public class AnterosVendasContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
-    public void populateDatabase() {
-        try {
-            getSession().getTransaction().begin();
 
-            Cliente cliente1 = new Cliente();
-            cliente1.setRazaoSocial("JOAO DA SILVA E CIA LTDA");
-            cliente1.setNomeFantasia("JOAO DA SILVA");
-            cliente1.setTpLogradouro(TipoLogradouro.AVENIDA);
-            cliente1.setNrLogradouro("240");
-            cliente1.setLogradouro("PRESIDENTE VARGAS");
-            cliente1.setBairro("CENTRO");
-            cliente1.setComplemento("");
-            cliente1.setCep("87300000");
-            cliente1.setCidade("CAMPO MOURAO");
-            cliente1.setEstado(Estado.PR);
-            cliente1.setDtCadastro(new Date());
+    /**
+     * Atribui uma fábrica de sessões de persistence.
+     *
+     * @param sessionFactory Fábrica de sessões.
+     */
+    public void setSessionFactory(SQLSessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-            getSession().save(cliente1);
-
-            getSession().getTransaction().commit();
-
-            getSession().getTransaction().begin();
-
-            TypedSQLQuery<Cliente> query = getSession().createQuery("SELECT * FROM CLIENTE", Cliente.class);
-            List<Cliente> clientes = query.getResultList();
-            for (Cliente cliente : clientes) {
-                PedidoVenda ped = new PedidoVenda();
-                ped.setVlTotalPedido(new BigDecimal(750));
-                ped.setNrPedido(new Long(12345));
-                ped.setFormaPagamento(FormaPagamento.BOLETO);
-                ped.setCondicaoPagamento(CondicaoPagamento.A_VISTA);
-                ped.setCliente(cliente);
-                ped.setDtPedido(new Date());
-
-                List<ItemPedido> itens = new ArrayList<ItemPedido>();
-
-                TypedSQLQuery<Produto> queryProdutos = getSession().createQuery("SELECT * FROM PRODUTO", Produto.class);
-                List<Produto> produtos = queryProdutos.getResultList();
-                for (Produto produto : produtos) {
-                    ItemPedido ite = new ItemPedido();
-                    ite.setVlTotal(produto.getVlProduto());
-                    ite.setVlProduto(produto.getVlProduto());
-                    ite.setQtProduto(new BigDecimal(1));
-                    ite.setPedidoVenda(ped);
-                    ite.setProduto(produto);
-                    itens.add(ite);
-                }
-                ped.setItens(itens);
-                getSession().save(ped);
-            }
-            getSession().getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    /**
+     * Atribui uma sessão de persistência
+     * @param session Sessão
+     */
+    public void setSession(SQLSession session) {
+        this.session = session;
     }
 }

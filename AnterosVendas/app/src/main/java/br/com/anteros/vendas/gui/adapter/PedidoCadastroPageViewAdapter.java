@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Adapter para controlar as páginas dentro do layout do Pedido.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)

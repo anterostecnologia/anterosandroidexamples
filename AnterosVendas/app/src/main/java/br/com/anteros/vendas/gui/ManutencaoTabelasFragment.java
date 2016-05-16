@@ -21,6 +21,7 @@ import br.com.anteros.persistence.session.SQLSession;
 import br.com.anteros.vendas.AnterosVendasContext;
 
 /**
+ *  Fragmento responsável pelo conteúdo da Activity ManutencaoTabelas.
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -28,6 +29,10 @@ import br.com.anteros.vendas.AnterosVendasContext;
  */
 public class ManutencaoTabelasFragment extends DatabaseMaintenanceFragment {
 
+    /**
+     * Atribui a sessão de persistência
+     * @return
+     */
     @Override
     public SQLSession getSQLSession() {
         return AnterosVendasContext.getInstance().getSession();

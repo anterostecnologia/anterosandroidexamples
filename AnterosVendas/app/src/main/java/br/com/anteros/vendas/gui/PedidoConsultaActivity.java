@@ -20,7 +20,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +39,8 @@ import br.com.anteros.vendas.gui.adapter.PedidoConsultaAdapter;
 import br.com.anteros.vendas.modelo.PedidoVenda;
 
 /**
+ * Activity responsável pela consulta do pedido.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -51,7 +52,7 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
     public static PedidoVenda pedido;
     private ListView lvPedidos;
     private PedidoConsultaAdapter adapter;
-    private final int REQUISICAO = 1000;
+    private final int EDITAR_PEDIDO = 1000;
     private SQLRepository<PedidoVenda, Long> pedidoRepository;
 
     @Override
@@ -68,12 +69,24 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
 
         pedidoRepository = AnterosVendasContext.getInstance().getSQLRepository(PedidoVenda.class);
 
+        /**
+         * Atribui o long click para a view do pedido. Quando o usuário pressionar
+         * o long click abre a edição do pedido.
+         */
         lvPedidos = (ListView) findViewById(R.id.pedido_consulta_list_view);
         lvPedidos.setOnItemLongClickListener(this);
 
+        /**
+         * Busca os dados dos pedidos.
+         */
         new BuscarPedidosConsulta().execute();
     }
 
+    /**
+     * Cria as opções do menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
@@ -88,24 +101,41 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
         return true;
     }
 
+    /**
+     * Evento se uma opção do menu foi selecionada.
+     * @param item Item selecionado
+     * @return True se propaga evento.
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /**
+                 * Sair da consulta de pedidos
+                 */
                 onBackPressed();
                 break;
 
             case R.id.pedido_consulta_action_adicionar:
+                /**
+                 * Adiciona um novo pedido de venda
+                 */
                 pedido = new PedidoVenda();
                 pedido.setNrPedido(Long.valueOf(new Date().getTime()));
                 pedido.setDtPedido(new Date());
+                /**
+                 * Inicia a activity de edição do pedido
+                 */
                 Intent intent = new Intent(this, PedidoCadastroActivity.class);
-                startActivityForResult(intent, REQUISICAO);
+                startActivityForResult(intent, EDITAR_PEDIDO);
                 break;
         }
         return true;
     }
 
+    /**
+     * AsyncTask para buscar os pedidos de venda.
+     */
     private class BuscarPedidosConsulta extends AsyncTask<Void, Void, List<PedidoVenda>> {
 
         private ProgressDialog progress;
@@ -119,6 +149,10 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
 
         @Override
         protected List<PedidoVenda> doInBackground(Void... params) {
+            /**
+             * Busca os objetos dos pedidos contendo dados parciais
+             * apenas para apresentação na lista.
+             */
             return pedidoRepository.find("SELECT  P.ID_PEDIDOVENDA,                " +
                     " P.NR_PEDIDO,                     " +
                     " P.DT_PEDIDO,                     " +
@@ -127,12 +161,15 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
                     " P.VL_TOTAL_PEDIDO,               " +
                     " C.ID_CLIENTE,                    " +
                     " C.RAZAO_SOCIAL                   " +
-                    " FROM PEDIDOVENDA P, CLIENTE C           " +
+                    " FROM PEDIDOVENDA P, OPCAO_CLIENTE C           " +
                     " WHERE C.ID_CLIENTE = P.ID_CLIENTE        ");
         }
 
         @Override
         public void onPostExecute(List<PedidoVenda> pedidos) {
+            /**
+             * Cria um adapter com os dados e atribui na lista
+             */
             adapter = new PedidoConsultaAdapter(PedidoConsultaActivity.this, pedidos);
             lvPedidos.setAdapter(adapter);
             progress.dismiss();
@@ -140,23 +177,50 @@ public class PedidoConsultaActivity extends AppCompatActivity implements Adapter
     }
 
 
+    /**
+     * Evento pressionou long click na view do pedido
+     * @param parent Pai da View
+     * @param view View
+     * @param position Posição da view
+     * @param id id da View
+     * @return False para não propagar o evento
+     */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvPedidos) {
+            /**
+             * Pega o objeto pedido parcial usado apenas para apresentação na lista
+             */
             PedidoVenda p = adapter.getItem(position);
+            /**
+             * Busca objeto completo usado para edição
+             */
             pedido = pedidoRepository.findOne(
                     "SELECT P.* FROM PEDIDOVENDA P WHERE P.ID_PEDIDOVENDA = :PID_PEDIDOVENDA",
                     new NamedParameter("PID_PEDIDOVENDA", p.getId()));
+            /**
+             * Inicia activity para edição do pedido
+             */
             Intent intent = new Intent(this, PedidoCadastroActivity.class);
-            startActivityForResult(intent, REQUISICAO);
+            startActivityForResult(intent, EDITAR_PEDIDO);
         }
         return false;
     }
 
+
+    /**
+     * Evento que ocorre quando retorna de outras activities.
+     * @param requestCode Código da requisição
+     * @param resultCode Código do resultado
+     * @param data Dados
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUISICAO) {
+        if (requestCode == EDITAR_PEDIDO) {
+            /**
+             * Atualiza lista de pedidos pois um pedido foi alterado.
+             */
             new BuscarPedidosConsulta().execute();
         }
     }

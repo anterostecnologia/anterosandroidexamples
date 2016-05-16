@@ -20,16 +20,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -40,6 +37,8 @@ import br.com.anteros.vendas.gui.adapter.ClienteConsultaAdapter;
 import br.com.anteros.vendas.modelo.Cliente;
 
 /**
+ * Activity responsável pela consulta de clientes.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -51,7 +50,7 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
     public static Cliente cliente;
     private ListView lvClientes;
     private ClienteConsultaAdapter adapter;
-    private final int REQUISICAO = 1000;
+    private final int EDITAR_CLIENTE = 1000;
     private SQLRepository<Cliente, Long> clienteRepository;
 
     @Override
@@ -66,15 +65,29 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
 
+        /**
+         * Obtém o repositório de clientes usado para buscar os dados.
+         */
         clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
 
+        /**
+     * Atribui evento long click para lista para permitir selecionar o cliente para edição.
+         */
         lvClientes = (ListView) findViewById(R.id.cliente_consulta_list_view);
         lvClientes.setOnItemLongClickListener(this);
 
+        /**
+         * Busca os objetos dos clientes.
+         */
         new BuscarClientes().execute();
 
     }
 
+    /**
+     * Cria as opções no menu para a consulta de cliente
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
@@ -89,22 +102,37 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
         return true;
     }
 
+    /**
+     * Se selecionou um item do menu
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /**
+                 * Pressionou a tecla voltar chama o método onBackPressed;
+                 */
                 onBackPressed();
                 break;
 
             case R.id.cliente_consulta_action_adicionar:
+                /**
+                 * Cria um novo cliente e chama a Activity de cadastro do cliente
+                 * passando o código da EDITAR_CLIENTE.
+                 */
                 cliente = new Cliente();
                 Intent intent = new Intent(this, ClienteCadastroActivity.class);
-                startActivityForResult(intent, REQUISICAO);
+                startActivityForResult(intent, EDITAR_CLIENTE);
                 break;
         }
         return true;
     }
 
+    /**
+     * AsyncTask para buscar a lista de clientes
+     */
     private class BuscarClientes extends AsyncTask<Void, Void, List<Cliente>> {
 
         private ProgressDialog progress;
@@ -118,7 +146,10 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
 
         @Override
         protected List<Cliente> doInBackground(Void... params) {
-            return clienteRepository.find("SELECT CLI.* FROM CLIENTE CLI");
+            /**
+             * Retorna a lista de clientes
+             */
+            return clienteRepository.find("SELECT CLI.* FROM OPCAO_CLIENTE CLI");
         }
 
         @Override
@@ -130,20 +161,38 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
     }
 
 
+    /**
+     * Evento que ocorre quando um long click foi executado. Se o evento
+     * ocorreu na lista de clientes abre a activity de edição.
+     * @param parent Pai da view
+     * @param view View
+     * @param position Posição
+     * @param id id da view
+     * @return False para não propagar o evento pois já foi tratado.
+     */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (parent == lvClientes) {
             cliente = adapter.getItem(position);
             Intent intent = new Intent(this, ClienteCadastroActivity.class);
-            startActivityForResult(intent, REQUISICAO);
+            startActivityForResult(intent, EDITAR_CLIENTE);
         }
         return false;
     }
 
+    /**
+     * Evento que ocorre quando retorna de outras activities.
+     * @param requestCode Código da requisição
+     * @param resultCode Código do resultado
+     * @param data Dados
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUISICAO) {
+        /**
+         * Se o resultCode for editar cliente atualiza a lista de clientes pois foi alterada.
+         */
+        if (requestCode == EDITAR_CLIENTE) {
             new BuscarClientes().execute();
         }
     }

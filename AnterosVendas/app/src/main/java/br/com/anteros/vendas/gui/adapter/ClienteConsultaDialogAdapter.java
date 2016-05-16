@@ -29,6 +29,8 @@ import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Cliente;
 
 /**
+ * Adapter responsável por mostrar a consulta de clientes em forma de Dialog.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -40,20 +42,39 @@ public class ClienteConsultaDialogAdapter extends ArrayAdapter<Cliente> {
         super(context, R.layout.cliente_consulta_dialog_item, objects);
     }
 
+    /**
+     * Retorna a view para apresentação na lista
+     * @param position Posição dentro da view
+     * @param convertView View
+     * @param parent View pai
+     * @return View criada
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /**
+         * Cria a view com o layout da consulta de cliente.
+         */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.cliente_consulta_dialog_item, null);
         }
 
+        /**
+         * Obtém o cliente correspondente a posição
+         */
         final Cliente item = (Cliente) getItem(position);
 
+        /**
+         * Obtém os campos do layou
+         */
         TextView tvRazaoCliente = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_nomeCliente);
         TextView tvFantasia = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_fantasia);
         TextView tvEndereco = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_endereco);
         TextView tvCidade = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_cidade);
 
+        /**
+         * Se o item não for nulo atribui os valores nos campos da view
+         */
         if (item != null) {
             tvRazaoCliente.setText(item.getId() + " - " + item.getRazaoSocial());
             tvFantasia.setText(item.getNomeFantasia());

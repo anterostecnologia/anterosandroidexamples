@@ -41,6 +41,14 @@ import br.com.anteros.vendas.gui.PedidoConsultaActivity;
 import br.com.anteros.vendas.modelo.ItemPedido;
 
 /**
+ * Adapter responsável pela lista com edição dos itens do pedido.
+ * Este adapter extends AnterosArrayAdapterWithViewHolder que implementa o
+ * padrão de projeto View Holder e permite a edição dos campos dentro da ListView.
+ * Importante: Para o correto funcionamento da edição a declaração da Activity
+ * no manifesto deve conter o seguinte atributo:
+ *
+ *  android:windowSoftInputMode="adjustPan|stateHidden"
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -48,6 +56,9 @@ import br.com.anteros.vendas.modelo.ItemPedido;
  */
 public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithViewHolder<ItemPedido> {
 
+    /**
+     * Lista de itens do pedido
+     */
     private List<ItemPedido> itens;
 
     public PedidoCadastroItensFragmentAdapter(Context context, List<ItemPedido> objects) {
@@ -55,24 +66,49 @@ public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithV
         this.itens = objects;
     }
 
+    /**
+     * Carrega os valores do ItemPedido do pedido nos campos da ViewHolder que controla o registro
+     * dentro da ListView.
+     * @param viewHolder
+     * @param currentBean
+     */
     @Override
     public void loadValuesFromCurrentBean(AnterosViewHolder viewHolder, ItemPedido currentBean) {
+        /**
+         * Obtém os campos do layout dentro da ViewHolder
+         */
         TextView produto = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_produto);
         TextView vlTotal = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_valorTotal);
         TextView preco = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_edPreco);
         EditText quantidade = (EditText) viewHolder.getViewById(R.id.pedido_cadastro_itens_edQuantidade);
         ImageView fotoProduto = (ImageView) viewHolder.getViewById(R.id.pedido_cadastro_itens_item_fotoProduto);
+
+        /**
+         * Obtém o ItemPedido dentro da ViewHolder.
+         */
         ItemPedido item = viewHolder.getBean();
 
+        /**
+         * Atribui os valores do ItemPedido nos campos
+         */
         produto.setText(item.getProduto().getId() + " - " + item.getProduto().getNomeProduto());
         vlTotal.setText(item.getVlTotalAsString());
         preco.setText(item.getVlProdutoAsString());
         quantidade.setText(item.getQtProduto().toPlainString());
+        /**
+         * Atribui a foto do produto
+         */
         if (item.getProduto().getFotoProduto() != null) {
             fotoProduto.setImageBitmap(BitmapFactory.decodeByteArray(item.getProduto().getFotoProduto(), 0, item.getProduto().getFotoProduto().length));
         }
     }
 
+    /**
+     * Retorna a lista de views(campos) que se deseja que a ViewHolder controla.
+     * Somente as views retornadas poderão ser acessadas no método loadValuesFromCurrentBean.
+     * @param row View correspondente a linha dentro layout da ListView.
+     * @return Conjunto de views para controlar.
+     */
     @Override
     public Set<View> getViewsToHolderController(View row) {
         Set<View> result = new HashSet<>();
@@ -85,53 +121,116 @@ public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithV
         return result;
     }
 
+    /**
+     * Lista de itens do pedido
+     * @return Lista de itens
+     */
     @Override
     public List<ItemPedido> geBeans() {
         return itens;
     }
 
+    /**
+     * Devolve a view correspondente ao layout da linha dentro da ListView.
+     * @param position Posição dentro da lista
+     * @param convertView View
+     * @param parent Pai da view
+     * @return View criada
+     */
     @Override
     public View getRowView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.pedido_cadastro_itens_lista, null);
+        if (convertView==null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.pedido_cadastro_itens_lista, null);
+        }
+        return convertView;
     }
 
+    /**
+     * Evento quando qualquer campo de edição sofrer alteração. Neste evento é possível realizar
+     * cálculos ou atribuir valores a outros campos.
+     * @param view View
+     * @param text Texto alterado
+     * @param viewHolder View Holder
+     */
     @Override
     public void onTextChanged(View view, String text, AnterosViewHolder viewHolder) {
+        /**
+         * Aqui é necessário verificar se view recebida é a que vc quer usando o
+         * método viewEqualsTo da viewHolder.
+         */
         if (viewHolder.viewEqualsTo(view, R.id.pedido_cadastro_itens_edQuantidade)) {
             if (!StringUtils.isEmpty(text)) {
+                /**
+                 * Calcula o valor total e atribui no TextView vlTotal.
+                 */
                 viewHolder.getBean().setQtProduto(new BigDecimal(text));
                 viewHolder.getBean().setVlTotal(viewHolder.getBean().getVlProduto().multiply(viewHolder.getBean().getQtProduto()));
                 TextView vlTotal = (TextView) viewHolder.getViewById(R.id.pedido_cadastro_itens_valorTotal);
                 vlTotal.setText(viewHolder.getBean().getVlTotalAsString());
+                /**
+                 * Calculo o total do pedido
+                 */
                 PedidoCadastroActivity.calcularTotalPedido();
             }
         }
     }
 
+    /**
+     * Evento que ocorre logo após ocorrer alteração em qualquer campo dentro do layout.
+     * @param view View
+     * @param text Texto alterado
+     * @param viewHolder View Holder.
+     */
     @Override
     public void onAfterTextChanged(View view, String text, AnterosViewHolder viewHolder) {
 
     }
 
+    /**
+     * Evento que ocorre se clicar em qualquer view sendo controlada pela View Holder.
+     * @param view View
+     * @param viewHolder View Holder
+     */
     @Override
     public void onClickView(View view, AnterosViewHolder viewHolder) {
+        /**
+         * Aqui é necessário verificar se view recebida é a que vc quer usando o
+         * método viewEqualsTo da viewHolder.
+         */
         if (viewHolder.viewEqualsTo(view, R.id.pedido_cadastro_itens_imgDelete)) {
-            delete(viewHolder.getBean());
+            /**
+             * Clicou no removerPedido chama o remover pedido.
+             */
+            removePedido(viewHolder.getBean());
         }
     }
 
-    protected void delete(final ItemPedido itemPedido) {
+    /**
+     * Remove o pedido
+     * @param itemPedido ItemPedido a ser removido
+     */
+    protected void removePedido(final ItemPedido itemPedido) {
         new QuestionAlert(getContext(), getContext().getString(
                 R.string.app_name), "Remover o item ?",
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
                         try {
+                            /**
+                             * Remove o item do pedido da lista do pedido. Aqui não é necessário
+                             * remover no banco de dados pois o framework irá fazer isso quando salvar o pedido.
+                             */
                             remove(itemPedido);
 
+                            /**
+                             * Recalcula total do pedido
+                             */
                             PedidoConsultaActivity.pedido.setVlTotalPedido(PedidoConsultaActivity.pedido.getVlTotalPedido().subtract(itemPedido.getVlTotal()));
                             PedidoCadastroDadosFragment.atualizarValorTotal();
+                            /**
+                             * Notifica o adapter que a lista alterou.
+                             */
                             notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();

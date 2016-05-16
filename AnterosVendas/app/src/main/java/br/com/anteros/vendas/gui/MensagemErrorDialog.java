@@ -31,6 +31,8 @@ import br.com.anteros.validation.api.ConstraintViolation;
 import br.com.anteros.vendas.R;
 
 /**
+ * Dialog usada para apresentar os erros de validação.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)

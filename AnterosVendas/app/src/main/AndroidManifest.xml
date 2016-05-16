@@ -33,8 +33,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:windowSoftInputMode="adjustPan"
-        android:descendantFocusability="beforeDescendants"
         android:theme="@style/AppTheme">
 
         <meta-data
@@ -89,6 +87,7 @@
         <activity
             android:name=".gui.PedidoCadastroActivity"
             android:label="@string/title_activity_pedido"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/Base.AppTheme.NoActionBar" />
         <activity
             android:name=".gui.ManutencaoTabelasActivity"

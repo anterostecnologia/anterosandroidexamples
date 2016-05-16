@@ -29,6 +29,8 @@ import br.com.anteros.vendas.gui.adapter.PedidoCadastroItensFragmentAdapter;
 
 
 /**
+ * Fragmento responsável por mostrar a lista de itens do pedido.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)

@@ -29,7 +29,11 @@ import java.util.List;
 import br.com.anteros.core.utils.IOUtils;
 
 /**
- * @author Edson Martins (edsonmartins2005@gmail.com)
+ * Realiza o download de várias imagens na mesma tarefa.
+ *
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 09/05/16.
  */
 public class DownloadImagesTask extends AsyncTask<String,String,List<byte[]>> {
@@ -41,8 +45,14 @@ public class DownloadImagesTask extends AsyncTask<String,String,List<byte[]>> {
 
             URLConnection conn = null;
             try {
+                /**
+                 * Abre conexão com url da imagem
+                 */
                 conn = new URL( url ).openConnection();
                 conn.connect();
+                /**
+                 * Le os bytes da imagem e adiciona na lista de retorno
+                 */
                 byte[] byteArray = IOUtils.toByteArray(conn.getInputStream());
                 result.add(byteArray);
             } catch (IOException e) {

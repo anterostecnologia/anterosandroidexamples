@@ -59,7 +59,7 @@ public class Anexo implements Serializable, Parcelable {
     /*
      * Nome do Anexo
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Size(min = 1, max = 100, groups = {Default.class})
     @Column(name = "DS_ANEXO", required = true, label = "Descrição", length = 100)
     private String nome;
@@ -81,7 +81,7 @@ public class Anexo implements Serializable, Parcelable {
     @Size(max = 20, min = 1, groups = {Default.class})
     @Column(name = "TP_CONTEUDO", length = 20, required = true, label = "Tipo do conteúdo")
     @Enumerated(EnumType.STRING)
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     private TipoConteudoAnexo tipoConteudo;
 
     /*

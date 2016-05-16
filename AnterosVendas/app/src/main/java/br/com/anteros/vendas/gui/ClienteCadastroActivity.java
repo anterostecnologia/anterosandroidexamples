@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -46,15 +45,16 @@ import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Cliente;
 import br.com.anteros.vendas.modelo.Estado;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
-import br.com.anteros.vendas.modelo.ValidacaoCliente;
+import br.com.anteros.vendas.modelo.ValidacaoPadrao;
 
-/**
+/** Activity responsável pelo cadastro do cliente.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 10/05/16.
  */
-public class ClienteCadastroActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class ClienteCadastroActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     private EditText edRazao;
     private EditText edFantasia;
@@ -79,6 +79,9 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
 
+        /**
+         * Obtém os campos do layout
+         */
         edRazao = (EditText) findViewById(R.id.cliente_cadastro_razaoSocial);
         edFantasia = (EditText) findViewById(R.id.cliente_cadastro_fantasia);
         spTipoLogradouro = (Spinner) findViewById(R.id.cliente_cadastro_cb_tipo_logradouro);
@@ -93,13 +96,22 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         spEstado = (Spinner) findViewById(R.id.cliente_cadastro_cb_estado);
 
 
+        /**
+         * Atribui um adapter com os valores do ENUM TipoLogradouro para o Spinner
+         */
         spTipoLogradouro.setAdapter(new ArrayAdapter<TipoLogradouro>(this, android.R.layout.simple_list_item_1, TipoLogradouro.values()));
+        /**
+         * Atribui um adapter com os valores do ENUM Estados para o Spinner
+         */
         spEstado.setAdapter(new ArrayAdapter<Estado>(this, android.R.layout.simple_list_item_1, Estado.values()));
 
-        bindView();
+        /**
+         * Carrega os dados na view
+         */
+        carregaDadosParaView();
     }
 
-    private void bindView() {
+    private void carregaDadosParaView() {
         edRazao.setText(ClienteConsultaActivity.cliente.getRazaoSocial());
         edFantasia.setText(ClienteConsultaActivity.cliente.getNomeFantasia());
         edLogradouro.setText(ClienteConsultaActivity.cliente.getLogradouro());
@@ -118,6 +130,11 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Cria as opções no menu e atribui evento de onClick
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
@@ -132,14 +149,25 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         return true;
     }
 
+    /**
+     * Evento para tratar quando um item do menu foi selecionado
+     * @param item MenuItem
+     * @return True se OK
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /**
+                 * Cancela edição do cliente
+                 */
                 cancelarCliente();
                 break;
 
             case R.id.cliente_cadastro_action_salvar:
+                /**
+                 * Pergunta ao usuário se deseja salvar o cliente
+                 */
                 new QuestionAlert(this, this.getResources().getString(R.string.app_name), "Deseja salvar o cliente?",
                         new QuestionAlert.QuestionListener() {
 
@@ -163,19 +191,26 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         return true;
     }
 
+    /**
+     * Se pressionou a tecla de voltar
+     * @param keyCode Código da tecla
+     * @param event Evento
+     * @return true se tratado.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            /**
+             * Cancela edição do cliente
+             */
             cancelarCliente();
         }
         return super.onKeyDown(keyCode, event);
     }
 
-
-    @Override
-    public void onClick(View v) {
-    }
-
+    /**
+     * Cancela a edição do cliente
+     */
     private void cancelarCliente() {
         new QuestionAlert(this, this.getResources().getString(
                 R.string.app_name), "Deseja cancelar o cliente?",
@@ -193,6 +228,9 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                 }).show();
     }
 
+    /**
+     * Salva os dados da view no objeto do cliente.
+     */
     private void salvarDadosCliente() {
         ClienteConsultaActivity.cliente.setRazaoSocial(edRazao.getText().toString());
         ClienteConsultaActivity.cliente.setNomeFantasia(edFantasia.getText().toString());
@@ -207,6 +245,12 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         ClienteConsultaActivity.cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
     }
 
+    /**
+     * Evento quando muda o foco dos campos. Se sair do campo CEP executa a tarefa para buscar o cep e alimenta
+     * cidade e estado.
+     * @param v
+     * @param hasFocus
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (v == edCep) {
@@ -224,14 +268,27 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * AsyncTask para salvar o cliente.
+     */
     public class SalvarCliente extends AsyncTask<Integer, Void, String> {
 
+        /**
+         * Repositório para salvar o cliente
+         */
         SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
-        Set<ConstraintViolation<Cliente>> violations;
+        /**
+         * Violações geradas pelo framework de persistência/validação.
+         */
+        Set<ConstraintViolation<Cliente>> violacoes;
         private ProgressDialog dialog;
 
         @Override
         protected void onPreExecute() {
+            /**
+             * Mostra janela de diálogo para avisar que o cliente está sendo salvo
+             * e tbém evitar que o usuário clique na tela
+             */
             dialog = new ProgressDialog(ClienteCadastroActivity.this);
             dialog.setTitle(getResources().getString(R.string.app_name));
             dialog.setMessage("Salvando cliente...");
@@ -245,13 +302,25 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
             try {
                 salvarDadosCliente();
 
-                violations = AnterosVendasContext.getInstance().getDefaultValidator().validate(ClienteConsultaActivity.cliente, ValidacaoCliente.class);
-                if (violations.size() > 0) {
+                /**
+                 * Valida o cliente
+                 */
+                violacoes = AnterosVendasContext.getInstance().getValidadorPadrao().validate(ClienteConsultaActivity.cliente, ValidacaoPadrao.class);
+                /**
+                 * Se ocorreram violacões retorna erro.
+                 */
+                if (violacoes.size() > 0) {
                     return "ERRO_VALIDACAO";
                 }
 
+                /**
+                 * Inicia transação e salva o cliente e anexos.
+                 */
                 clienteRepository.getTransaction().begin();
                 clienteRepository.save(ClienteConsultaActivity.cliente);
+                /**
+                 * Realiza commit nos dados
+                 */
                 clienteRepository.getTransaction().commit();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -270,6 +339,9 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
             if (dialog.isShowing())
                 dialog.dismiss();
 
+            /**
+             * Se result == null não ocorreram erros
+             */
             if (result == null) {
 
                 new InfoAlert(ClienteCadastroActivity.this, getString(R.string.app_name),
@@ -281,10 +353,16 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                     }
                 }).show();
 
+                /**
+                 * Se result = ERRO_VALIDACAO apresenta os erros de validação
+                 */
             } else if (result.equals("ERRO_VALIDACAO")) {
                 new MensagemErrorDialog<Cliente>(ClienteCadastroActivity.this,
-                        "Atenção!", violations).show();
+                        "Atenção!", violacoes).show();
             } else {
+                /**
+                 * Apresenta os demais erros.
+                 */
                 new ErrorAlert(ClienteCadastroActivity.this, getString(R.string.app_name),
                         "Salvando cliente: " + result).show();
             }

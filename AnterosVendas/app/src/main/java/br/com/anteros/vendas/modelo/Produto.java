@@ -39,7 +39,7 @@ import br.com.anteros.validation.api.groups.Default;
  *         Data: 09/05/16.
  */
 @Entity
-@Table(name = "PRODUTO")
+@Table(name = "OPCAO_PRODUTO")
 public class Produto implements Serializable, Parcelable {
     /*
      * Id do Produto
@@ -53,7 +53,7 @@ public class Produto implements Serializable, Parcelable {
     /*
      * Nome do produto
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "DS_PRODUTO", required = true, length = 50, label="Nome do produto")
     private String nomeProduto;
 
@@ -67,7 +67,7 @@ public class Produto implements Serializable, Parcelable {
     /*
      * Valor do produto
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "VL_PRODUTO", required = true, precision = 14, scale = 2, defaultValue = "0", label="Valor do produto")
     private BigDecimal vlProduto;
 

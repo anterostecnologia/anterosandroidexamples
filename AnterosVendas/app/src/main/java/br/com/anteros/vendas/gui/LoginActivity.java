@@ -67,6 +67,8 @@ import br.com.anteros.vendas.R;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
+ * Activity responsável pelo login da aplicação;
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -75,20 +77,25 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, View.OnClickListener, OnLoginListener, OnLogoutListener {
 
+    /**
+     * Dados da aplicação cadastrados no Instragram.
+     */
     public static final String CLIENT_ID = "93a34b2080a34ccbadf58fe98595849b";
     public static final String CLIENT_SECRET = "8cd89592ce8c45d7869fc81164856726";
     public static final String REDIRECT_URL = "http://www.anteros.com.br";
+
+
     private static final int REQUEST_READ_CONTACTS = 0;
 
 
     public static final String SENHA = "SENHA";
     public static final String USUARIO = "USUARIO";
 
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private FloatingActionButton mBtnFacebook;
-    private FloatingActionButton mBtnGoogle;
-    private FloatingActionButton mBtnInstagram;
+    private AutoCompleteTextView login;
+    private EditText senha;
+    private FloatingActionButton btnFacebook;
+    private FloatingActionButton btnGoogle;
+    private FloatingActionButton btnInstagram;
     public static AnterosSocialNetwork anterosGoogle;
     public static AnterosSocialNetwork anterosFacebook;
     public static AnterosSocialNetwork anterosInstagram;
@@ -105,15 +112,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        login = (AutoCompleteTextView) findViewById(R.id.email);
+        carregarAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        senha = (EditText) findViewById(R.id.password);
+        senha.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    executaLogin();
                     return true;
                 }
                 return false;
@@ -121,21 +128,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         FloatingActionButton mEmailSignInButton = (FloatingActionButton) findViewById(R.id.main_search_floatLogin);
+        /**
+         * Atribui evento responsável por executar o login.
+         */
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                executaLogin();
             }
         });
 
 
-        mBtnFacebook = (FloatingActionButton) findViewById(R.id.activity_login_floatFacebook);
-        mBtnGoogle = (FloatingActionButton) findViewById(R.id.activity_login_floatGoogle);
-        mBtnInstagram = (FloatingActionButton) findViewById(R.id.activity_login_floatInstagram);
+        btnFacebook = (FloatingActionButton) findViewById(R.id.activity_login_floatFacebook);
+        btnGoogle = (FloatingActionButton) findViewById(R.id.activity_login_floatGoogle);
+        btnInstagram = (FloatingActionButton) findViewById(R.id.activity_login_floatInstagram);
 
-        mBtnFacebook.setOnClickListener(this);
-        mBtnGoogle.setOnClickListener(this);
-        mBtnInstagram.setOnClickListener(this);
+        /**
+         * Atribui o evento de onClick no botões de rede social
+         */
+        btnFacebook.setOnClickListener(this);
+        btnGoogle.setOnClickListener(this);
+        btnInstagram.setOnClickListener(this);
 
         anterosFacebook = AnterosFacebook.create(new AnterosFacebookConfiguration.Builder()
                 .onLoginListener(this)
@@ -152,19 +165,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .clientId(CLIENT_ID).clientSecret(CLIENT_SECRET).redirectURL(REDIRECT_URL).scope(null)
                 .activity(this).build());
 
-        carregarUsuarioSenha();
+        /**
+         * Carrega usuário e senha salvo nas preferências.
+         */
+        carregarLoginSenha();
 
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
+    /**
+     * Carrega o autocomplete
+     */
+    private void carregarAutoComplete() {
+        if (!verificaSePodeUsarContatos()) {
             return;
         }
 
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private boolean mayRequestContacts() {
+    /**
+     * Verifica se tem permissão para usar os contatos no autocomplete do e-mail
+     * @return
+     */
+    private boolean verificaSePodeUsarContatos() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
@@ -172,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(login, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -187,91 +210,119 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * Callback received when a permissions request has been completed.
+     * Evento que recebe resultado da requisição de permissões
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        /**
+         * Se tem permissão para ler os contatos carrega no autocomplete
+         */
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
+                carregarAutoComplete();
             }
         }
     }
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Executa o login
      */
-    private void attemptLogin() {
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+    private void executaLogin() {
+        login.setError(null);
+        senha.setError(null);
 
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        /**
+         * Obtém os valores do login e senha
+         */
+        String login = this.login.getText().toString();
+        String password = senha.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+        /**
+         * Valida campos
+          */
+        if (!TextUtils.isEmpty(password) && !isSenhaValida(password)) {
+            senha.setError(getString(R.string.error_invalid_password));
+            focusView = senha;
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        /**
+         * Verifica se o login(e-mail) é valido
+          */
+        if (TextUtils.isEmpty(login)) {
+            this.login.setError(getString(R.string.error_field_required));
+            focusView = this.login;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isEmailValido(login)) {
+            this.login.setError(getString(R.string.error_invalid_email));
+            focusView = this.login;
             cancel = true;
         }
 
         if (cancel) {
             focusView.requestFocus();
         } else {
-            validarUsuarioSenha();
-            salvarUsuarioSenha();
+            /**
+             * Valida o usuário e senha
+             */
+            validarLoginSenha();
+            /**
+             * Salva dados nas preferências
+             */
+            salvarLoginSenha();
+            /**
+             * Inicia o MenuActivity.
+             */
             startActivity(new Intent(LoginActivity.this, MenuActivity.class));
+            /**
+             * Finaliza o login.
+             */
             finish();
         }
     }
 
-    private void salvarUsuarioSenha() {
+    /**
+     * Salva o login e senha nas preferências
+     */
+    private void salvarLoginSenha() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        if (StringUtils.isNotEmpty(mEmailView.getText()+"")) {
-            editor.putString(USUARIO, mEmailView.getText() + "");
+        if (StringUtils.isNotEmpty(login.getText()+"")) {
+            editor.putString(USUARIO, login.getText() + "");
         }
-        if (StringUtils.isNotEmpty(mPasswordView.getText()+"")) {
-            editor.putString(SENHA, mPasswordView.getText() + "");
+        if (StringUtils.isNotEmpty(senha.getText()+"")) {
+            editor.putString(SENHA, senha.getText() + "");
         }
 
         editor.commit();
     }
 
-    private void carregarUsuarioSenha() {
+    /**
+     * Carrega o login e senha salvo nas preferências
+     */
+    private void carregarLoginSenha() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        mEmailView.setText(sharedPref.getString(USUARIO, mEmailView.getText() + ""));
-        mPasswordView.setText(sharedPref.getString(SENHA, mPasswordView.getText() + ""));
+        login.setText(sharedPref.getString(USUARIO, login.getText() + ""));
+        senha.setText(sharedPref.getString(SENHA, senha.getText() + ""));
     }
 
-    private void validarUsuarioSenha() {
+    /**
+     * Fazer aqui a validação do login e senha
+     */
+    private void validarLoginSenha() {
 
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean isEmailValido(String email) {
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
+    private boolean isSenhaValida(String password) {
         return password.length() > 4;
     }
 
@@ -297,7 +348,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        adicionaEmailsNoAutoComplete(emails);
     }
 
     @Override
@@ -305,36 +356,55 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void adicionaEmailsNoAutoComplete(List<String> emailAddressCollection) {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        login.setAdapter(adapter);
     }
 
+    /**
+     * Evento para tratar onClick nos botões da rede social.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_login_floatFacebook:
+                /**
+                 * Executa o login no Facebook
+                 */
                 loginType = LOGIN_FACEBOOK;
                 anterosFacebook.login();
                 break;
             case R.id.activity_login_floatGoogle:
+                /**
+                 * Executa o login no Google
+                 */
                 loginType = LOGIN_GOOGLE;
                 anterosGoogle.login();
                 break;
             case R.id.activity_login_floatInstagram:
+                /**
+                 * Executa o login no Instagram
+                 */
                 loginType = LOGIN_INSTAGRAM;
                 anterosInstagram.login();
                 break;
         }
     }
 
+    /**
+     * Evento ocorre quando executou o login em uma rede social.
+     */
     @Override
     public void onLogin() {
         switch (loginType){
             case LOGIN_FACEBOOK:
+                /**
+                 * Busca o perfil do usuário no Facebook.
+                 */
                 anterosFacebook.getProfile(new OnProfileListener() {
 
                     @Override
@@ -366,6 +436,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
                 break;
             case LOGIN_GOOGLE:
+                /**
+                 * Busca o perfil do usuário no Google
+                 */
                 anterosGoogle.getProfile(new OnProfileListener() {
 
                     @Override
@@ -397,6 +470,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
                 break;
             case LOGIN_INSTAGRAM:
+                /**
+                 * Busca o perfil do usuário no Instagram.
+                 */
                 anterosInstagram.getProfile(new OnProfileListener() {
 
                     @Override
@@ -433,24 +509,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    /**
+     * Se o login foi cancelado.
+     */
     @Override
     public void onCancel() {
 
     }
 
+    /**
+     * Se ocorreu um erro no login
+     * @param throwable Erro
+     */
     @Override
     public void onFail(Throwable throwable) {
 
     }
 
+    /**
+     * Se executou logout na rede social.
+     */
     @Override
     public void onLogout() {
 
     }
 
+    /**
+     * Evento que ocorre quando retorna o resultado de outra activity.
+     * @param requestCode Código da requisição
+     * @param resultCode Código do resultado.
+     * @param data Dados
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        /**
+         * Redireciona resultado para redes socias realizarem o tratamento.
+         */
         anterosFacebook.onActivityResult(requestCode, resultCode, data);
         anterosGoogle.onActivityResult(requestCode, resultCode, data);
         anterosInstagram.onActivityResult(requestCode, resultCode, data);

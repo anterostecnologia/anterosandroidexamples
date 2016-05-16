@@ -27,9 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
-import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
 import br.com.anteros.persistence.metadata.annotation.Column;
@@ -71,14 +69,14 @@ public class PedidoVenda implements Serializable, Parcelable {
     /*
      * Número do pedido
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "NR_PEDIDO", length = 8, required = true, label = "Nr.pedido")
     private Long nrPedido;
 
     /*
      * Data do pedido
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Temporal(TemporalType.DATE)
     @Past
     @Column(name = "DT_PEDIDO", required = true, label = "Data do pedido")
@@ -87,7 +85,7 @@ public class PedidoVenda implements Serializable, Parcelable {
     /*
      * Cliente a qual pertence o pedido
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @ForeignKey
     @Column(name = "ID_CLIENTE", required = true, label = "Cliente")
     private Cliente cliente;
@@ -95,14 +93,14 @@ public class PedidoVenda implements Serializable, Parcelable {
     /*
      * Valor total do pedido
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Column(name = "VL_TOTAL_PEDIDO", required = true, defaultValue = "0", precision = 14, scale = 2, label = "Valor total do pedido")
     private BigDecimal vlTotalPedido;
 
     /*
      * Condição de pagamento
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Enumerated(EnumType.STRING)
     @Column(name = "TP_CONDICAO_PGTO", length = 20, required = true, label = "Tipo de condição de pagamento")
     private CondicaoPagamento condicaoPagamento;
@@ -110,7 +108,7 @@ public class PedidoVenda implements Serializable, Parcelable {
     /*
      * Forma de pagamento
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Enumerated
     @Column(name = "FORMA_PAGTO", required = true, length = 20, label = "Forma de pagamento")
     private FormaPagamento formaPagamento;
@@ -118,7 +116,7 @@ public class PedidoVenda implements Serializable, Parcelable {
     /*
      * Itens do pedido de venda
      */
-    @Required(groups = {Default.class, ValidacaoCliente.class})
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
     @Fetch(type = FetchType.LAZY, mode = FetchMode.ONE_TO_MANY, mappedBy = "pedidoVenda")
     @Cascade(values = {CascadeType.ALL})
     private List<ItemPedido> itens;

@@ -44,6 +44,8 @@ import br.com.anteros.vendas.modelo.ItemPedido;
 import br.com.anteros.vendas.modelo.Produto;
 
 /**
+ * Dialog responsável pela consulta de produtos de dentro do pedido.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -51,6 +53,9 @@ import br.com.anteros.vendas.modelo.Produto;
  */
 public class ProdutoConsultaDialog extends DialogFragment {
 
+    /**
+     * Repositório do produto
+     */
     private SQLRepository<Produto, Long> produtoRepository;
     private ListView listView;
     private ProdutoConsultaAdapter adapter;
@@ -63,12 +68,20 @@ public class ProdutoConsultaDialog extends DialogFragment {
         listView = (ListView) v.findViewById(R.id.produto_consulta_dialog_list_view);
 
 
+        /**
+         * Obtém o repositório e busca a lista de produtos
+         */
         produtoRepository = AnterosVendasContext.getInstance().getSQLRepository(Produto.class);
-        List<Produto> produtos = produtoRepository.find("SELECT PRO.* FROM PRODUTO PRO");
+        List<Produto> produtos = produtoRepository.find("SELECT PRO.* FROM OPCAO_PRODUTO PRO");
+        /**
+         * Cria o adapter e atribui a lista
+         */
         adapter = new ProdutoConsultaAdapter(getContext(), produtos);
-
         listView.setAdapter(adapter);
 
+        /**
+         * Configura botão selecionou produtos
+         */
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -88,15 +101,24 @@ public class ProdutoConsultaDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
+        /**
+         * Remove título da dialog.
+         */
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }
 
+    /**
+     * Seleciona os produtos.
+     */
     public void selecionarProdutos() {
-        List<Produto> selectedItens = adapter.getSelectedItens();
+        List<Produto> selectedItens = adapter.getItensSelecionados();
         List<ItemPedido> pedidoItens = PedidoConsultaActivity.pedido.getItens();
         List<Produto> itensDeleted = new ArrayList<>();
 
+        /**
+         * Adiciona os itens selecionados no pedido
+         */
         if (!pedidoItens.isEmpty()) {
             for (ItemPedido item : pedidoItens) {
                 for (Produto prod: selectedItens) {
@@ -133,7 +155,13 @@ public class ProdutoConsultaDialog extends DialogFragment {
                 pedidoItens.add(item);
             }
         }
+        /**
+         * Atribui os itens no pedido
+         */
         PedidoConsultaActivity.pedido.setItens(pedidoItens);
+        /**
+         * Fecha dialog.
+         */
         dismiss();
     }
 

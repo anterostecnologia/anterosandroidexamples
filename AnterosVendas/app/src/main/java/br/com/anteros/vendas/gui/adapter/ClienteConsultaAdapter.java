@@ -38,6 +38,8 @@ import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Cliente;
 
 /**
+ * Adapter responsável por mostrar a consulta de clientes.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -49,30 +51,55 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
         super(context, R.layout.cliente_consulta_item, objects);
     }
 
+    /**
+     * Retorna a view para apresentação na lista
+     * @param position Posição dentro da view
+     * @param convertView View
+     * @param parent View pai
+     * @return View criada
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /**
+         * Cria a view com o layout da consulta de cliente.
+         */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.cliente_consulta_item, null);
         }
 
+        /**
+         * Obtém o cliente correspondente a posição na lista
+         */
         final Cliente item = (Cliente) getItem(position);
 
+        /**
+         * Obtém os campos dentro do layout
+         */
         TextView tvRazaoCliente = (TextView) convertView.findViewById(R.id.cliente_consulta_item_nomeCliente);
         TextView tvFantasia = (TextView) convertView.findViewById(R.id.cliente_consulta_item_fantasia);
         TextView tvEndereco = (TextView) convertView.findViewById(R.id.cliente_consulta_item_endereco);
         TextView tvCidade = (TextView) convertView.findViewById(R.id.cliente_consulta_item_cidade);
         ImageView imgDelete = (ImageView) convertView.findViewById(R.id.cliente_consulta_item_imgDelete);
 
+        /**
+         * Habilita o removerCliente apenas se o item for diferente de null
+         */
         imgDelete.setEnabled(item != null);
 
+        /**
+         * Atribui o evento onClick para a imagem delete
+         */
         imgDelete.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-                delete(item);
+                removerCliente(item);
             }
         });
 
+        /**
+         * Se o item não for nulo atribui os valores nos campos da view
+         */
         if (item != null) {
             tvRazaoCliente.setText(item.getId() + " - " + item.getRazaoSocial());
             tvFantasia.setText(item.getNomeFantasia());
@@ -83,24 +110,48 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
         return convertView;
     }
 
-    protected void delete(final Cliente cliente) {
+
+    /**
+     * Remove o cliente
+     * @param cliente Cliente
+     */
+    protected void removerCliente(final Cliente cliente) {
         new QuestionAlert(getContext(), getContext().getString(
-                R.string.app_name), "Remover Cliente ?",
+                R.string.app_name), "Remover o cliente ?",
                 new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
+                        /**
+                         * Obtém um repositório para remover o cliente.
+                         */
                         SQLRepository<Cliente, Long> clienteRepository = AnterosVendasContext.getInstance().getSQLRepository(Cliente.class);
 
                         try {
+                            /**
+                             * Busca o objeto cliente completo para remover já que o objeto que está na lista
+                             * do adapter é parcial
+                             */
                             Cliente cli = clienteRepository.findOne(
-                                    "SELECT P.* FROM CLIENTE P WHERE P.ID_CLIENTE = :PID_CLIENTE",
+                                    "SELECT P.* FROM OPCAO_CLIENTE P WHERE P.ID_CLIENTE = :PID_CLIENTE",
                                     new NamedParameter("PID_CLIENTE", cliente.getId()));
 
+                            /**
+                             * Inicia a transação e remove o cliente
+                             */
                             clienteRepository.getTransaction().begin();
                             clienteRepository.remove(cli);
+                            /**
+                             * Realiza o commit na transação
+                             */
                             clienteRepository.getTransaction().commit();
 
+                            /**
+                             * Remove o cliente da lista do adapter
+                             */
                             remove(cliente);
+                            /**
+                             * Notifica o adapter que a lista mudou
+                             */
                             notifyDataSetChanged();
 
                         } catch (Exception e) {

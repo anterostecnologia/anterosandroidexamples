@@ -60,6 +60,8 @@ import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
 
 /**
+ * Acitivity para o cadastro de anexos do cliente.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -67,19 +69,33 @@ import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
  */
 public class AnexoCadastroActivity extends AppCompatActivity implements AdapterView.OnLongClickListener, View.OnClickListener {
 
-    private static final int NAO_ALTEROU_ANEXO = 0;
+    /**
+     * Constantes dos códigos de resultados a chamadas de outras activities.
+     */
+    public static final int NAO_ALTEROU_ANEXO = 0;
     public static final int ALTEROU_ANEXO = 1;
-    private static final int TIRAR_FOTO = 2;
-    private static final int SELECIONAR_ARQUIVO = 3;
+    public static final int TIRAR_FOTO = 2;
+    public static final int SELECIONAR_ARQUIVO = 3;
+
     public static final String ANTEROSVENDAS_ANEXO = "/anterosvendas/anexo";
+    /**
+     * Objeto Anexo sendo editado
+     */
     private static Anexo anexo;
+    /**
+     * Controles visuais
+     */
     private ImageView imgVisualizar;
     private ImageView imgFoto;
     private EditText edDescricao;
-    private Uri mUri;
     private Bitmap fotoGaleria;
+
+    /**
+     * Dados do arquivo para captura da câmera.
+     */
     private String filePath;
     private String fileName;
+    private Uri mUri;
 
 
     @Override
@@ -94,22 +110,37 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
 
+        /**
+         * Obtém os controles visuais do layout
+         */
         edDescricao = (EditText) findViewById(R.id.anexo_edDescricao);
 
+        /**
+         * Atribui os eventos
+         */
         imgFoto = (ImageView) findViewById(R.id.anexo_imgFoto);
         imgFoto.setOnLongClickListener(this);
 
         imgVisualizar = (ImageView) findViewById(R.id.anexo_imgVisualizar);
         imgVisualizar.setOnClickListener(this);
 
-        filePath = getFilePath();
+        /**
+         * Inicia os dados do arquivo
+         */
+        filePath = getCaminhoArquivo();
         fileName = getFileName();
-        mUri = getUriFile();
+        mUri = getUriArquivo();
 
-        bindView();
+        /**
+         * Carrega os dados na view
+         */
+        carregaDadosParaView();
     }
 
-    private void bindView() {
+    /**
+     * Carrega os dados do objeto Anexo na view.
+     */
+    private void carregaDadosParaView() {
         edDescricao.setText(anexo.getNome());
 
         File imgFile = null;
@@ -122,7 +153,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         }
 
         if (imgFile.exists()) {
-            setImageFileToFotoGaleria(imgFile);
+            atribuiImageParaFotoGaleria(imgFile);
             imgFoto.setImageBitmap(fotoGaleria);
             imgVisualizar.setEnabled(true);
         } else {
@@ -130,9 +161,17 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
             imgVisualizar.setEnabled(false);
         }
 
+        /**
+         * Obtém a URI referente ao arquivo anexo
+         */
         mUri = Uri.fromFile(imgFile);
     }
 
+    /**
+     * Cria as opções no menu
+     * @param menu Menu
+     * @return True se criou
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
@@ -147,16 +186,25 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         return true;
     }
 
+    /**
+     * Evento quando um item do menu foi clicado
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                /**
+                 * Volta para tela anterior. Se estiver editando pergunta
+                 * ao usuário se deseja cancelar.
+                 */
                 new QuestionAlert(this, getResources().getString(
                         R.string.app_name), "Cancelar anexo ?",
                         new QuestionAlert.QuestionListener() {
 
                             public void onPositiveClick() {
-                                cancela();
+                                cancelaEdicaoAnexo();
                             }
 
                             public void onNegativeClick() {
@@ -167,24 +215,37 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                 break;
 
             case R.id.cliente_cadastro_action_upload:
-                opcoesUpload();
+                /**
+                 * Chama o método para anexar arquivos.
+                 */
+                anexarArquivos();
                 break;
 
             case R.id.cliente_cadastro_action_camera:
+                /**
+                 * Verifica se App possuí permissão para usar a câmera e gravar arquivos. Se não tiver
+                 * requisita permissão.
+                 */
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                 } else {
+                    /**
+                     * Se já tem permissão inicia a câmera.
+                     */
                     iniciaCamera();
                 }
                 break;
 
             case R.id.cliente_cadastro_action_salvar:
+                /**
+                 * Pergunta ao usuário se deseja salvar o anexo.
+                 */
                 new QuestionAlert(this,
                         getResources().getString(R.string.app_name),
                         "Salvar Anexo ?", new QuestionAlert.QuestionListener() {
 
                     public void onPositiveClick() {
-                        salva();
+                        salvarAnexo();
                     }
 
                     public void onNegativeClick() {
@@ -196,33 +257,71 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         return true;
     }
 
+    /**
+     * Evento long click para iniciar captura de imagem da câmera. Não foi usado onClick pois já foi
+     * usado na imagem de visualizar para ver o anexo.
+     * @param v View
+     * @return True se executou
+     */
     @Override
     public boolean onLongClick(View v) {
+        /**
+         * Verifica se App possuí permissão para usar a câmera e gravar arquivos. Se não tiver
+         * requisita permissão.
+         */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         } else {
+            /**
+             * Se já tem permissão inicia a câmera.
+             */
             iniciaCamera();
         }
         return false;
     }
 
+    /**
+     * Evento que ocorre quando o usuário confirmou a requisição de permissão.
+     * @param requestCode Código da requisição
+     * @param permissions Permissões
+     * @param grantResults Grants
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        /**
+         * Se requestcode for igual 0(Zero) ele confirmou requisição
+         */
         if (requestCode == 0) {
+            /**
+             * Verifica se ele aceitou a requisição com as permissões.
+             */
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                /**
+                 * Se já tem permissão inicia a câmera.
+                 */
                 iniciaCamera();
             }
         }
     }
 
+    /**
+     * Evento atribuido a imagem para visualizar o anexo.
+     * @param v View
+     */
     @Override
     public void onClick(View v) {
+        /**
+         * Se clicou na imagem abre o anexo.
+         */
         if (v == imgVisualizar) {
             abrirAnexo(mUri);
         }
     }
 
+    /**
+     * Evento que ocorre quando a Activity é destruida. Aqui destruímos a foto.
+     */
     @Override
     protected void onDestroy() {
         try {
@@ -236,8 +335,17 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         super.onDestroy();
     }
 
+    /**
+     * Evento que retorna o resultado da chamada de outras activities.
+     * @param requestCode Código da requisição
+     * @param resultCode Código do resultado
+     * @param data Dados
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * Se a requisção era para tira foto.
+         */
         if (requestCode == TIRAR_FOTO) {
             if (resultCode == RESULT_OK) {
                 try {
@@ -249,6 +357,9 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                             + e.getMessage()).show();
                 }
             }
+            /**
+             * Se a requisição era para selecionar arquivo
+             */
         } else if (requestCode == SELECIONAR_ARQUIVO) {
             if (resultCode == RESULT_OK) {
                 try {
@@ -265,14 +376,23 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
 
+    /**
+     * Se clicou no botão voltar para sair da Activity.
+     * @param keyCode Tecla pressionada
+     * @param event Evento
+     * @return true se OK
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            /**
+             * Pergunta ao usuário se deseja cancelar a edição do anexo.
+             */
             new QuestionAlert(this, getResources().getString(
-                    R.string.app_name), "Cancelar Anexo?",
+                    R.string.app_name), "Cancelar o anexo?",
                     new QuestionAlert.QuestionListener() {
                         public void onPositiveClick() {
-                            cancela();
+                            cancelaEdicaoAnexo();
                         }
 
                         public void onNegativeClick() {
@@ -284,7 +404,11 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         return super.onKeyDown(keyCode, event);
     }
 
-    private String getFilePath() {
+    /**
+     * Devolve o caminho do arquivo do anexo.
+     * @return
+     */
+    private String getCaminhoArquivo() {
         if (filePath == null) {
             filePath = Environment.getExternalStorageDirectory() + ANTEROSVENDAS_ANEXO;
             File path = new File(filePath);
@@ -295,26 +419,40 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         return filePath;
     }
 
+    /**
+     * Cria um novo nome de arquivo para o anexo.
+     * @return Nome do arquivo
+     */
     public String getFileName() {
         return "img_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
                 .format(new Date()) + ".png";
     }
 
-    private Uri getUriFile() {
-        File f = new File(getFilePath(), getFileName());
+    /**
+     * Retorna a URI do arquivo de anexo.
+     * @return
+     */
+    private Uri getUriArquivo() {
+        File f = new File(getCaminhoArquivo(), getFileName());
         return Uri.fromFile(f);
     }
 
+    /**
+     * Inicia a câmera para captura da imagem de anexo.
+     */
     private void iniciaCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
         startActivityForResult(takePictureIntent, TIRAR_FOTO);
     }
 
-    private void opcoesUpload() {
+    /**
+     * Anexar arquivos
+     */
+    private void anexarArquivos() {
         String items[] = {"Imagem", "Outros tipos"};
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
-        ab.setTitle("Upload de arquivos");
+        ab.setTitle("Seleção de arquivos");
         ab.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface d, int choice) {
                 if (choice == 0) {
@@ -327,6 +465,9 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         ab.show();
     }
 
+    /**
+     * Seleciona um arquivo do tipo imagem para anexar
+     */
     private void selecionarImagem() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -335,6 +476,9 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                 SELECIONAR_ARQUIVO);
     }
 
+    /**
+     * Seleciona outros tipos de arquivos para anexar
+     */
     private void selecionarOutrosTiposArquivo() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -343,13 +487,13 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         startActivityForResult(Intent.createChooser(intent, "Selecione"), SELECIONAR_ARQUIVO);
     }
 
-    private void setImageFileToFotoGaleria(File file) {
+    private void atribuiImageParaFotoGaleria(File file) {
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
         TipoConteudoAnexo tipoConteudoAnexo = TipoConteudoAnexo.getTipoConteudoAnexoPorExtensao(extension);
 
         switch (tipoConteudoAnexo) {
             case IMAGEM:
-                fotoGaleria = ImageUtils.loadScaledImage(file.getPath(), 300, 200);
+                fotoGaleria = ImageUtils.loadScaledImage(file.getPath(), 640, 480);
                 break;
             case PDF:
                 fotoGaleria = BitmapFactory.decodeResource(getResources(), R.drawable.ic_file_extension_pdf);
@@ -384,12 +528,18 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    protected void cancela() {
+    /**
+     * Cancela edição do anexo
+     */
+    protected void cancelaEdicaoAnexo() {
         setResult(NAO_ALTEROU_ANEXO);
         finish();
     }
 
-    protected void salva() {
+    /**
+     * Salva o anexo e finaliza retornando que ALTEROU_ANEXO
+     */
+    protected void salvarAnexo() {
         File file = AndroidFileUtils.getFile(this, mUri);
         if (edDescricao.getText().length() == 0) {
             new ErrorAlert(this, getResources().getString(R.string.app_name),
@@ -412,11 +562,20 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    private TipoConteudoAnexo getTipoConteudoAnexo(String path) {
-        String extension = FilenameUtils.getExtension(path);
+    /**
+     * Retorna tipo do conteúdo do anexo
+     * @param caminho Caminho do arquivo
+     * @return Tipo de conteúdo
+     */
+    private TipoConteudoAnexo getTipoConteudoAnexo(String caminho) {
+        String extension = FilenameUtils.getExtension(caminho);
         return TipoConteudoAnexo.getTipoConteudoAnexoPorExtensao(extension);
     }
 
+    /**
+     * Abre o anexo pela URI do arquivo anexado para visualização.
+     * @param mUri
+     */
     private void abrirAnexo(Uri mUri) {
         String extension = FilenameUtils.getExtension(AndroidFileUtils.getPath(AnexoCadastroActivity.this, mUri));
         try {
@@ -444,14 +603,25 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    public static void setAnexo(Anexo anex) {
-        anexo = anex;
+    /**
+     * Atribui o objeto estático anexo
+     * @param anexo
+     */
+    public static void setAnexo(Anexo anexo) {
+        AnexoCadastroActivity.anexo = anexo;
     }
 
+    /**
+     * Retorna o objeto estático anexo
+     * @return Anexo
+     */
     public static Anexo getAnexo() {
         return anexo;
     }
 
+    /**
+     * AsynTask para salvar o anexo.
+     */
     public class SalvaArquivoAnexo extends AsyncTask<Integer, Void, String> {
 
         private ProgressDialog progressDialog;
@@ -470,19 +640,31 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
             try {
                 int requestCode = params[0];
                 if (requestCode == TIRAR_FOTO) {
-                    fotoGaleria = ImageUtils.resizeAndStorageImage(mUri.getEncodedPath(), 800, 600);
+                    /**
+                     * Redimensiona a imagem para 640x480
+                     */
+                    fotoGaleria = ImageUtils.resizeAndStorageImage(mUri.getEncodedPath(), 640, 480);
                 } else if (requestCode == SELECIONAR_ARQUIVO) {
+                    /**
+                     * Obtém o arquivo selecionado e salva com novo nome para anexar.
+                     */
                     File sourceFile = AndroidFileUtils.getFile(AnexoCadastroActivity.this, mUri);
                     File destinationFile = new File(filePath, getFileName());
 
                     if (!sourceFile.exists())
-                        throw new RuntimeException("Arquivo de origem não encontrado! Source path["
+                        throw new RuntimeException("Arquivo de origem não encontrado. Caminho["
                                 + sourceFile.getPath() + "]");
 
+                    /**
+                     * Copia arquivo de origem para o novo arquivo
+                     */
                     FileUtils.copyFile(sourceFile, destinationFile);
                     mUri = Uri.fromFile(destinationFile);
 
-                    setImageFileToFotoGaleria(destinationFile);
+                    /**
+                     * Atribui a imagem para a foto galeria para visualizar.
+                     */
+                    atribuiImageParaFotoGaleria(destinationFile);
                 }
                 return null;
             } catch (Exception e) {

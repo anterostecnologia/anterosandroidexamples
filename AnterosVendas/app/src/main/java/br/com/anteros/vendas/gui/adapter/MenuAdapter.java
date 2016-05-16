@@ -30,6 +30,8 @@ import br.com.anteros.vendas.MenuItem;
 import br.com.anteros.vendas.R;
 
 /**
+ * Adapter responsável por apresenta a lista de opções do menu.
+ *
  * @author Eduardo Greco (eduardogreco93@gmail.com)
  *         Eduardo Albertini (albertinieduardo@hotmail.com)
  *         Edson Martins (edsonmartins2005@gmail.com)
@@ -41,9 +43,19 @@ public class MenuAdapter extends ArrayAdapter<MenuItem> {
         super(context, textViewResourceId, lista);
     }
 
+    /**
+     * Retorna a view para apresentação na lista
+     * @param position Posição dentro da view
+     * @param convertView View
+     * @param parent View pai
+     * @return View criada
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        /**
+         * Cria a view com o layout da menu.
+         */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,8 +63,14 @@ public class MenuAdapter extends ArrayAdapter<MenuItem> {
             convertView = inflater.inflate(R.layout.menu_item, null);
         }
 
+        /**
+         * Obtém o menu item
+         */
         MenuItem item = (MenuItem) getItem(position);
 
+        /**
+         * Se o item não for nulo atribui os valores nos campos da view
+         */
         if (item != null) {
             TextView tvTitulo = (TextView) convertView.findViewById(R.id.menu_item_titulo);
             TextView tvDescricao = (TextView) convertView.findViewById(R.id.menu_item_descricao);
@@ -79,6 +97,11 @@ public class MenuAdapter extends ArrayAdapter<MenuItem> {
         return convertView;
     }
 
+    /**
+     * Retorna o id do MenuItem referente a posição
+     * @param position Posição
+     * @return Id
+     */
     @Override
     public long getItemId(int position) {
         MenuItem item = getItem(position);

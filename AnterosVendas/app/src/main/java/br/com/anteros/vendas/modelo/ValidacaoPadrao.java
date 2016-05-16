@@ -16,9 +16,10 @@
 
 package br.com.anteros.vendas.modelo;
 
-/**
+/** Interface de marcação para validação.
+ *
  * @author Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 09/05/16.
  */
-public interface ValidacaoCliente {
+public interface ValidacaoPadrao {
 }
