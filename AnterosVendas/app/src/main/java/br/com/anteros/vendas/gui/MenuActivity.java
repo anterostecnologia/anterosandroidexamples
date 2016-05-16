@@ -35,7 +35,6 @@ import java.util.List;
 
 import br.com.anteros.android.core.util.GUIUtils;
 import br.com.anteros.android.ui.controls.QuestionAlert;
-import android.support.design.widget.FloatingActionButton;
 import br.com.anteros.social.core.SocialProfile;
 import br.com.anteros.social.core.image.CircularImageView;
 import br.com.anteros.vendas.AnterosVendasContext;
@@ -43,6 +42,12 @@ import br.com.anteros.vendas.MenuItem;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.MenuAdapter;
 
+/**
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 10/05/16.
+ */
 public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
 
     public static final int CLIENTE = 0;
@@ -64,13 +69,6 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         actionBar.setIcon(R.drawable.ic_anteros_logo_toolbar);
 
-        /*
-         * Inicializa o contexto da aplicação de vendas.
-         */
-        AnterosVendasContext.setApplication(this.getApplication());
-
-
-
         gridMenu = (GridView) findViewById(R.id.activity_menu_gridMenu
         );
         gridMenu.setOnItemClickListener(this);
@@ -87,9 +85,10 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
             imgUserSocial.setVisibility(View.INVISIBLE);
         }
 
-
-        //AnterosVendasContext.getInstance().populateDatabase();
-        AnterosVendasContext.getInstance().populateProdutos();
+        /**
+         * Adiciona produtos caso não exista
+         */
+        AnterosVendasContext.getInstance().adicionaProdutos();
     }
 
     private void verificaQtdeColunasPorLinha() {

@@ -20,7 +20,8 @@ import br.com.anteros.persistence.metadata.annotation.EnumValue;
 import br.com.anteros.persistence.metadata.annotation.EnumValues;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 @EnumValues(value = {
         @EnumValue(enumValue = "A_VISTA", value = "A VISTA"),

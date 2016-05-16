@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by eduardogreco on 5/12/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 12/05/16.
  */
 public class PedidoCadastroPageViewAdapter extends FragmentStatePagerAdapter {
     private final List<Fragment> mFragments;

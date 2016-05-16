@@ -32,7 +32,9 @@ import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
 
 /**
- * @author Eduardo Albertini (albertinieduardo@hotmail.com)
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 11/05/16.
  */
 public class SplashActivity extends AppCompatActivity {

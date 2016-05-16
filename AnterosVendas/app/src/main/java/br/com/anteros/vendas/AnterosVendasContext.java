@@ -53,7 +53,8 @@ import br.com.anteros.vendas.modelo.Produto;
 import br.com.anteros.vendas.modelo.TipoLogradouro;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 public class AnterosVendasContext {
 
@@ -172,7 +173,7 @@ public class AnterosVendasContext {
         return repository;
     }
 
-    public void populateProdutos() {
+    public void adicionaProdutos() {
 
         try {
             getSession().getTransaction().begin();

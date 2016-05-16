@@ -45,7 +45,10 @@ import br.com.anteros.vendas.gui.PedidoConsultaActivity;
 import br.com.anteros.vendas.modelo.ItemPedido;
 
 /**
- * Created by eduardogreco on 5/13/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 13/05/16.
  */
 public class PedidoCadastroItensFragmentAdapter extends AnterosArrayAdapterWithViewHolder<ItemPedido> {
 

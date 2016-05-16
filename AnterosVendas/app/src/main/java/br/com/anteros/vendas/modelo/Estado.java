@@ -17,7 +17,8 @@
 package br.com.anteros.vendas.modelo;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 public enum Estado {
     AC, AL, AM, AP, BA, CE, DF, ES, GO,

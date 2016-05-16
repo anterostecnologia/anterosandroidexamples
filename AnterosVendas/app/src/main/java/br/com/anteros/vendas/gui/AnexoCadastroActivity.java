@@ -60,7 +60,10 @@ import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
 
 /**
- * Created by eduardogreco on 5/13/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 13/05/16.
  */
 public class AnexoCadastroActivity extends AppCompatActivity implements AdapterView.OnLongClickListener, View.OnClickListener {
 
@@ -169,7 +172,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
 
             case R.id.cliente_cadastro_action_camera:
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                 } else {
                     iniciaCamera();
                 }
@@ -196,7 +199,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     @Override
     public boolean onLongClick(View v) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         } else {
             iniciaCamera();
         }
@@ -216,7 +219,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onClick(View v) {
         if (v == imgVisualizar) {
-            openAnexo(mUri);
+            abrirAnexo(mUri);
         }
     }
 
@@ -262,7 +265,6 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -294,7 +296,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     }
 
     public String getFileName() {
-        return "img_"+new SimpleDateFormat("yyyyMMdd_HHmmss")
+        return "img_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
                 .format(new Date()) + ".png";
     }
 
@@ -347,7 +349,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
 
         switch (tipoConteudoAnexo) {
             case IMAGEM:
-                fotoGaleria = ImageUtils.loadScaledImage(file.getPath(), 800, 600);
+                fotoGaleria = ImageUtils.loadScaledImage(file.getPath(), 300, 200);
                 break;
             case PDF:
                 fotoGaleria = BitmapFactory.decodeResource(getResources(), R.drawable.ic_file_extension_pdf);
@@ -415,7 +417,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         return TipoConteudoAnexo.getTipoConteudoAnexoPorExtensao(extension);
     }
 
-    private void openAnexo(Uri mUri) {
+    private void abrirAnexo(Uri mUri) {
         String extension = FilenameUtils.getExtension(AndroidFileUtils.getPath(AnexoCadastroActivity.this, mUri));
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);

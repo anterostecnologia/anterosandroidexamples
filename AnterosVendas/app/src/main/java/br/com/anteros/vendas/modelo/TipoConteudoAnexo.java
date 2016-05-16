@@ -17,7 +17,8 @@
 package br.com.anteros.vendas.modelo;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 public enum TipoConteudoAnexo {
     IMAGEM, TEXTO, DOCUMENTO, PLANILHA, APRESENTACAO, PDF, HTML, XML, ZIP, RAR, OUTROS;

@@ -30,6 +30,12 @@ import java.util.Set;
 import br.com.anteros.validation.api.ConstraintViolation;
 import br.com.anteros.vendas.R;
 
+/**
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 12/05/16.
+ */
 public class MensagemErrorDialog<T> extends Dialog implements View.OnClickListener {
 
     private Button btnOK;

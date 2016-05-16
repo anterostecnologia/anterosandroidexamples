@@ -19,7 +19,10 @@ package br.com.anteros.vendas;
 import android.graphics.drawable.Drawable;
 
 /**
- * Created by eduardogreco on 5/10/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 10/05/16.
  */
 public class MenuItem {
     private long id;

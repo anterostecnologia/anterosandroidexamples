@@ -67,8 +67,12 @@ import br.com.anteros.vendas.R;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 12/05/16.
  */
+
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, View.OnClickListener, OnLoginListener, OnLogoutListener {
 
     public static final String CLIENT_ID = "93a34b2080a34ccbadf58fe98595849b";
@@ -464,7 +468,3 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
 }
-
-
-
-//AIzaSyBYNhvlP8I93E1GhYKH3cVtU3UToZquWok

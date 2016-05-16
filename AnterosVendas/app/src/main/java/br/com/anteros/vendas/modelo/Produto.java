@@ -35,7 +35,8 @@ import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.validation.api.groups.Default;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 @Entity
 @Table(name = "PRODUTO")

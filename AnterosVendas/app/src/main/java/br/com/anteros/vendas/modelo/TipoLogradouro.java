@@ -20,7 +20,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by edson on 09/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 public enum TipoLogradouro {
 

@@ -30,8 +30,12 @@ import android.widget.TextView;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.gui.adapter.PedidoCadastroItensFragmentAdapter;
 
+
 /**
- * Created by eduardogreco on 5/12/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 12/05/16.
  */
 public class PedidoCadastroItensFragment extends Fragment {
 

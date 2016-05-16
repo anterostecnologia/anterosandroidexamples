@@ -49,7 +49,10 @@ import br.com.anteros.vendas.modelo.TipoLogradouro;
 import br.com.anteros.vendas.modelo.ValidacaoCliente;
 
 /**
- * Created by eduardogreco on 5/10/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 10/05/16.
  */
 public class ClienteCadastroActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 

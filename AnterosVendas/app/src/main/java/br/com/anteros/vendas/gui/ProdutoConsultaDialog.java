@@ -44,7 +44,10 @@ import br.com.anteros.vendas.modelo.ItemPedido;
 import br.com.anteros.vendas.modelo.Produto;
 
 /**
- * Created by eduardogreco on 5/12/16.
+ * @author Eduardo Greco (eduardogreco93@gmail.com)
+ *         Eduardo Albertini (albertinieduardo@hotmail.com)
+ *         Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 12/05/16.
  */
 public class ProdutoConsultaDialog extends DialogFragment {
 

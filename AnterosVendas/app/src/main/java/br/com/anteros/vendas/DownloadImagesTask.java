@@ -29,7 +29,8 @@ import java.util.List;
 import br.com.anteros.core.utils.IOUtils;
 
 /**
- * Created by edson on 12/05/16.
+ * @author Edson Martins (edsonmartins2005@gmail.com)
+ *         Data: 09/05/16.
  */
 public class DownloadImagesTask extends AsyncTask<String,String,List<byte[]>> {
     @Override
