@@ -101,7 +101,7 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
          * Se o item não for nulo atribui os valores nos campos da view
          */
         if (item != null) {
-            tvDescricaoPedido.setText("OPCAO_PEDIDO NR. " + item.getNrPedido());
+            tvDescricaoPedido.setText("PEDIDO NR. " + item.getNrPedido());
             tvDataPedido.setText(DateUtil.toStringDateDMA(item.getDtPedido()));
             tvCliente.setText(item.getCliente().getId() + " - " + item.getCliente().getRazaoSocial());
             tvCondicao.setText(item.getCondicaoPagamento().name());
