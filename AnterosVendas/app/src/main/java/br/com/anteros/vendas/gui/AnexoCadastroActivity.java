@@ -55,6 +55,7 @@ import br.com.anteros.android.core.util.AndroidFileUtils;
 import br.com.anteros.android.core.util.ImageUtils;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.core.utils.StringUtils;
 import br.com.anteros.vendas.R;
 import br.com.anteros.vendas.modelo.Anexo;
 import br.com.anteros.vendas.modelo.TipoConteudoAnexo;
@@ -88,7 +89,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
     private ImageView imgVisualizar;
     private ImageView imgFoto;
     private EditText edDescricao;
-    private Bitmap fotoGaleria;
+    private static Bitmap fotoGaleria;
 
     /**
      * Dados do arquivo para captura da câmera.
@@ -127,8 +128,15 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         /**
          * Inicia os dados do arquivo
          */
-        filePath = getCaminhoArquivo();
-        fileName = getFileName();
+        if ((anexo !=null) && (StringUtils.isNotEmpty(anexo.getConteudoPath()))) {
+               File file = new File(anexo.getConteudoPath());
+            filePath = file.getAbsolutePath();
+            fileName = file.getName();
+        } else {
+            filePath = getCaminhoArquivo();
+            fileName = getFileName();
+        }
+
         mUri = getUriArquivo();
 
         /**
@@ -317,22 +325,6 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
         if (v == imgVisualizar) {
             abrirAnexo(mUri);
         }
-    }
-
-    /**
-     * Evento que ocorre quando a Activity é destruida. Aqui destruímos a foto.
-     */
-    @Override
-    protected void onDestroy() {
-        try {
-            if (fotoGaleria != null && !fotoGaleria.isRecycled()) {
-                fotoGaleria.recycle();
-                fotoGaleria = null;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        super.onDestroy();
     }
 
     /**
@@ -552,14 +544,17 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                     "O arquivo selecionado não foi encontrado.").show();
         } else {
 
-            anexo.setNome(edDescricao.getText().toString());
-            anexo.setConteudoPath(file.getAbsolutePath());
-            anexo.setNome(getFileName());
-            anexo.setTipoConteudo(getTipoConteudoAnexo(anexo.getConteudoPath()));
+            salvarDadosAnexo(file);
 
             setResult(ALTEROU_ANEXO);
             finish();
         }
+    }
+
+    private void salvarDadosAnexo(File file) {
+        anexo.setNome(edDescricao.getText().toString());
+        anexo.setConteudoPath(file.getAbsolutePath());
+        anexo.setTipoConteudo(getTipoConteudoAnexo(anexo.getConteudoPath()));
     }
 
     /**
@@ -679,6 +674,7 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
             if (result == null) {
                 imgFoto.setImageBitmap(fotoGaleria);
                 imgVisualizar.setEnabled(true);
+                salvarDadosAnexo(AndroidFileUtils.getFile(AnexoCadastroActivity.this, mUri));
             } else {
                 imgFoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_arquivo_nao_encontrado));
                 imgVisualizar.setEnabled(false);

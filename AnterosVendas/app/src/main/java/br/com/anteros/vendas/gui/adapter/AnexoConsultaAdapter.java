@@ -31,8 +31,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.List;
 
+import br.com.anteros.android.core.util.AndroidFileUtils;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.core.utils.StringUtils;
 import br.com.anteros.persistence.parameter.NamedParameter;
 import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.persistence.transaction.impl.TransactionException;
@@ -114,7 +116,14 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
          */
         if (item != null) {
             tvIdAnexo.setText(item.getId() + "");
-            tvNomeAnexo.setText(item.getNome());
+            if (StringUtils.isNotEmpty(item.getConteudoPath())){
+                File file = new File(item.getConteudoPath());
+                tvNomeAnexo.setText(file.getName());
+            } else {
+                tvNomeAnexo.setText("");
+            }
+
+
             tvDescricao.setText(item.getNome());
 
             /**
@@ -173,7 +182,10 @@ public class AnexoConsultaAdapter extends ArrayAdapter<Anexo> {
         /**
          * Obtém a extensão do arquivo
          */
-        String extension = anexo.getNome().substring(anexo.getNome().lastIndexOf(".") + 1);
+        String extension = AndroidFileUtils.getExtension(uri.toString());
+        if (extension.contains(".")){
+            extension = extension.replace(".","");
+        }
 
         /**
          * Cria um MIME type correspondente a extensão para passar para Intent como parâmetro

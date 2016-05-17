@@ -31,6 +31,7 @@ Esta aplicação foi construída para demonstrar a utilização dos frameworks A
 * Personalização do tema do android para a aplicação. styles.xml no resources/values;
 * Adicionado icone para a aplicação nos resources/mipmap;
 * Implementado tratamento de permissões para ficar compatível com Android 6 acima;
+* Resolvido problema quando o usuário muda a orientação da tela. Usando ```android:configChanges="orientation"``` no manifesto.
 
 
 #### Dependências do projeto ####
