@@ -41,6 +41,5 @@
     <string name="error_field_required">O campo é requerido</string>
     <string name="permission_rationale">"É necessário ter permissão para acesso ao contatos para autocompletar o e-mail."
     </string>
-
-
+    <string name="server_client_id">926610917397-mrdbagvea5oocp3hqcm30qojln7pvrrf.apps.googleusercontent.com</string>
 </resources>
