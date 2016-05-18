@@ -226,7 +226,11 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                 /**
                  * Chama o método para anexar arquivos.
                  */
-                anexarArquivos();
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                } else {
+                    anexarArquivos();
+                }
                 break;
 
             case R.id.cliente_cadastro_action_camera:
@@ -309,6 +313,21 @@ public class AnexoCadastroActivity extends AppCompatActivity implements AdapterV
                  * Se já tem permissão inicia a câmera.
                  */
                 iniciaCamera();
+            }
+        }
+
+        /**
+         * Se requestcode for igual 1(Um) ele confirmou requisição
+         */
+        if (requestCode == 1) {
+            /**
+             * Verifica se ele aceitou a requisição com as permissões.
+             */
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                /**
+                 * Se já tem permissão abre a galeria.
+                 */
+                anexarArquivos();
             }
         }
     }

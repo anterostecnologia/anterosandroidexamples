@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.anteros.android.core.util.GUIUtils;
+import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
 import br.com.anteros.social.core.SocialProfile;
 import br.com.anteros.social.core.image.CircularImageView;

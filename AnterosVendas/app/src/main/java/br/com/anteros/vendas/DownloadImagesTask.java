@@ -18,6 +18,10 @@
 package br.com.anteros.vendas;
 
 
+import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -36,19 +40,20 @@ import br.com.anteros.core.utils.IOUtils;
  *         Edson Martins (edsonmartins2005@gmail.com)
  *         Data: 09/05/16.
  */
-public class DownloadImagesTask extends AsyncTask<String,String,List<byte[]>> {
+public class DownloadImagesTask extends AsyncTask<String, String, List<byte[]>> {
+
     @Override
     protected List<byte[]> doInBackground(String... params) {
-
         List<byte[]> result = new ArrayList<>();
-        for (String url : params){
+
+        for (String url : params) {
 
             URLConnection conn = null;
             try {
                 /**
                  * Abre conexão com url da imagem
                  */
-                conn = new URL( url ).openConnection();
+                conn = new URL(url).openConnection();
                 conn.connect();
                 /**
                  * Le os bytes da imagem e adiciona na lista de retorno
@@ -57,13 +62,11 @@ public class DownloadImagesTask extends AsyncTask<String,String,List<byte[]>> {
                 result.add(byteArray);
             } catch (IOException e) {
                 e.printStackTrace();
+
                 return null;
             }
         }
 
-
         return result;
     }
-
-
 }
