@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.MaskUtils;
 import br.com.anteros.vendas.modelo.Cliente;
 
 /**
@@ -71,6 +72,9 @@ public class ClienteConsultaDialogAdapter extends ArrayAdapter<Cliente> {
         TextView tvFantasia = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_fantasia);
         TextView tvEndereco = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_endereco);
         TextView tvCidade = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_cidade);
+        TextView tvTelefone = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_telefone);
+        TextView tvEmail = (TextView) convertView.findViewById(R.id.cliente_consulta_dialog_item_email);
+
 
         /**
          * Se o item não for nulo atribui os valores nos campos da view
@@ -78,8 +82,10 @@ public class ClienteConsultaDialogAdapter extends ArrayAdapter<Cliente> {
         if (item != null) {
             tvRazaoCliente.setText(item.getId() + " - " + item.getRazaoSocial());
             tvFantasia.setText(item.getNomeFantasia());
-            tvEndereco.setText(item.getTpLogradouro() + " " + item.getLogradouro() + ", Nr. " + item.getNrLogradouro() + " - " + item.getBairro());
+            tvEndereco.setText(item.getTpLogradouro() + " " + item.getLogradouro() + ", " + item.getNrLogradouro() + " - " + item.getBairro());
             tvCidade.setText(item.getCidade() + "/" + item.getEstado().name());
+            tvTelefone.setText(MaskUtils.formatTelefone(item.getTelefone()));
+            tvEmail.setText(item.getEmail());
         }
 
         return convertView;

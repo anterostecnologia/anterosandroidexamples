@@ -52,8 +52,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
@@ -80,6 +87,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:layout_margin="3dp"/>
+                </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/main_search_floatLogin"

@@ -126,10 +126,10 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                     gridMenu.setNumColumns(2);
             } else {
                 gridMenu.setVerticalSpacing(3);
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                //if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                     gridMenu.setNumColumns(2);
-                else
-                    gridMenu.setNumColumns(1);
+                //else
+                //    gridMenu.setNumColumns(1);
             }
         }
     }
@@ -141,9 +141,9 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     private void adicionarItensMenu() {
         List<MenuItem> itens = new ArrayList<MenuItem>();
 
-        itens.add(new MenuItem(OPCAO_CLIENTE, MENU_CLIENTE, DESCRICAO_MENU_CLIENTES, "", getResources().getDrawable(R.drawable.ic_menu_cliente), Color.TRANSPARENT));
-        itens.add(new MenuItem(OPCAO_PEDIDO, MENU_PEDIDO, DESCRICAO_MENU_PEDIDOS, "", getResources().getDrawable(R.drawable.ic_menu_pedido), Color.TRANSPARENT));
-        itens.add(new MenuItem(OPCAO_PRODUTO, MENU_PRODUTO, DESCRICAO_MENU_PRODUTOS, "", getResources().getDrawable(R.drawable.ic_menu_produto), Color.TRANSPARENT));
+        itens.add(new MenuItem(OPCAO_CLIENTE, DESCRICAO_MENU_CLIENTES, getResources().getDrawable(R.drawable.ic_menu_cliente)));
+        itens.add(new MenuItem(OPCAO_PEDIDO, DESCRICAO_MENU_PEDIDOS, getResources().getDrawable(R.drawable.ic_menu_pedido)));
+        itens.add(new MenuItem(OPCAO_PRODUTO, DESCRICAO_MENU_PRODUTOS, getResources().getDrawable(R.drawable.ic_menu_produto)));
 
         gridMenu.setAdapter(new MenuAdapter(this, R.layout.menu_item, itens));
     }

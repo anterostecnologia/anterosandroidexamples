@@ -36,7 +36,7 @@
             android:id="@+id/cbBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             >
+            android:gravity="center">
         </CheckBox>
 
         <LinearLayout
@@ -51,17 +51,19 @@
                 android:id="@+id/produto_descricao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="TESTE TESTE TESTE"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
                 android:layout_margin="5dp"
-                android:text=""
-                android:textSize="20sp" >
-            </TextView>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/produto_preco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="" >
+                android:layout_marginLeft="15dp"
+                android:textSize="16sp"
+                android:text="R$ 250,00" >
             </TextView>
         </LinearLayout>
 
@@ -69,7 +71,7 @@
             android:id="@+id/produto_foto"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:src="@drawable/ic_cancel"
+            android:src="@drawable/ic_btn_foto"
             android:layout_gravity="right"
             android:contentDescription="@string/app_name">
         </ImageView>

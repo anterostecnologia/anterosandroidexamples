@@ -27,39 +27,55 @@
         android:background="@drawable/bc_round_corner_item" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/pedido_consulta_item_diaPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="21dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="19"/>
+
+            <TextView
+                android:id="@+id/pedido_consulta_item_mesPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="15dp"
+                android:textColor="@android:color/white"
+                android:text="MAI"/>
+
+            <TextView
+                android:id="@+id/pedido_consulta_item_anoPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="11dp"
+                android:textColor="@android:color/white"
+                android:text="2016"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight=".2"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:paddingLeft="5dp"
-            android:paddingTop="5dp" >
+            android:paddingBottom="5dp">
 
-            <LinearLayout
-                android:id="@+id/pedido_consulta_item__layoutDescricaoPedido"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
-
-                    <ImageView
-                        android:id="@+id/pedido_consulta_item_imgItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_pedido" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1"
-                    android:orientation="vertical" >
 
                     <LinearLayout
+                        android:id="@+id/pedido_consulta_item__layoutDescricaoPedido"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" >
 
@@ -75,28 +91,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical|left"
-                                android:text="PEDIDO NR 12343"
-                                android:textColor="#000000"
+                                android:text="PEDIDO 12343"
                                 android:textSize="18sp"
+                                android:textColor="@color/colorPrimary"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical" >
-
-                            <TextView
-                                android:id="@+id/pedido_consulta_item_dtPedido"
-                                android:layout_width="wrap_content"
-                                android:layout_height="fill_parent"
-                                android:gravity="center_vertical|left"
-                                android:text="12/01/2015"
-                                android:textColor="#4D4D4D"
-                                android:textSize="16dp"
-                                android:textStyle="italic" />
-                        </LinearLayout>
 
                         <ImageView
                             android:id="@+id/pedido_consulta_item_imgDelete"
@@ -106,16 +106,30 @@
                             android:src="@drawable/sel_delete" />
                     </LinearLayout>
 
-                    <View
-                        android:id="@+id/vw"
-                        android:layout_width="fill_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bc_color_gray"
-                        android:paddingRight="5dp" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="3dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="R$"
+                        android:textColor="@android:color/holo_orange_dark"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/pedido_consulta_item_valorTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VL PEDIDOS"
+                        android:textSize="18dp"
+                        android:textColor="@android:color/holo_orange_dark"
+                        android:textStyle="bold"
+                        android:paddingLeft="3dp"/>
                 </LinearLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -127,36 +141,27 @@
                     android:id="@+id/pedido_consulta_item_layoutCliente"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_weight="1" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:gravity="center"
-                        android:src="@drawable/ic_user_black" />
+                        android:src="@drawable/ic_client_gray"/>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingLeft="3dp" >
+                        android:paddingLeft="5dp" >
 
-                        <TextView
-                            android:id="@+id/pedido_consulta_item_cliente"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cliente"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
 
                         <TextView
                             android:id="@+id/pedido_consulta_item_nomeCliente"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Nome cliente"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -175,11 +180,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_money_wallet" />
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -187,20 +187,10 @@
                         android:paddingLeft="3dp" >
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Condição de pagamento"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
-
-                        <TextView
                             android:id="@+id/pedido_consulta_item_tvCondicaoPagamento"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CONDIÇÃO"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -211,11 +201,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_payment" />
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -223,60 +208,12 @@
                         android:paddingLeft="3dp" >
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Forma de pagamento"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
-
-                        <TextView
                             android:id="@+id/pedido_consulta_item_formaPagamento"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="FORMA"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/pedido_consulta_item_layoutValorPedido"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:src="@drawable/ic_dollar_black" />
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="3dp" >
-
-                    <TextView
-                        android:id="@+id/pedido_consulta_item_descricaoValor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Valor"
-                        android:textColor="#4D4D4D"
-                        android:textSize="13sp"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:id="@+id/pedido_consulta_item_valorTotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="VL PEDIDOS"
-                        android:textColor="#FF0000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 

@@ -27,6 +27,18 @@ import br.com.anteros.persistence.metadata.annotation.EnumValues;
         @EnumValue(enumValue = "A_VISTA", value = "A VISTA"),
         @EnumValue(enumValue = "A_PRAZO", value = "A PRAZO")})
 public enum CondicaoPagamento {
-    A_VISTA,
-    A_PRAZO
+    A_VISTA {
+        @Override
+        public String getNomeFormatado() {
+            return "A VISTA";
+        }
+    },
+    A_PRAZO {
+        @Override
+        public String getNomeFormatado() {
+            return "A PRAZO";
+        }
+    };
+
+    public abstract String getNomeFormatado();
 }

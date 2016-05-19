@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016 Anteros Tecnologia
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,203 +9,123 @@
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+    ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ~ See the License for the specific language governing permissions and
+    ~ limitations under the License.
+    -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bc_round_corner_item">
+        android:background="@drawable/bc_round_corner_item"
+        android:gravity="center_vertical">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight=".2"
+            android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp">
+            android:padding="6dp">
 
             <LinearLayout
-                android:id="@+id/cliente_consulta_dialog_item_layoutCliente"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/cliente_consulta_dialog_item_nomeCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical|left"
-                                android:text="Nome do cliente "
-                                android:textColor="#000000"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_weight=".1"
-                        android:background="@drawable/bc_color_gray" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
+                    <TextView
+                        android:id="@+id/cliente_consulta_dialog_item_nomeCliente"
                         android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:src="@drawable/ic_user_black" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:text="CLIENTE"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nome Fantasia"
-                            android:textColor="#4D4D4D"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/cliente_consulta_dialog_item_fantasia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="NOME FANTASIA"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
+                    <TextView
+                        android:id="@+id/cliente_consulta_dialog_item_fantasia"
                         android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:src="@drawable/ic_house" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Endereço"
-                            android:textColor="#4D4D4D"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/cliente_consulta_dialog_item_endereco"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ENDEREÇO - BAIRRO"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                        android:lines="1"
+                        android:text="Fantasia"
+                        android:textStyle="italic" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp">
+                android:layout_weight="0.5"
+                android:orientation="horizontal"
+                android:paddingLeft="3dp">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|right"
+                    android:orientation="vertical"
+                    android:paddingLeft="3dp">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/cliente_consulta_dialog_item_telefone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:src="@drawable/ic_city" />
+                        android:text="44 9999 6666"
+                        android:textColor="@android:color/holo_green_dark"
+                        android:textSize="18sp" />
 
-                    <LinearLayout
-                        android:layout_width="fill_parent"
+                    <TextView
+                        android:id="@+id/cliente_consulta_dialog_item_email"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="3dp">
+                        android:text="teste@teste.com"
+                        android:textColor="@android:color/holo_orange_dark"
+                        android:textSize="18sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cidade"
-                            android:textColor="#4D4D4D"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/cliente_consulta_dialog_item_cidade"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="CIDADE"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|right">
+
+                <TextView
+                    android:id="@+id/cliente_consulta_dialog_item_endereco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Endereço"
+                    android:textStyle="italic" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/cliente_consulta_dialog_item_cidade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Cidade"
+                    android:textStyle="italic" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

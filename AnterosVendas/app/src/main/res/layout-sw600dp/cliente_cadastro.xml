@@ -45,11 +45,9 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/Label"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Razão Social"
-                android:textSize="15sp" />
+                android:text="RAZÃO SOCIAL" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_razaoSocial"
@@ -60,11 +58,9 @@
 
             <TextView
                 android:id="@+id/cliente_cadastro_lbFantasia"
-                style="@style/Label"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Fantasia"
-                android:textSize="15sp" />
+                android:text="FANTASIA" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_fantasia"
@@ -74,12 +70,39 @@
                 android:singleLine="true" />
 
             <TextView
+                android:id="@+id/cliente_cadastro_lbTelefone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="TELEFONE"/>
+
+            <br.com.anteros.android.ui.controls.maskEditText.MaskedEditText
+                android:id="@+id/cliente_cadastro_telefone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                app:mask="(##) #### ####"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/cliente_cadastro_lbEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="E-MAIL" />
+
+            <EditText
+                android:id="@+id/cliente_cadastro_email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <TextView
                 android:id="@+id/cliente_cadastro_tpLogradouro"
-                style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tipo Logradouro"
-                android:textSize="15sp"/>
+                android:text="TIPO LOGRADOURO"/>
 
             <Spinner
                 android:id="@+id/cliente_cadastro_cb_tipo_logradouro"
@@ -88,11 +111,9 @@
 
             <TextView
                 android:id="@+id/cliente_cadastro_tvLogradouro"
-                style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logradouro"
-                android:textSize="15sp" />
+                android:text="LOGRADOURO" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_logradouro"
@@ -116,11 +137,9 @@
 
                     <TextView
                         android:id="@+id/cliente_cadastro_tvNumero"
-                        style="@style/Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Número"
-                        android:textSize="15sp" />
+                        android:text="NUMERO" />
 
                     <EditText
                         android:id="@+id/cliente_cadastro_numero"
@@ -143,19 +162,18 @@
 
                     <TextView
                         android:id="@+id/cliente_cadastro_tvCEP"
-                        style="@style/Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CEP"
-                        android:textSize="15sp" />
+                        android:text="CEP" />
 
-                    <EditText
+                    <br.com.anteros.android.ui.controls.maskEditText.MaskedEditText
                         android:id="@+id/cliente_cadastro_CEP"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        app:mask="#####-###"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:singleLine="true" />
+                        android:singleLine="true"/>
 
                 </LinearLayout>
 
@@ -163,11 +181,9 @@
 
             <TextView
                 android:id="@+id/cliente_cadastro_tvBairro"
-                style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bairro"
-                android:textSize="15sp" />
+                android:text="BAIRRO" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_bairro"
@@ -180,11 +196,9 @@
 
             <TextView
                 android:id="@+id/cliente_cadastro_tvComplemento"
-                style="@style/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complemento"
-                android:textSize="15sp" />
+                android:text="COMPLEMENTO" />
 
             <EditText
                 android:id="@+id/cliente_cadastro_complemento"
@@ -209,11 +223,9 @@
 
                     <TextView
                         android:id="@+id/cliente_cadastro_tvCidade"
-                        style="@style/Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cidade"
-                        android:textSize="15sp" />
+                        android:text="CIDADE" />
 
                     <EditText
                         android:id="@+id/cliente_cadastro_cidade"
@@ -233,11 +245,9 @@
 
                     <TextView
                         android:id="@+id/cliente_cadastro_estado"
-                        style="@style/Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Estado"
-                        android:textSize="15sp" />
+                        android:text="ESTADO" />
 
                     <Spinner
                         android:id="@+id/cliente_cadastro_cb_estado"

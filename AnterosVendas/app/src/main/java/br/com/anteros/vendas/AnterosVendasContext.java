@@ -318,10 +318,10 @@ public class AnterosVendasContext {
 
                     }.execute(
                             "http://i.dell.com/sites/imagecontent/consumer/merchandizing/en/PublishingImages/Franchise-category/inspiron_polaris_sub_cat_franchise_laptops_mod-02d.jpg",
-                            "http://scene7-cdn.dell.com/is/image/DellComputer/laptop-inspiron-15-5547-t-love-mixed-set-video?hei=200&wid=565",
+                            "http://www.businessnewsdaily.com/images/i/000/007/957/i02/Photo1.jpg?1422635020",
                             "http://imagens.lojahp.com.br/Empresa/Impressora-Empresa/2177255/5349591/Impressora-HP-Officejet-7110-Wide-Format-ePrinter-Preta-2177255.jpg",
                             "http://imagens.lojahp.com.br/Empresa/Impressora-Empresa/2843830/5356309/Multifuncional-HP-LaserJet-Pro-MFP-M127fn-com-ePrint-Impressora-Copiadora-Scanner-e-Fax-2843830.jpg",
-                            "http://images.samsung.com/is/image/samsung/br_SM-G928GZKAZTO_001_Front_black_10049808900909?$DT-Gallery$",
+                            "http://cdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s6-3.jpg",
                             "http://www.motorola.com.br/sites/default/files/styles/homepage_feature_product_1x/public/library/br/homepage/features/motog_bundles_pretoazul-5.png?itok=AQq2Y-MV&timestamp=1462809447",
                             "http://www.motorola.com.br/sites/default/files/styles/homepage_feature_product_1x/public/library/br/homepage/feat-moto-360-gen1.png?itok=LgCtITqa&timestamp=1462809454",
                             "http://store.storeimages.cdn-apple.com/4973/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone6/plus/iphone6-plus-box-silver-2014_GEO_US?wid=478&hei=595&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=J8El53",

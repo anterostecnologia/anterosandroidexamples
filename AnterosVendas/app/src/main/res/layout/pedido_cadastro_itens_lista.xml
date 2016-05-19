@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016 Anteros Tecnologia
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,49 +37,42 @@
             <LinearLayout
                 android:id="@+id/pedido_cadastro_itens_layoutProduto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/pedido_cadastro_itens_produto"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:text="PRODUTO"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical|left"
-                            android:orientation="horizontal">
+                </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/pedido_cadastro_itens_produto"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="PRODUTO"
-                                android:textColor="#000000"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|end"
+                    android:orientation="horizontal"
+                    android:paddingLeft="3dp">
 
-                            <ImageView
-                                android:id="@+id/pedido_cadastro_itens_imgDelete"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:focusable="false"
-                                android:src="@drawable/sel_delete" />
-                        </LinearLayout>
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/pedido_cadastro_itens_imgDelete"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:focusable="false"
+                        android:src="@drawable/sel_delete" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/bc_color_gray"
-                        android:paddingRight="5dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -98,35 +90,32 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="5dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:id="@+id/pedido_produto_edit_list_item_layoutQuantidade"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
                             android:paddingLeft="3dp">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:paddingLeft="3dp"
                                 android:text="Quantidade"
-                                android:textColor="#4D4D4D"
-                                android:textSize="12sp"
+                                android:textSize="13sp"
                                 android:textStyle="italic" />
 
-                            <EditText
-                                android:id="@+id/pedido_cadastro_itens_edQuantidade"
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:digits="1234567890"
-                                android:imeOptions="actionDone"
-                                android:inputType="phone"
-                                android:maxLength="9"
-                                android:singleLine="true">
-                            </EditText>
+                                android:layout_weight="1"
+                                android:text="Valor unitário"
+                                android:textSize="13sp"
+                                android:textStyle="italic" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -134,25 +123,30 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
                             android:paddingLeft="3dp">
 
-                            <TextView
+                            <EditText
+                                android:id="@+id/pedido_cadastro_itens_edQuantidade"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:digits="1234567890"
+                                android:imeOptions="actionDone"
+                                android:inputType="phone"
+                                android:maxLength="9"
                                 android:paddingLeft="3dp"
-                                android:text="Preço"
-                                android:textColor="#4D4D4D"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
+                                android:singleLine="true"/>
 
                             <TextView
                                 android:id="@+id/pedido_cadastro_itens_edPreco"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:text="VALOR PRODUTO"
+                                android:paddingLeft="5dp"
                                 android:textColor="#000000"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -173,18 +167,32 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Valor total"
-                                android:textColor="#4D4D4D"
-                                android:textSize="12sp"
+                                android:textSize="13sp"
                                 android:textStyle="italic" />
 
-                            <TextView
-                                android:id="@+id/pedido_cadastro_itens_valorTotal"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:text="VALOR TOTAL"
-                                android:textColor="#FF0000"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal"
+                                android:paddingLeft="5dp" >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="R$"
+                                    android:textColor="@android:color/holo_orange_dark"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/pedido_cadastro_itens_valorTotal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="VALOR TOTAL"
+                                    android:textSize="17dp"
+                                    android:textColor="@android:color/holo_orange_dark"
+                                    android:textStyle="bold"
+                                    android:paddingLeft="3dp"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -197,8 +205,8 @@
 
                     <ImageView
                         android:id="@+id/pedido_cadastro_itens_item_fotoProduto"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_btn_foto" />
                 </LinearLayout>

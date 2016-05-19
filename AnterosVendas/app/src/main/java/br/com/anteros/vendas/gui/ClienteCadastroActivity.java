@@ -38,6 +38,7 @@ import br.com.anteros.android.core.communication.ws.PostmonWebService;
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.InfoAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
+import br.com.anteros.android.ui.controls.maskEditText.MaskedEditText;
 import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.validation.api.ConstraintViolation;
 import br.com.anteros.vendas.AnterosVendasContext;
@@ -61,11 +62,13 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     private Spinner spTipoLogradouro;
     private EditText edLogradouro;
     private EditText edNrLogradouro;
-    private EditText edCep;
+    private MaskedEditText edCep;
     private EditText edBairro;
     private EditText edComplemento;
     private EditText edCidade;
     private Spinner spEstado;
+    private MaskedEditText edTelefone;
+    private EditText edEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +90,16 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         spTipoLogradouro = (Spinner) findViewById(R.id.cliente_cadastro_cb_tipo_logradouro);
         edLogradouro = (EditText) findViewById(R.id.cliente_cadastro_logradouro);
         edNrLogradouro = (EditText) findViewById(R.id.cliente_cadastro_numero);
-        edCep = (EditText) findViewById(R.id.cliente_cadastro_CEP);
+        edCep = (MaskedEditText) findViewById(R.id.cliente_cadastro_CEP);
         edCep.setOnFocusChangeListener(this);
 
         edBairro = (EditText) findViewById(R.id.cliente_cadastro_bairro);
         edComplemento = (EditText) findViewById(R.id.cliente_cadastro_complemento);
         edCidade = (EditText) findViewById(R.id.cliente_cadastro_cidade);
         spEstado = (Spinner) findViewById(R.id.cliente_cadastro_cb_estado);
+
+        edTelefone = (MaskedEditText) findViewById(R.id.cliente_cadastro_telefone);
+        edEmail = (EditText) findViewById(R.id.cliente_cadastro_email);
 
 
         /**
@@ -120,6 +126,8 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         edBairro.setText(ClienteConsultaActivity.cliente.getBairro());
         edComplemento.setText(ClienteConsultaActivity.cliente.getComplemento());
         edCidade.setText(ClienteConsultaActivity.cliente.getCidade());
+        edTelefone.setText(ClienteConsultaActivity.cliente.getTelefone());
+        edEmail.setText(ClienteConsultaActivity.cliente.getEmail());
 
         if (ClienteConsultaActivity.cliente.getTpLogradouro() != null) {
             spTipoLogradouro.setSelection(ClienteConsultaActivity.cliente.getTpLogradouro().ordinal());
@@ -236,13 +244,15 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
         ClienteConsultaActivity.cliente.setNomeFantasia(edFantasia.getText().toString());
         ClienteConsultaActivity.cliente.setLogradouro(edLogradouro.getText().toString());
         ClienteConsultaActivity.cliente.setNrLogradouro(edNrLogradouro.getText().toString());
-        ClienteConsultaActivity.cliente.setCep(edCep.getText().toString());
+        ClienteConsultaActivity.cliente.setCep(edCep.getTextWithoutMask().toString());
         ClienteConsultaActivity.cliente.setBairro(edBairro.getText().toString());
         ClienteConsultaActivity.cliente.setComplemento(edComplemento.getText().toString());
         ClienteConsultaActivity.cliente.setCidade(edCidade.getText().toString());
         ClienteConsultaActivity.cliente.setDtCadastro(ClienteConsultaActivity.cliente.getDtCadastro() != null ? ClienteConsultaActivity.cliente.getDtCadastro() : new Date());
         ClienteConsultaActivity.cliente.setEstado((Estado) spEstado.getSelectedItem());
         ClienteConsultaActivity.cliente.setTpLogradouro((TipoLogradouro) spTipoLogradouro.getSelectedItem());
+        ClienteConsultaActivity.cliente.setTelefone(edTelefone.getTextWithoutMask().toString());
+        ClienteConsultaActivity.cliente.setEmail(edEmail.getText().toString());
     }
 
     /**
@@ -367,6 +377,5 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
                         "Salvando cliente: " + result).show();
             }
         }
-
     }
 }

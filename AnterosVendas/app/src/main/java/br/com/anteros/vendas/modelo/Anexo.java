@@ -45,7 +45,7 @@ import br.com.anteros.validation.api.groups.Default;
 
 @Entity
 @Table(name = "ANEXO")
-public class Anexo implements Serializable, Parcelable {
+public class Anexo implements Serializable {
 
     /*
  * Identificação do Anexo
@@ -93,26 +93,6 @@ public class Anexo implements Serializable, Parcelable {
     public Anexo(){
 
     }
-
-    protected Anexo(Parcel in) {
-        nome = in.readString();
-        conteudoPath = in.readString();
-        conteudo = in.createByteArray();
-        cliente = in.readParcelable(Cliente.class.getClassLoader());
-        tipoConteudo = TipoConteudoAnexo.values()[in.readInt()];
-    }
-
-    public static final Creator<Anexo> CREATOR = new Creator<Anexo>() {
-        @Override
-        public Anexo createFromParcel(Parcel in) {
-            return new Anexo(in);
-        }
-
-        @Override
-        public Anexo[] newArray(int size) {
-            return new Anexo[size];
-        }
-    };
 
     public Long getId() {
         return id;
@@ -168,19 +148,5 @@ public class Anexo implements Serializable, Parcelable {
 
     public File getFile() {
         return new File(getConteudoPath());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(nome);
-        dest.writeString(conteudoPath);
-        dest.writeByteArray(conteudo);
-        dest.writeParcelable(cliente, flags);
-        dest.writeInt(tipoConteudo.ordinal());
     }
 }

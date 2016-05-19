@@ -24,7 +24,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.anteros.android.ui.controls.ErrorAlert;
 import br.com.anteros.android.ui.controls.QuestionAlert;
@@ -44,6 +50,8 @@ import br.com.anteros.vendas.modelo.PedidoVenda;
  *         Data: 10/05/16.
  */
 public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
+
+    SimpleDateFormat month_date = new SimpleDateFormat("MMM", new Locale("pt", "BR"));
 
     public PedidoConsultaAdapter(Context context, List<PedidoVenda> objects) {
         super(context, R.layout.pedido_consulta_item, objects);
@@ -75,7 +83,9 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
          * Obtém os campos dentro do layout
          */
         TextView tvDescricaoPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_descricaoPedido);
-        TextView tvDataPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_dtPedido);
+        TextView tvDiaPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_diaPedido);
+        TextView tvMesPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_mesPedido);
+        TextView tvAnoPedido = (TextView) convertView.findViewById(R.id.pedido_consulta_item_anoPedido);
         TextView tvCliente = (TextView) convertView.findViewById(R.id.pedido_consulta_item_nomeCliente);
         TextView tvCondicao = (TextView) convertView.findViewById(R.id.pedido_consulta_item_tvCondicaoPagamento);
         TextView tvFormaPgto = (TextView) convertView.findViewById(R.id.pedido_consulta_item_formaPagamento);
@@ -101,15 +111,31 @@ public class PedidoConsultaAdapter extends ArrayAdapter<PedidoVenda> {
          * Se o item não for nulo atribui os valores nos campos da view
          */
         if (item != null) {
-            tvDescricaoPedido.setText("PEDIDO NR. " + item.getNrPedido());
-            tvDataPedido.setText(DateUtil.toStringDateDMA(item.getDtPedido()));
+            tvDescricaoPedido.setText("PEDIDO " + item.getNrPedido());
+            //tvDataPedido.setText(DateUtil.toStringDateDMA(item.getDtPedido()));
             tvCliente.setText(item.getCliente().getId() + " - " + item.getCliente().getRazaoSocial());
-            tvCondicao.setText(item.getCondicaoPagamento().name());
+            tvCondicao.setText(item.getCondicaoPagamento().getNomeFormatado());
             tvFormaPgto.setText(item.getFormaPagamento().name());
             tvValorTotal.setText(item.getVlTotalPedidoAsString());
+
+            String[] result =getDateAsString(item.getDtPedido());
+            tvDiaPedido.setText(result[0]);
+            tvMesPedido.setText(result[1]);
+            tvAnoPedido.setText(result[2]);
         }
 
         return convertView;
+    }
+
+    private String[] getDateAsString(Date dataPedido) {
+        String[] result = new String[3];
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dataPedido);
+        result[0] = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        result[1] = month_date.format(calendar.getTime()).toUpperCase();
+        result[2] = String.valueOf(calendar.get(Calendar.YEAR));
+
+        return result;
     }
 
     /**

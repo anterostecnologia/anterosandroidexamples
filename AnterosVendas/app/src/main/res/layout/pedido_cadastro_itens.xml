@@ -28,7 +28,9 @@
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:descendantFocusability="beforeDescendants"
-        android:divider="@android:color/transparent" >
+        android:divider="@android:color/transparent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
     </ListView>
 
 </RelativeLayout>

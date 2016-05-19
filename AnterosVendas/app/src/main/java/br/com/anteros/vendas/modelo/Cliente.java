@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.anteros.bean.validation.constraints.Email;
+import br.com.anteros.bean.validation.constraints.Length;
 import br.com.anteros.bean.validation.constraints.Required;
 import br.com.anteros.persistence.metadata.annotation.Cascade;
 import br.com.anteros.persistence.metadata.annotation.Column;
@@ -42,6 +44,8 @@ import br.com.anteros.persistence.metadata.annotation.type.FetchType;
 import br.com.anteros.persistence.metadata.annotation.type.GeneratedType;
 import br.com.anteros.persistence.metadata.annotation.type.TemporalType;
 import br.com.anteros.validation.api.constraints.Past;
+import br.com.anteros.validation.api.constraints.Pattern;
+import br.com.anteros.validation.api.constraints.Size;
 import br.com.anteros.validation.api.groups.Default;
 
 /**
@@ -50,7 +54,7 @@ import br.com.anteros.validation.api.groups.Default;
 
 @Entity
 @Table(name = "CLIENTE")
-public class Cliente implements Serializable, Parcelable {
+public class Cliente implements Serializable {
 
     /*
      * Id do Cliente
@@ -94,14 +98,15 @@ public class Cliente implements Serializable, Parcelable {
      * Número do logradouro do cliente
      */
     @Required(groups = {Default.class, ValidacaoPadrao.class})
-    @Column(name = "NR_LOGRADOURO", length = 20, required = true, label = "Nr.logradouro")
+    @Column(name = "NR_LOGRADOURO", length = 20, required = true, label = "Número")
     private String nrLogradouro;
 
     /*
      * Cep do cliente
      */
+    @Length(min = 8, max = 8)
     @Required(groups = {Default.class, ValidacaoPadrao.class})
-    @Column(name = "CEP", length = 8, required = true, label = "Cep")
+    @Column(name = "CEP", length = 8, required = true, label = "CEP")
     private String cep;
 
     /*
@@ -141,6 +146,16 @@ public class Cliente implements Serializable, Parcelable {
     private Date dtCadastro;
 
 
+    @Length(min = 10, max = 11)
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
+    @Column(name = "TELEFONE", length = 11, required = true, label = "Telefone")
+    private String telefone;
+
+    @Email
+    @Required(groups = {Default.class, ValidacaoPadrao.class})
+    @Column(name = "EMAIL", required = true, length = 50, label = "Email")
+    private String email;
+
     /*
      * Anexos do cliente: FOTOS, DOCUMENTOS, CONTRATOS, etc
      */
@@ -148,33 +163,6 @@ public class Cliente implements Serializable, Parcelable {
     @Cascade(values = {CascadeType.ALL})
     private List<Anexo> anexos;
 
-
-    protected Cliente(Parcel in) {
-        id = in.readLong();
-        razaoSocial = in.readString();
-        nomeFantasia = in.readString();
-        logradouro = in.readString();
-        nrLogradouro = in.readString();
-        cep = in.readString();
-        bairro = in.readString();
-        complemento = in.readString();
-        Cidade = in.readString();
-        tpLogradouro = TipoLogradouro.values()[in.readInt()];
-        estado = Estado.values()[in.readInt()];
-        anexos = in.readArrayList(Anexo.class.getClassLoader());
-    }
-
-    public static final Creator<Cliente> CREATOR = new Creator<Cliente>() {
-        @Override
-        public Cliente createFromParcel(Parcel in) {
-            return new Cliente(in);
-        }
-
-        @Override
-        public Cliente[] newArray(int size) {
-            return new Cliente[size];
-        }
-    };
 
     public Cliente() {
     }
@@ -289,6 +277,22 @@ public class Cliente implements Serializable, Parcelable {
         this.dtCadastro = dtCadastro;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -308,30 +312,5 @@ public class Cliente implements Serializable, Parcelable {
     @Override
     public String toString() {
         return id + " " + razaoSocial;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(razaoSocial);
-        dest.writeString(nomeFantasia);
-        dest.writeString(logradouro);
-        dest.writeString(nrLogradouro);
-        dest.writeString(cep);
-        dest.writeString(bairro);
-        dest.writeString(complemento);
-        dest.writeString(Cidade);
-        if (tpLogradouro != null) {
-            dest.writeInt(tpLogradouro.ordinal());
-        }
-        if (estado != null) {
-            dest.writeInt(estado.ordinal());
-        }
-        dest.writeList(anexos);
     }
 }

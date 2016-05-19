@@ -32,6 +32,7 @@ import java.util.Calendar;
 
 import br.com.anteros.core.utils.DateUtil;
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.adapter.CondicaoPagamentoAdapter;
 import br.com.anteros.vendas.modelo.CondicaoPagamento;
 import br.com.anteros.vendas.modelo.FormaPagamento;
 
@@ -66,7 +67,7 @@ public class PedidoCadastroDadosFragment extends Fragment implements View.OnClic
         edCliente.setOnClickListener(this);
         edValorTotal = (EditText) view.findViewById(R.id.pedido_cadastro_dados_valor);
 
-        spCondicaoPagamento.setAdapter(new ArrayAdapter<CondicaoPagamento>(getContext(), android.R.layout.simple_list_item_1, CondicaoPagamento.values()));
+        spCondicaoPagamento.setAdapter(new CondicaoPagamentoAdapter(getContext(), CondicaoPagamento.values()));
         spFormaPagamento.setAdapter(new ArrayAdapter<FormaPagamento>(getContext(), android.R.layout.simple_list_item_1, FormaPagamento.values()));
         try {
             bindView();

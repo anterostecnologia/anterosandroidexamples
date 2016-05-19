@@ -55,7 +55,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 @Entity
 @Table(name = "PEDIDOVENDA")
-public class PedidoVenda implements Serializable, Parcelable {
+public class PedidoVenda implements Serializable {
 
     /*
      * Id do Pedido de venda
@@ -123,29 +123,6 @@ public class PedidoVenda implements Serializable, Parcelable {
 
     public PedidoVenda() {
     }
-
-    protected PedidoVenda(Parcel in) {
-        id = in.readLong();
-        nrPedido = in.readLong();
-        dtPedido = new Date(in.readLong());
-        cliente = in.readParcelable(Cliente.class.getClassLoader());
-        vlTotalPedido = new BigDecimal(in.readString());
-        condicaoPagamento = CondicaoPagamento.values()[in.readInt()];
-        formaPagamento = FormaPagamento.values()[in.readInt()];
-        itens = in.readArrayList(ItemPedido.class.getClassLoader());
-    }
-
-    public static final Creator<PedidoVenda> CREATOR = new Creator<PedidoVenda>() {
-        @Override
-        public PedidoVenda createFromParcel(Parcel in) {
-            return new PedidoVenda(in);
-        }
-
-        @Override
-        public PedidoVenda[] newArray(int size) {
-            return new PedidoVenda[size];
-        }
-    };
 
     public Long getId() {
         return id;
@@ -215,27 +192,6 @@ public class PedidoVenda implements Serializable, Parcelable {
 
     public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(nrPedido);
-        dest.writeLong(dtPedido.getTime());
-        dest.writeParcelable(cliente, flags);
-        dest.writeString(vlTotalPedido.toString());
-        if (condicaoPagamento != null) {
-            dest.writeInt(condicaoPagamento.ordinal());
-        }
-        if (formaPagamento != null) {
-            dest.writeInt(formaPagamento.ordinal());
-        }
-        dest.writeList(itens);
     }
 
     public static String formatMoeda(BigDecimal valor) {

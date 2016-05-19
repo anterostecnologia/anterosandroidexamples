@@ -161,7 +161,9 @@ public class ClienteConsultaActivity extends AppCompatActivity implements Adapte
                     "CLI.NR_LOGRADOURO,                           " +
                     "CLI.BAIRRO,                                  " +
                     "CLI.DS_CIDADE,                               " +
-                    "CLI.UF                                       " +
+                    "CLI.UF,                                      " +
+                    "CLI.TELEFONE,                                " +
+                    "CLI.EMAIL                                    " +
                     "FROM CLIENTE CLI                             ");
         }
 

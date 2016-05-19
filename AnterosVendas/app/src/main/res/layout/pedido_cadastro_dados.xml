@@ -19,7 +19,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:layout_margin="5dp">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -54,10 +55,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Número"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
+                            android:text="NUMERO" />
 
                         <EditText
                             android:id="@+id/pedido_cadastro_dados_nr_pedido"
@@ -88,16 +86,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Data"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
+                            android:text="DATA" />
 
                         <EditText
                             android:id="@+id/pedido_cadastro_dados_data_pedido"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/sel_data"
+                            android:drawableRight="@drawable/ic_calendar_gray"
                             android:editable="false"
                             android:inputType="textCapCharacters"
                             android:singleLine="true"
@@ -132,10 +127,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Condição de pagamento"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
+                            android:text="CONDIÇÃO DE PAGAMENTO" />
 
                         <Spinner
                             android:id="@+id/pedido_cadastro_dados_cb_condicao_pagamento"
@@ -159,10 +151,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Forma de pagamento"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
+                            android:text="FORMA DE PAGAMENTO" />
 
                         <Spinner
                             android:id="@+id/pedido_cadastro_dados__cb_tipo_formaPagamento"
@@ -194,16 +183,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cliente"
-                            android:textColor="#4D4D4D"
-                            android:textSize="13sp"
-                            android:textStyle="italic" />
+                            android:text="CLIENTE" />
 
                         <EditText
                             android:id="@+id/pedido_cadastro_dados_cliente"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/ic_cliente24"
+                            android:drawableRight="@drawable/ic_client_gray"
                             android:editable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"

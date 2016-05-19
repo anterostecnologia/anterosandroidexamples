@@ -1,69 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016 Anteros Tecnologia
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~   http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-     <!-- Drop Shadow Stack -->
-     <item>
+    <!-- Drop Shadow Stack -->
+    <item>
         <shape>
-            <padding  android:top="1dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
-            <gradient android:startColor="#00CCCCCC" 
-                      android:endColor="#10CCCCCC" />
-            <corners  android:radius="30dp" />
-        </shape>
-    </item>
-     <item>
-        <shape>
-            <padding android:top="1dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
-            <gradient android:startColor="#10CCCCCC" 
-                      android:endColor="#20CCCCCC" />
-            <corners android:radius="30dp" />
-        </shape>
-    </item>
-     <item>
-        <shape>
-            <padding android:top="0dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
-            <gradient android:startColor="#30CCCCCC" 
-                      android:endColor="#40CCCCCC" />
-            <corners android:radius="30dp" />
-        </shape>
-    </item>
-     <item>
-        <shape>
-            <padding android:top="0dp" android:right="2dp" android:bottom="2dp" android:left="2dp" />
-            <gradient android:startColor="#50CCCCCC" 
-                      android:endColor="#60CCCCCC" />
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="1dp" />
+            <gradient
+                android:endColor="#10CCCCCC"
+                android:startColor="#00CCCCCC" />
             <corners android:radius="30dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <padding android:top="0dp" android:right="0dp" android:bottom="2dp" android:left="0dp" />
-            <gradient android:startColor="#70CCCCCC" 
-                      android:endColor="#80CCCCCC" />
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="1dp" />
+            <gradient
+                android:endColor="#20CCCCCC"
+                android:startColor="#10CCCCCC" />
             <corners android:radius="30dp" />
         </shape>
     </item>
+    <item>
+        <shape>
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="0dp" />
+            <gradient
+                android:endColor="#40CCCCCC"
+                android:startColor="#30CCCCCC" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
 
     <!-- Background -->
     <item>
-		<shape>
-	         <solid android:color="@android:color/white" /> 
-		    <corners android:radius="1dp" />
-		</shape>
+        <shape>
+            <solid android:color="@android:color/white" />
+            <corners android:radius="1dp" />
+        </shape>
     </item>
 </layer-list>

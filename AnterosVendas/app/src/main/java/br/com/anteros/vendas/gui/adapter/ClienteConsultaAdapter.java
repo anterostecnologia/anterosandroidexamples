@@ -17,6 +17,8 @@
 package br.com.anteros.vendas.gui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 import br.com.anteros.persistence.parameter.NamedParameter;
@@ -35,7 +38,9 @@ import br.com.anteros.persistence.session.repository.SQLRepository;
 import br.com.anteros.persistence.transaction.impl.TransactionException;
 import br.com.anteros.vendas.AnterosVendasContext;
 import br.com.anteros.vendas.R;
+import br.com.anteros.vendas.gui.MaskUtils;
 import br.com.anteros.vendas.modelo.Cliente;
+import br.com.anteros.android.ui.controls.floatingActionButton.FloatingActionButton;
 
 /**
  * Adapter responsável por mostrar a consulta de clientes.
@@ -80,7 +85,12 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
         TextView tvFantasia = (TextView) convertView.findViewById(R.id.cliente_consulta_item_fantasia);
         TextView tvEndereco = (TextView) convertView.findViewById(R.id.cliente_consulta_item_endereco);
         TextView tvCidade = (TextView) convertView.findViewById(R.id.cliente_consulta_item_cidade);
+        TextView tvTelefone = (TextView) convertView.findViewById(R.id.cliente_consulta_item_telefone);
+        TextView tvEmail = (TextView) convertView.findViewById(R.id.cliente_consulta_item_email);
         ImageView imgDelete = (ImageView) convertView.findViewById(R.id.cliente_consulta_item_imgDelete);
+
+        FloatingActionButton floatTelefone = (FloatingActionButton) convertView.findViewById(R.id.cliente_consulta_item_floatLigar);
+        FloatingActionButton floatEmail = (FloatingActionButton) convertView.findViewById(R.id.cliente_consulta_item_floatEmail);
 
         /**
          * Habilita o removerCliente apenas se o item for diferente de null
@@ -103,8 +113,25 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
         if (item != null) {
             tvRazaoCliente.setText(item.getId() + " - " + item.getRazaoSocial());
             tvFantasia.setText(item.getNomeFantasia());
-            tvEndereco.setText(item.getTpLogradouro() + " " + item.getLogradouro() + ", Nr. " + item.getNrLogradouro() + " - " + item.getBairro());
+            tvEndereco.setText(item.getTpLogradouro() + " " + item.getLogradouro() + ", " + item.getNrLogradouro() + " - " + item.getBairro());
             tvCidade.setText(item.getCidade() + "/" + item.getEstado().name());
+            tvTelefone.setText(MaskUtils.formatTelefone(item.getTelefone()));
+            tvEmail.setText(item.getEmail());
+
+            floatTelefone.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    efetuarLigacao(item.getTelefone());
+                }
+            });
+
+            floatEmail.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    enviarEmail(item.getEmail());
+                }
+            });
+
         }
 
         return convertView;
@@ -174,6 +201,27 @@ public class ClienteConsultaAdapter extends ArrayAdapter<Cliente> {
 
                     }
                 }).show();
+
+    }
+
+    /**
+     * Efetua a ligação para o número de telefone passado
+     * @param telefone telefone
+     */
+    private void efetuarLigacao(String telefone) {
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:"+ Uri.encode(telefone.trim())));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(callIntent);
+    }
+
+    /**
+     * Chama a intent para enviar email. Diferente da tela de manutenção da tabela, essa chamada só envia email
+     * @param email email
+     */
+    private void enviarEmail(String email) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",email, null));
+        getContext().startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
 
     }
 }

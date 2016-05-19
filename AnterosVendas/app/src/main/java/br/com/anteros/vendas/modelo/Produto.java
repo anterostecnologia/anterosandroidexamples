@@ -40,7 +40,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 @Entity
 @Table(name = "PRODUTO")
-public class Produto implements Serializable, Parcelable {
+public class Produto implements Serializable {
     /*
      * Id do Produto
      */
@@ -75,27 +75,7 @@ public class Produto implements Serializable, Parcelable {
     private Boolean selected=false;
 
     public Produto(){
-
     }
-
-    protected Produto(Parcel in) {
-        id = in.readLong();
-        nomeProduto = in.readString();
-        fotoProduto = in.createByteArray();
-        vlProduto = new BigDecimal(in.readString());
-    }
-
-    public static final Creator<Produto> CREATOR = new Creator<Produto>() {
-        @Override
-        public Produto createFromParcel(Parcel in) {
-            return new Produto(in);
-        }
-
-        @Override
-        public Produto[] newArray(int size) {
-            return new Produto[size];
-        }
-    };
 
     public Long getId() {
         return id;
@@ -129,19 +109,6 @@ public class Produto implements Serializable, Parcelable {
 
     public void setVlProduto(BigDecimal vlProduto) {
         this.vlProduto = vlProduto;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(nomeProduto);
-        dest.writeByteArray(fotoProduto);
-        dest.writeString(vlProduto.toString());
     }
 
     public Boolean isSelected() {

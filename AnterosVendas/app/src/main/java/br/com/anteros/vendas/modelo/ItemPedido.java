@@ -42,7 +42,7 @@ import br.com.anteros.validation.api.groups.Default;
  */
 @Entity
 @Table(name = "PEDIDO_ITEM")
-public class ItemPedido implements Serializable, Parcelable {
+public class ItemPedido implements Serializable {
 
     /*
    * Id do Item do pedido
@@ -76,27 +76,6 @@ public class ItemPedido implements Serializable, Parcelable {
     public ItemPedido(){
 
     }
-
-    protected ItemPedido(Parcel in) {
-        id = in.readLong();
-        pedidoVenda = in.readParcelable(PedidoVenda.class.getClassLoader());
-        produto = in.readParcelable(Produto.class.getClassLoader());
-        qtProduto = new BigDecimal(in.readString());
-        vlProduto = new BigDecimal(in.readString());
-        vlTotal = new BigDecimal(in.readString());
-    }
-
-    public static final Creator<ItemPedido> CREATOR = new Creator<ItemPedido>() {
-        @Override
-        public ItemPedido createFromParcel(Parcel in) {
-            return new ItemPedido(in);
-        }
-
-        @Override
-        public ItemPedido[] newArray(int size) {
-            return new ItemPedido[size];
-        }
-    };
 
     public Long getId() {
         return id;
@@ -152,21 +131,6 @@ public class ItemPedido implements Serializable, Parcelable {
 
     public void setVlTotal(BigDecimal vlTotal) {
         this.vlTotal = vlTotal;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeParcelable(pedidoVenda, flags);
-        dest.writeParcelable(produto, flags);
-        dest.writeString(qtProduto.toString());
-        dest.writeString(vlProduto.toString());
-        dest.writeString(vlTotal.toString());
     }
 
     public static String formatMoeda(BigDecimal valor) {
