@@ -31,7 +31,9 @@ Esta aplicação foi construída para demonstrar a utilização dos frameworks A
 * Personalização do tema do android para a aplicação. styles.xml no resources/values;
 * Adicionado icone para a aplicação nos resources/mipmap;
 * Implementado tratamento de permissões para ficar compatível com Android 6 acima;
-* Resolvido problema quando o usuário muda a orientação da tela. Usando ```android:configChanges="orientation"``` no manifesto.
+* Resolvido problema quando o usuário muda a orientação da tela. Usando ```android:configChanges="orientation"``` no manifesto;
+* Chamada telefônica usando intent Android para a discagem;
+* Envio de e-mail usando intent Android para o envio.
 
 
 #### Dependências do projeto ####
@@ -64,11 +66,13 @@ Esta aplicação foi construída para demonstrar a utilização dos frameworks A
 
 Veja abaixo algumas telas da aplicação exemplo:
 
-![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-1.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-2.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-3.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-4.png)
+![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-1.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-2.png) ![alt text](http://i.imgur.com/kutr5Me.jpg?1) ![alt text](http://i.imgur.com/uXR5NNA.jpg?1)
 
-![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-5.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-6.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-7.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-8.png)
+![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-4.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-6.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-7.png) ![alt text](http://i.imgur.com/TwXrasU.jpg?1)
 
-![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-9.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-10.png)
+![alt text](http://i.imgur.com/9hQp9rV.jpg?1) ![alt text](http://i.imgur.com/A3P5uwI.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-8.png) ![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-9.png)
+
+![alt text](https://raw.githubusercontent.com/anterostecnologia/anterosandroidexamples/master/AnterosVendas/app/images/screenshot-10.png)
 
 
 ## Licença ##
