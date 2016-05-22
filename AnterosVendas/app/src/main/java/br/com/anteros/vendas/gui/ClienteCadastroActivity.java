@@ -33,6 +33,8 @@ import android.widget.Spinner;
 import java.util.Date;
 import java.util.Set;
 
+import br.com.anteros.android.core.communication.ws.ConsultaCepCorreios;
+import br.com.anteros.android.core.communication.ws.EnderecoCorreio;
 import br.com.anteros.android.core.communication.ws.PostmonResponse;
 import br.com.anteros.android.core.communication.ws.PostmonWebService;
 import br.com.anteros.android.ui.controls.ErrorAlert;
@@ -265,12 +267,22 @@ public class ClienteCadastroActivity extends AppCompatActivity implements View.O
     public void onFocusChange(View v, boolean hasFocus) {
         if (v == edCep) {
             if (!hasFocus) {
-                new PostmonWebService() {
+//                new PostmonWebService() {
+//                    @Override
+//                    protected void onPostExecute(PostmonResponse postmonResponse) {
+//                        if (postmonResponse != null) {
+//                            edCidade.setText(postmonResponse.getCidade().toUpperCase());
+//                            spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
+//                        }
+//                    }
+//                }.execute(edCep.getText().toString());
+
+                new ConsultaCepCorreios() {
                     @Override
-                    protected void onPostExecute(PostmonResponse postmonResponse) {
-                        if (postmonResponse != null) {
-                            edCidade.setText(postmonResponse.getCidade().toUpperCase());
-                            spEstado.setSelection(Estado.getEstadoByName(postmonResponse.getEstado()).ordinal());
+                    protected void onPostExecute(EnderecoCorreio enderecoCorreio) {
+                        if (enderecoCorreio != null) {
+                            edCidade.setText(enderecoCorreio.getCidade().toUpperCase());
+                            spEstado.setSelection(Estado.getEstadoByName(enderecoCorreio.getUf()).ordinal());
                         }
                     }
                 }.execute(edCep.getText().toString());

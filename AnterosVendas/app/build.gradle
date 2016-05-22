@@ -77,7 +77,7 @@ dependencies {
     compile 'br.com.anteros:Anteros-Persistence-Core:1.0.3'
     compile 'br.com.anteros:Anteros-Bean-Validation:1.0.1'
     compile 'br.com.anteros:Anteros-Bean-Validation-Api:1.0.1'
-    compile 'br.com.anteros:anteros-core-android:1.0.3'
+    compile 'br.com.anteros:anteros-core-android:1.0.7'
     compile 'br.com.anteros:anteros-ui-controls-android:1.0.3'
     compile 'br.com.anteros:anteros-persistence-android:1.0.13'
     compile 'br.com.anteros.social:anteros-social-android-core:1.0.3@aar'

@@ -7,7 +7,7 @@ Esta aplicação foi construída para demonstrar a utilização dos frameworks A
 * Tela exemplo com validação de login que já salva os dados nas preferências;
 * Utilização de ToolBar e MenuItem na tela do menu principal. Implementação de menu responsivo;
 * Apresentação da foto do perfil da rede social no menu usando CircularImageView;
-* Tela de clientes com responsividade e busca de cep usando PostmonWebService do Anteros Android;
+* Tela de clientes com responsividade e busca de cep usando PostmonWebService(http://postmon.com.br) ou Consulta via WS dos Correios do Anteros Android: WSDL dos Correios: ```https://apps.correios.com.br/ SigepMasterJPA/AtendeClienteService/AtendeCliente?wsdl```
 * Validação dos dados cliente usando Anteros Bean Validation;
 * Tela para adicionar anexos no cliente podendo ser capturados da câmera ou selecionados dos arquivos;
 * Redimensionamento da imagens capturadas da câmera;
